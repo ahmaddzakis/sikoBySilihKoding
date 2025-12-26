@@ -117,39 +117,52 @@
                 </div>
 
                 <!-- Profile Dropdown -->
-                <div class="relative" x-data="{ open: false }">
-                    <div @click="open = !open"
-                        class="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 cursor-pointer border border-[#3a3442] hover:scale-105 transition-transform">
-                    </div>
-
-                    <!-- Dropdown Menu -->
-                    <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class="absolute right-0 mt-3 w-56 bg-[#1a161f] border border-[#3a3442] rounded-2xl shadow-2xl overflow-hidden z-[60]"
-                        x-cloak>
-                        <!-- User Info -->
-                        <div class="px-4 py-4 border-b border-[#3a3442] bg-[#221d28]/30">
-                            <div class="font-bold text-white">mustika</div>
-                            <div class="text-xs text-gray-500 truncate">mustika@gmail.com</div>
+                @auth
+                    <div class="relative" x-data="{ open: false }">
+                        <div @click="open = !open"
+                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 cursor-pointer border border-[#3a3442] hover:scale-105 transition-transform">
                         </div>
 
-                        <!-- Menu Items -->
-                        <div class="py-2">
-                            <a href="/profile"
-                                class="block px-4 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 transition-colors text-sm font-medium">
-                                <i class="fa-regular fa-user mr-2 text-xs opacity-50"></i> Lihat Profil
-                            </a>
-                            <div class="h-px bg-[#3a3442] my-1 mx-2"></div>
-                            <form action="/login" method="GET">
-                                <button type="submit"
-                                    class="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-400/5 transition-colors text-sm font-medium">
-                                    <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign
-                                    Out
-                                </button>
-                            </form>
+                        <!-- Dropdown Menu -->
+                        <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                            class="absolute right-0 mt-3 w-56 bg-[#1a161f] border border-[#3a3442] rounded-2xl shadow-2xl overflow-hidden z-[60]"
+                            x-cloak>
+                            <!-- User Info -->
+                            <div class="px-4 py-4 border-b border-[#3a3442] bg-[#221d28]/30">
+                                <div class="font-bold text-white">{{ Auth::user()->name }}</div>
+                                <div class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</div>
+                            </div>
+
+                            <!-- Menu Items -->
+                            <div class="py-2">
+                                @if(Auth::user()->role === 'admin')
+                                    <a href="{{ route('dashboard') }}"
+                                        class="block px-4 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 transition-colors text-sm font-medium">
+                                        <i class="fa-solid fa-gauge-high mr-2 text-xs opacity-50"></i> Dashboard
+                                    </a>
+                                @endif
+                                <a href="/profile"
+                                    class="block px-4 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 transition-colors text-sm font-medium">
+                                    <i class="fa-regular fa-user mr-2 text-xs opacity-50"></i> Lihat Profil
+                                </a>
+                                <div class="h-px bg-[#3a3442] my-1 mx-2"></div>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-400/5 transition-colors text-sm font-medium">
+                                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign
+                                        Out
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @else
+                    <a href="{{ route('login') }}" class="text-white hover:text-gray-300 transition-colors font-medium">
+                        Sign In
+                    </a>
+                @endauth
             </div>
         </div>
     </header>
