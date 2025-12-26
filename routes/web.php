@@ -30,6 +30,10 @@ Route::get('/events', function (Request $request) {
     return redirect()->route('home', ['tab' => $request->query('tab', 'upcoming')]);
 })->name('events.index');
 
+Route::get('/calendar', function () {
+    return view('calendar');
+})->name('calendar');
+
 // ================== DASHBOARD ==================
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
