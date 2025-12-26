@@ -39,38 +39,24 @@
         }
     </script>
 
-    <style>
-        body {
-            background-color: #1a161f;
-            color: #ededed;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1a161f;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #3a3442;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4a4452;
-        }
-
-        [x-cloak] {
-            display: none !important;
+    <style type="text/tailwindcss">
+        @layer utilities {
+            [x-cloak] {
+                display: none !important;
+            }
         }
     </style>
 
     @stack('styles')
 </head>
 
-<body class="min-h-screen font-sans antialiased selection:bg-purple-500 selection:text-white" x-data="layoutData()">
+<body class="min-h-screen font-sans antialiased bg-background text-textMain selection:bg-purple-500 selection:text-white 
+    [&::-webkit-scrollbar]:w-2 
+    [&::-webkit-scrollbar-track]:bg-background 
+    [&::-webkit-scrollbar-thumb]:bg-border 
+    [&::-webkit-scrollbar-thumb]:rounded 
+    [&::-webkit-scrollbar-thumb:hover]:bg-[#4a4452]" 
+    x-data="layoutData()">
 
     <!-- ================= NAVBAR ================= -->
     <header class="sticky top-0 bg-[#1a161f]/90 backdrop-blur-md z-50 border-b border-transparent transition-all"
@@ -110,11 +96,27 @@
                     <i class="fa-solid fa-magnifying-glass text-lg"></i>
                 </button>
 
-                <button class="hover:text-white transition-colors relative">
-                    <i class="fa-regular fa-bell text-lg"></i>
-                    <span class="absolute -top-1 -right-0.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#1a161f]">
-                    </span>
-                </button>
+                <!-- Notification Dropdown -->
+                <div class="relative" x-data="{ showNotifications: false }">
+                    <button @click="showNotifications = !showNotifications" class="hover:text-white transition-colors relative block">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                    </button>
+
+                    <!-- Dropdown Content -->
+                    <div x-show="showNotifications" 
+                         @click.away="showNotifications = false"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         class="absolute right-0 mt-3 w-80 bg-[#1a161f] border border-[#3a3442] rounded-xl shadow-2xl z-[60]"
+                         style="display: none;">
+                        
+                        <div class="py-12 px-8 text-center">
+                            <h3 class="text-white text-lg font-semibold mb-2">Masih Sepi di Sini</h3>
+                            <p class="text-textMuted text-sm leading-relaxed">Buat acara dan undang beberapa teman.</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Profile Dropdown -->
                 <div class="relative" x-data="{ open: false }">
@@ -155,36 +157,21 @@
 
     <!-- ================= FOOTER ================= -->
     @if(!request()->is('create'))
-        <footer class="max-w-6xl mx-auto px-6 pb-10">
-            <div class="mt-32 pt-8 border-t border-border">
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-                    <!-- Left Links -->
-                    <div class="flex items-center gap-6 text-sm text-textMuted font-medium">
-                        <img src="{{ asset('images/logo.png') }}" alt="Siko Logo"
-                            class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
-                        <a href="#" class="hover:text-white transition-colors">Temukan</a>
-                        <a href="#" class="hover:text-white transition-colors">Harga</a>
-                        <a href="#" class="hover:text-white transition-colors">Bantuan</a>
-                    </div>
-
-                    <!-- Right Icons -->
-                    <div class="flex items-center gap-6 text-textMuted text-lg">
-                        <a href="#" class="hover:text-white transition-colors"><i class="fa-regular fa-envelope"></i></a>
-                        <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-apple"></i></a>
-                        <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-x"></i></a>
-                        <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                    </div>
-                </div>
-
-                <!-- Bottom Promotion -->
-                <div class="text-center text-sm font-medium">
-                    <a href="/create" class="inline-flex items-center gap-1 hover:opacity-80 transition-opacity">
-                        <span class="text-blue-500">Selenggarakan acara</span>
-                        <span class="text-textMuted">Anda dengan</span>
-                        <span class="text-orange-500">Siko</span>
-                        <i class="fa-solid fa-arrow-right -rotate-45 text-xs text-textMuted"></i>
+    <footer class="max-w-6xl mx-auto px-6 pb-10">
+        <div class="mt-32 pt-8 border-t border-border">
+            <div class="flex justify-between items-center">
+                <!-- Left: Logo & Calendar -->
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/logo.png') }}" alt="Siko Logo" class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
+                    <a href="/calendar" class="text-textMuted hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                        <span>Kalender</span>
                     </a>
                 </div>
+                
+                <!-- Right: Instagram Icon -->
+                <a href="#" class="text-textMuted hover:text-white transition-colors text-lg">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
             </div>
         </footer>
     @endif
