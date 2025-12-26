@@ -18,7 +18,13 @@
         <form action="{{ route('login.post') }}" method="POST" class="space-y-6">
             @csrf
 
-            @if($errors->any())
+            @if (session('success'))
+                <div class="bg-green-500/10 border border-green-500/20 text-green-400 text-xs p-3 rounded-lg mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
                 <div class="bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-lg mb-4">
                     {{ $errors->first() }}
                 </div>
@@ -33,7 +39,8 @@
                         Use Phone Number
                     </button>
                 </div>
-                <input type="email" name="email" id="email" placeholder="you@email.com" value="{{ old('email') }}" required
+                <input type="email" name="email" id="email" placeholder="you@email.com" value="{{ old('email') }}"
+                    required
                     class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px]" />
             </div>
 
@@ -50,33 +57,9 @@
             </button>
         </form>
 
-        <!-- Divider -->
-        <div class="relative my-8">
-            <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-[#2a2a2a]"></div>
-            </div>
-            <div class="relative flex justify-center text-xs">
-                <!-- Space for label if needed -->
-            </div>
-        </div>
-
-        <!-- Social Logins -->
-        <div class="space-y-3">
-            <button
-                class="w-full bg-[#2f2936] text-gray-300 font-medium py-3.5 rounded-xl hover:bg-[#3d3645] transition-colors flex items-center justify-center gap-3 text-[15px]">
-                <i class="fa-brands fa-google text-[16px]"></i>
-                Sign in with Google
-            </button>
-            <button
-                class="w-full bg-[#2f2936] text-gray-300 font-medium py-3.5 rounded-xl hover:bg-[#3d3645] transition-colors flex items-center justify-center gap-3 text-[15px]">
-                <i class="fa-solid fa-key text-[16px]"></i>
-                Sign in with Passkey
-            </button>
-        </div>
-
         <div class="mt-8 text-center">
-            <a href="{{ route('admin.login') }}" class="text-xs text-gray-500 hover:text-white transition-colors">
-                Are you an Admin? Login here
+            <a href="{{ route('register') }}" class="text-xs text-gray-500 hover:text-white transition-colors">
+                Belum punya akun? Registrasi di sini
             </a>
         </div>
     </div>

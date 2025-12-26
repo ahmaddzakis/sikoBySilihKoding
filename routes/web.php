@@ -10,7 +10,9 @@ use App\Http\Controllers\AdminEventController;
 // ================== AUTH ==================
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::get('/admin/login', [AuthController::class, 'adminLoginForm'])->name('admin.login');
+Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ================== PUBLIC ==================
