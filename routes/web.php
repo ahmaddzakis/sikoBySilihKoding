@@ -45,6 +45,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('dashboard/events', AdminEventController::class)->names('dashboard.events');
 });
 
+Route::get('/profile', function () {
+    return view('profile');
+})->name('profile');
+
 // ================== SIGN IN (NON LIVEWIRE) - Existing Legacy ==================
 // Note: This route '/signin' seems redundant if we have '/login', but keeping it as per user previous file
 Route::get('/signin', function () {

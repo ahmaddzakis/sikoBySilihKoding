@@ -55,8 +55,7 @@
     [&::-webkit-scrollbar-track]:bg-background 
     [&::-webkit-scrollbar-thumb]:bg-border 
     [&::-webkit-scrollbar-thumb]:rounded 
-    [&::-webkit-scrollbar-thumb:hover]:bg-[#4a4452]" 
-    x-data="layoutData()">
+    [&::-webkit-scrollbar-thumb:hover]:bg-[#4a4452]" x-data="layoutData()">
 
     <!-- ================= NAVBAR ================= -->
     <header class="sticky top-0 bg-[#1a161f]/90 backdrop-blur-md z-50 border-b border-transparent transition-all"
@@ -98,19 +97,18 @@
 
                 <!-- Notification Dropdown -->
                 <div class="relative" x-data="{ showNotifications: false }">
-                    <button @click="showNotifications = !showNotifications" class="hover:text-white transition-colors relative block">
+                    <button @click="showNotifications = !showNotifications"
+                        class="hover:text-white transition-colors relative block">
                         <i class="fa-regular fa-bell text-lg"></i>
                     </button>
 
                     <!-- Dropdown Content -->
-                    <div x-show="showNotifications" 
-                         @click.away="showNotifications = false"
-                         x-transition:enter="transition ease-out duration-200"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         class="absolute right-0 mt-3 w-80 bg-[#1a161f] border border-[#3a3442] rounded-xl shadow-2xl z-[60]"
-                         style="display: none;">
-                        
+                    <div x-show="showNotifications" @click.away="showNotifications = false"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        class="absolute right-0 mt-3 w-80 bg-[#1a161f] border border-[#3a3442] rounded-xl shadow-2xl z-[60]"
+                        style="display: none;">
+
                         <div class="py-12 px-8 text-center">
                             <h3 class="text-white text-lg font-semibold mb-2">Masih Sepi di Sini</h3>
                             <p class="text-textMuted text-sm leading-relaxed">Buat acara dan undang beberapa teman.</p>
@@ -137,10 +135,16 @@
 
                         <!-- Menu Items -->
                         <div class="py-2">
+                            <a href="/profile"
+                                class="block px-4 py-2.5 text-gray-300 hover:text-white hover:bg-white/5 transition-colors text-sm font-medium">
+                                <i class="fa-regular fa-user mr-2 text-xs opacity-50"></i> Lihat Profil
+                            </a>
+                            <div class="h-px bg-[#3a3442] my-1 mx-2"></div>
                             <form action="/login" method="GET">
                                 <button type="submit"
                                     class="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-400/5 transition-colors text-sm font-medium">
-                                    Sign Out
+                                    <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign
+                                    Out
                                 </button>
                             </form>
                         </div>
@@ -157,22 +161,24 @@
 
     <!-- ================= FOOTER ================= -->
     @if(!request()->is('create'))
-    <footer class="max-w-6xl mx-auto px-6 pb-10">
-        <div class="mt-32 pt-8 border-t border-border">
-            <div class="flex justify-between items-center">
-                <!-- Left: Logo & Calendar -->
-                <div class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="Siko Logo" class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
-                    <a href="/calendar" class="text-textMuted hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
-                        <span>Kalender</span>
+        <footer class="max-w-6xl mx-auto px-6 pb-10">
+            <div class="mt-32 pt-8 border-t border-border">
+                <div class="flex justify-between items-center">
+                    <!-- Left: Logo & Calendar -->
+                    <div class="flex items-center gap-3">
+                        <img src="{{ asset('images/logo.png') }}" alt="Siko Logo"
+                            class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
+                        <a href="/calendar"
+                            class="text-textMuted hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                            <span>Kalender</span>
+                        </a>
+                    </div>
+
+                    <!-- Right: Instagram Icon -->
+                    <a href="#" class="text-textMuted hover:text-white transition-colors text-lg">
+                        <i class="fa-brands fa-instagram"></i>
                     </a>
                 </div>
-                
-                <!-- Right: Instagram Icon -->
-                <a href="#" class="text-textMuted hover:text-white transition-colors text-lg">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-            </div>
         </footer>
     @endif
 
