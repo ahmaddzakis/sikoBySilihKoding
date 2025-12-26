@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Http\Controllers;
 
-use Livewire\Component;
-use Livewire\Attributes\Layout;
+use Illuminate\Http\Request;
 
-#[Layout('layouts.app')]
-class Events extends Component
+class EventController extends Controller
 {
-    public $activeTab = 'upcoming';
-
-    public function render()
+    public function index()
     {
-        // Data acara yang akan datang
+        // Data acara yang akan datang (Static data from previous Livewire component)
         $upcomingEvents = [
             [
                 'title' => 'Workshop Laravel & Livewire',
@@ -92,14 +88,6 @@ class Events extends Component
             ],
         ];
 
-        return view('livewire.events', [
-            'upcomingEvents' => $upcomingEvents,
-            'pastEvents' => $pastEvents,
-        ]);
-    }
-
-    public function setTab($tab)
-    {
-        $this->activeTab = $tab;
+        return view('events.index', compact('upcomingEvents', 'pastEvents'));
     }
 }
