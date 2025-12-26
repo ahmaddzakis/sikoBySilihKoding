@@ -106,7 +106,7 @@
                     Buat Acara
                 </a>
 
-                <button class="hover:text-white transition-colors">
+                <button @click="searchOpen = true" class="hover:text-white transition-colors">
                     <i class="fa-solid fa-magnifying-glass text-lg"></i>
                 </button>
 
@@ -155,43 +155,67 @@
 
     <!-- ================= FOOTER ================= -->
     @if(!request()->is('create'))
-    <footer class="max-w-6xl mx-auto px-6 pb-10">
-        <div class="mt-32 pt-8 border-t border-border">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-                <!-- Left Links -->
-                <div class="flex items-center gap-6 text-sm text-textMuted font-medium">
-                    <img src="{{ asset('images/logo.png') }}" alt="Siko Logo" class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
-                    <a href="#" class="hover:text-white transition-colors">Temukan</a>
-                    <a href="#" class="hover:text-white transition-colors">Harga</a>
-                    <a href="#" class="hover:text-white transition-colors">Bantuan</a>
+        <footer class="max-w-6xl mx-auto px-6 pb-10">
+            <div class="mt-32 pt-8 border-t border-border">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                    <!-- Left Links -->
+                    <div class="flex items-center gap-6 text-sm text-textMuted font-medium">
+                        <img src="{{ asset('images/logo.png') }}" alt="Siko Logo"
+                            class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
+                        <a href="#" class="hover:text-white transition-colors">Temukan</a>
+                        <a href="#" class="hover:text-white transition-colors">Harga</a>
+                        <a href="#" class="hover:text-white transition-colors">Bantuan</a>
+                    </div>
+
+                    <!-- Right Icons -->
+                    <div class="flex items-center gap-6 text-textMuted text-lg">
+                        <a href="#" class="hover:text-white transition-colors"><i class="fa-regular fa-envelope"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-apple"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-x"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
                 </div>
 
-                <!-- Right Icons -->
-                <div class="flex items-center gap-6 text-textMuted text-lg">
-                    <a href="#" class="hover:text-white transition-colors"><i class="fa-regular fa-envelope"></i></a>
-                    <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-apple"></i></a>
-                    <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-x"></i></a>
-                    <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <!-- Bottom Promotion -->
+                <div class="text-center text-sm font-medium">
+                    <a href="/create" class="inline-flex items-center gap-1 hover:opacity-80 transition-opacity">
+                        <span class="text-blue-500">Selenggarakan acara</span>
+                        <span class="text-textMuted">Anda dengan</span>
+                        <span class="text-orange-500">Siko</span>
+                        <i class="fa-solid fa-arrow-right -rotate-45 text-xs text-textMuted"></i>
+                    </a>
                 </div>
             </div>
-
-            <!-- Bottom Promotion -->
-            <div class="text-center text-sm font-medium">
-                <a href="/create" class="inline-flex items-center gap-1 hover:opacity-80 transition-opacity">
-                    <span class="text-blue-500">Selenggarakan acara</span>
-                    <span class="text-textMuted">Anda dengan</span>
-                    <span class="text-orange-500">Siko</span>
-                    <i class="fa-solid fa-arrow-right -rotate-45 text-xs text-textMuted"></i>
-                </a>
-            </div>
-        </div>
-    </footer>
+        </footer>
     @endif
+
+    @include('search')
 
     <!-- ================= SCRIPTS ================= -->
     <script>
         function layoutData() {
-            return {}
+            return {
+                searchOpen: false,
+                init() {
+                    this.$watch('searchOpen', value => {
+                        if (value) {
+                            document.body.style.overflow = 'hidden';
+                            // Dispatch event to focus input
+                            window.dispatchEvent(new CustomEvent('show-search'));
+                        } else {
+                            document.body.style.overflow = '';
+                        }
+                    });
+
+                    // Global keyboard shortcut
+                    window.addEventListener('keydown', (e) => {
+                        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                            e.preventDefault();
+                            this.searchOpen = !this.searchOpen;
+                        }
+                    });
+                }
+            }
         }
     </script>
 
