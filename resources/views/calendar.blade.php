@@ -33,26 +33,6 @@
         </div>
     </div>
 
-    <!-- Separator -->
-    <div class="border-t border-border my-8"></div>
-
-    <!-- Kalender yang Berlangganan -->
-    <div>
-        <h2 class="text-xl font-bold mb-4 text-white">Kalender yang Berlangganan</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Empty State Card -->
-            <div class="bg-surface border border-border rounded-xl p-6 flex flex-col items-start justify-center text-left opacity-80 hover:opacity-100 transition-opacity min-h-[220px]">
-                <div class="relative mb-4">
-                    <i class="fa-regular fa-calendar text-6xl text-border"></i>
-                    <span class="absolute top-[55%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-border/70">0</span>
-                </div>
-
-                <h3 class="text-lg font-bold text-textMuted mb-1">Tidak Ada Langganan</h3>
-                <p class="text-sm text-textMuted/60 leading-relaxed">Anda belum berlangganan<br>kalender apa pun.</p>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
 
