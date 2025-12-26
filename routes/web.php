@@ -13,8 +13,22 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ================== PUBLIC ==================
-Route::get('/', [EventController::class, 'index'])->name('home');
-Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/', function (Request $request) {
+    $activeTab = $request->query('tab', 'upcoming');
+
+    $upcomingEvents = [];
+    $pastEvents = [];
+
+    return view('events', [
+        'activeTab' => $activeTab,
+        'upcomingEvents' => $upcomingEvents,
+        'pastEvents' => $pastEvents,
+    ]);
+})->name('home');
+
+Route::get('/events', function (Request $request) {
+    return redirect()->route('home', ['tab' => $request->query('tab', 'upcoming')]);
+})->name('events.index');
 
 // ================== DASHBOARD ==================
 Route::middleware('auth')->group(function () {
