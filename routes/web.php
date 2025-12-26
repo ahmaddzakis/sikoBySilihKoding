@@ -2,11 +2,28 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Counter;
+use App\Livewire\Events;
 use App\Livewire\Create;
 use Illuminate\Http\Request;
 
 Route::get('/counter', Counter::class);
-Route::get('/events', \App\Livewire\Events::class)->name('events');
+Route::get('/events', Events::class)->name('events');
+
+// Sign In routes
+Route::get('/signin', function () {
+    return view('signin');
+})->name('signin');
+
+Route::post('/signin', function (Request $request) {
+    // TODO: Implement authentication logic
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|min:6',
+    ]);
+
+    // Redirect to home page after sign in
+    return redirect('/');
+})->name('signin.post');
 
 // buat buka halaman create 
 Route::get('/create', function () {
@@ -27,9 +44,7 @@ Route::post('/create', function (Request $request) {
     return redirect()->back()->with('success', 'Acara berhasil dibuat!');
 })->name('event.store');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', Events::class)->name('home');
 
 // buat buka halaman find 
 Route::get('/find', function () {
