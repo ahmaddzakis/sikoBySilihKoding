@@ -10,11 +10,20 @@
             @csrf
             
             <!-- Left Column -->
-            <div class="flex flex-col gap-5">
-                <div 
-                    class="relative aspect-square w-full rounded-3xl overflow-hidden border border-[#3a3442] shadow-2xl shadow-black/50">
+            <div class="flex flex-col gap-5" x-data="{ imagePreview: null }">
+                <!-- Image Display with Upload Button -->
+                <div class="relative aspect-square w-full rounded-3xl overflow-hidden border border-[#3a3442] shadow-2xl shadow-black/50">
+                    <img :src="imagePreview || '{{ asset('images/invite.jpg') }}'" 
+                         class="w-full h-full object-cover">
                     
-                    <img src="{{ asset('images/invite.jpg') }}" class="w-full h-full object-cover">
+                    <!-- Upload Button in Bottom Right Corner -->
+                    <label for="imageUpload" class="absolute bottom-4 right-4 cursor-pointer bg-[#26212c]/90 hover:bg-[#2f2936] backdrop-blur-sm border border-[#3a3442] rounded-full p-3 flex items-center justify-center transition-all shadow-lg">
+                        <svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </label>
+                    <input type="file" id="imageUpload" name="image" accept="image/*" class="hidden"
+                           @change="const file = $event.target.files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => imagePreview = e.target.result; reader.readAsDataURL(file); }">
                 </div>
             </div>
 

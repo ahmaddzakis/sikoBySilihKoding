@@ -175,7 +175,7 @@
     <!-- ================= FOOTER ================= -->
     @if(!request()->is('create'))
         <footer class="max-w-6xl mx-auto px-6 pb-10">
-            <div class="mt-32 pt-8 border-t border-border">
+            <div class="mt-64 pt-8 border-t border-border">
                 <div class="flex justify-between items-center">
                     <!-- Left: Logo & Calendar -->
                     <div class="flex items-center gap-3">
