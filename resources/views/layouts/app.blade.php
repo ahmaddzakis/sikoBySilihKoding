@@ -92,7 +92,7 @@
                     Buat Acara
                 </a>
 
-                <button class="hover:text-white transition-colors">
+                <button @click="searchOpen = true" class="hover:text-white transition-colors">
                     <i class="fa-solid fa-magnifying-glass text-lg"></i>
                 </button>
 
@@ -173,14 +173,36 @@
                     <i class="fa-brands fa-instagram"></i>
                 </a>
             </div>
-        </div>
-    </footer>
+        </footer>
     @endif
+
+    @include('search')
 
     <!-- ================= SCRIPTS ================= -->
     <script>
         function layoutData() {
-            return {}
+            return {
+                searchOpen: false,
+                init() {
+                    this.$watch('searchOpen', value => {
+                        if (value) {
+                            document.body.style.overflow = 'hidden';
+                            // Dispatch event to focus input
+                            window.dispatchEvent(new CustomEvent('show-search'));
+                        } else {
+                            document.body.style.overflow = '';
+                        }
+                    });
+
+                    // Global keyboard shortcut
+                    window.addEventListener('keydown', (e) => {
+                        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                            e.preventDefault();
+                            this.searchOpen = !this.searchOpen;
+                        }
+                    });
+                }
+            }
         }
     </script>
 
