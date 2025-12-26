@@ -6,6 +6,7 @@ use App\Livewire\Create;
 use Illuminate\Http\Request;
 
 Route::get('/counter', Counter::class);
+Route::get('/events', \App\Livewire\Events::class)->name('events');
 
 // buat buka halaman create 
 Route::get('/create', function () {
@@ -22,7 +23,7 @@ Route::post('/create', function (Request $request) {
 
     // TODO: Simpan data event ke database
     // Event::create([...]);
-    
+
     return redirect()->back()->with('success', 'Acara berhasil dibuat!');
 })->name('event.store');
 

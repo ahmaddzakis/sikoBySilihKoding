@@ -52,7 +52,7 @@
 
             <!-- Center Navigation -->
             <nav class="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                <a href="/events" class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 {{ request()->is('events') || request()->is('/') ? 'text-white' : '' }}">
                     <i class="fa-regular fa-calendar"></i>
                     Acara
                 </a>
