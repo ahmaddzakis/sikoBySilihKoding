@@ -38,6 +38,32 @@
                         <i class="fa-solid fa-house text-gray-400 group-hover:text-white"></i>
                         <span class="text-gray-300 group-hover:text-white font-medium">Buka Beranda</span>
                     </a>
+                    <a href="/calendar"
+                        class="flex items-center gap-4 px-3 py-3 rounded-xl hover:bg-[#1e1e1e] group transition-colors">
+                        <i class="fa-regular fa-calendar-days text-gray-400 group-hover:text-white"></i>
+                        <span class="text-gray-300 group-hover:text-white font-medium">Buka Kalender</span>
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-4 px-3 py-3 rounded-xl hover:bg-[#1e1e1e] group transition-colors">
+                        <i class="fa-regular fa-circle-question text-gray-400 group-hover:text-white"></i>
+                        <span class="text-gray-300 group-hover:text-white font-medium">Buka Bantuan</span>
+                        <i
+                            class="fa-solid fa-arrow-right -rotate-45 ml-auto text-xs text-gray-600 group-hover:text-gray-400"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Calendars Section -->
+            <div>
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 px-2">Kalender</h3>
+                <div class="space-y-1">
+                    <a href="#"
+                        class="flex items-center gap-4 px-3 py-3 rounded-xl hover:bg-[#1e1e1e] group transition-colors">
+                        <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                        </div>
+                        <span class="text-gray-300 group-hover:text-white font-medium">Personal</span>
+                    </a>
                 </div>
             </div>
         </div>
