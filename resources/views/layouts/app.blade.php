@@ -92,8 +92,8 @@
                     Acara
                 </a>
 
-                <a href="#"
-                    class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                <a href="/calendar"
+                    class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 {{ request()->is('calendar') ? 'text-white' : '' }}">
                     <i class="fa-regular fa-calendar-days"></i>
                     Kalender
                 </a>
@@ -152,6 +152,41 @@
     <main>
         @yield('content')
     </main>
+
+    <!-- ================= FOOTER ================= -->
+    @if(!request()->is('create'))
+    <footer class="max-w-6xl mx-auto px-6 pb-10">
+        <div class="mt-32 pt-8 border-t border-border">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                <!-- Left Links -->
+                <div class="flex items-center gap-6 text-sm text-textMuted font-medium">
+                    <img src="{{ asset('images/logo.png') }}" alt="Siko Logo" class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
+                    <a href="#" class="hover:text-white transition-colors">Temukan</a>
+                    <a href="#" class="hover:text-white transition-colors">Harga</a>
+                    <a href="#" class="hover:text-white transition-colors">Bantuan</a>
+                </div>
+
+                <!-- Right Icons -->
+                <div class="flex items-center gap-6 text-textMuted text-lg">
+                    <a href="#" class="hover:text-white transition-colors"><i class="fa-regular fa-envelope"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-apple"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="fa-solid fa-x"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <!-- Bottom Promotion -->
+            <div class="text-center text-sm font-medium">
+                <a href="/create" class="inline-flex items-center gap-1 hover:opacity-80 transition-opacity">
+                    <span class="text-blue-500">Selenggarakan acara</span>
+                    <span class="text-textMuted">Anda dengan</span>
+                    <span class="text-orange-500">Siko</span>
+                    <i class="fa-solid fa-arrow-right -rotate-45 text-xs text-textMuted"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+    @endif
 
     <!-- ================= SCRIPTS ================= -->
     <script>
