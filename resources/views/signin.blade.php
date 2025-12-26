@@ -21,8 +21,8 @@
         <div class="bg-[#1a1a1a] rounded-3xl p-8 border border-[#2a2a2a]">
             <!-- Logo -->
             <div class="flex justify-center mb-8">
-                <div class="w-24 h-24 bg-[#2a2a2a] rounded-full flex items-center justify-center p-4">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="SIKO Logo" class="w-full h-full object-contain">
+                <div class="flex items-center justify-center">
+                    <img src="{{ asset('images/logo.png') }}" alt="SIKO Logo" class="w-64 h-auto object-contain">
                 </div>
             </div>
 

@@ -68,7 +68,7 @@
             <!-- Logo (Left) -->
             <div class="flex items-center">
                 <a href="/" class="flex items-center gap-2">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="SIKO Logo" class="h-10 w-auto">
+                    <img src="{{ asset('images/logo.png') }}" alt="SIKO Logo" class="h-10 w-auto">
                 </a>
             </div>
 
