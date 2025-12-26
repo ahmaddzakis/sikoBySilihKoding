@@ -1,62 +1,66 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Livewire\Auth\Login;
+use App\Livewire\Dashboard\Index as DashboardIndex;
+use App\Livewire\Dashboard\CreateEvent;
 use App\Livewire\Counter;
 use App\Livewire\Events;
-use App\Livewire\Create;
-use Illuminate\Http\Request;
 
+// ================== AUTH ==================
+Route::get('/login', Login::class)->name('login');
+
+// ================== PUBLIC ==================
+Route::get('/', Events::class)->name('home');
 Route::get('/counter', Counter::class);
 Route::get('/events', Events::class)->name('events');
 
-// Sign In routes
+// ================== DASHBOARD ==================
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', DashboardIndex::class);
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/dashboard/create-event', CreateEvent::class);
+    });
+});
+
+// ================== SIGN IN (NON LIVEWIRE) ==================
 Route::get('/signin', function () {
     return view('signin');
 })->name('signin');
 
 Route::post('/signin', function (Request $request) {
-    // TODO: Implement authentication logic
     $request->validate([
         'email' => 'required|email',
         'password' => 'required|min:6',
     ]);
 
-    // Redirect to home page after sign in
     return redirect('/');
 })->name('signin.post');
 
-// buat buka halaman create 
+// ================== CREATE EVENT ==================
 Route::get('/create', function () {
     return view('create');
 })->name('create');
 
-// Handle saving the event
 Route::post('/create', function (Request $request) {
-    // Validate the request
     $request->validate([
         'title' => 'required|max:255',
-        // TODO: tambahkan validasi untuk field lainnya (start_date, end_date, location, description, dll)
     ]);
-
-    // TODO: Simpan data event ke database
-    // Event::create([...]);
 
     return redirect()->back()->with('success', 'Acara berhasil dibuat!');
 })->name('event.store');
 
-Route::get('/', Events::class)->name('home');
-
-// buat buka halaman find 
+// ================== FIND ==================
 Route::get('/find', function () {
     return view('find');
 })->name('find');
 
-//buka halaman city
 Route::get('/find/city/{city}', function ($city) {
-    return view('city', ['city' => $city]);
+    return view('city', compact('city'));
 })->name('find.city');
 
-//buka halaman category
 Route::get('/find/{category}', function ($category) {
-    return view('category', ['category' => $category]);
+    return view('category', compact('category'));
 })->name('find.category');
