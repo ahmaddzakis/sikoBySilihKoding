@@ -67,7 +67,6 @@
         }
     </style>
 
-    @livewireStyles
     @stack('styles')
 </head>
 
@@ -139,7 +138,7 @@
 
     <!-- ================= CONTENT ================= -->
     <main>
-        {{ $slot }}
+        @yield('content')
     </main>
 
     <!-- ================= SCRIPTS ================= -->
@@ -149,7 +148,6 @@
         }
     </script>
 
-    @livewireScripts
     @stack('scripts')
 </body>
 
