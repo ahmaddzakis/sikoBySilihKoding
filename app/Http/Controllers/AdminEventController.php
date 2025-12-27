@@ -8,29 +8,28 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminEventController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $events = [];
         if (Auth::check()) {
-            $events = Event::where('organizer_id', Auth::id())->orderBy('waktu_mulai', 'desc')->get();
+            $query = Event::where('organizer_id', Auth::id());
+
+            if ($request->has('search')) {
+                $search = $request->search;
+                $query->where(function($q) use ($search) {
+                    $q->where('judul', 'like', "%{$search}%")
+                      ->orWhere('lokasi', 'like', "%{$search}%");
+                });
+            }
+
+            $events = $query->orderBy('waktu_mulai', 'desc')->get();
         }
         return view('dashboard.events.index', compact('events'));
     }
 
     public function create()
     {
-        // View for creating event - assuming reuse of index or separate view if modal approach changes
-        // For now, based on previous design, it seems it was a single page with list and form? 
-        // Actually the previous design was CreateEvent component which had a form.
-        // The list was also in the same component or loaded there? 
-        // Reading CreateEvent.php: it has loadEvents() and save().
-        // It seems it was a "manage events" page effectively.
-        // Let's stick to the previous single-view approach or split it.
-        // The user asked to refactor livewire. Livewire CreateEvent had both list and form capabilities?
-        // Let's look at `loadEvents`. Yes.
-        // But the previous route was `/dashboard/create-event`.
-        // Let's keep one view `dashboard.events.index` that mirrors the functionality.
-        return $this->index(); 
+        return view('dashboard.events.create');
     }
 
     public function store(Request $request)
