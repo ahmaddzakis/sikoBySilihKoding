@@ -48,9 +48,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('dashboard/events', AdminEventController::class)->names('dashboard.events');
 });
 
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
+use App\Http\Controllers\ProfileController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
+});
 
 Route::get('/help', function () {
     return view('help');
