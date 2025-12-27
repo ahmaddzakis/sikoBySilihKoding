@@ -1,4 +1,3 @@
-```
 @extends('layouts.app')
 
 @section('title', 'Profil')
@@ -65,4 +64,3 @@
         </div>
     </div>
 @endsection
-```

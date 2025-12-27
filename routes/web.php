@@ -9,7 +9,10 @@ use App\Http\Controllers\AdminEventController;
 
 // ================== AUTH ==================
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+Route::get('/admin/login', [AuthController::class, 'adminLoginForm'])->name('admin.login');
+Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ================== PUBLIC ==================
@@ -48,6 +51,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/profile', function () {
     return view('profile');
 })->name('profile');
+
+Route::get('/help', function () {
+    return view('help');
+})->name('help');
 
 // ================== SIGN IN (NON LIVEWIRE) - Existing Legacy ==================
 // Note: This route '/signin' seems redundant if we have '/login', but keeping it as per user previous file
