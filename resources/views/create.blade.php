@@ -62,7 +62,7 @@
                         <div class="flex items-center gap-4 p-2 relative">
                             <!-- Label -->
                             <div class="flex items-center gap-3 w-24 pl-2 relative z-10">
-                                <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                                <span class="w-2.5 h-2.5 rounded-full border border-gray-500 bg-[#26212c]"></span>
                                 <span class="text-[15px] font-medium text-gray-300">Mulai</span>
                             </div>
                             
@@ -119,8 +119,6 @@
                             </div>
                         </div>
 
-                        <!-- Connector Line -->
-                        <div class="absolute left-[21px] top-[34px] w-px h-[38px] border-l border-dashed border-gray-600 z-0"></div>
 
                         <!-- End Row -->
                         <div class="flex items-center gap-4 p-2 relative z-10">
@@ -220,17 +218,17 @@
                         
                         <!-- Ticket -->
                         <div class="flex justify-between items-center py-2.5 px-2 hover:bg-[#26212c] rounded-lg transition-colors cursor-pointer group"
-                             @click="openTicketModal = true">
+                             @click="tempTicketPrice = ticketPrice; openTicketModal = true">
                              <div class="flex items-center gap-3">
                                  <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
                                  <span class="text-[15px] text-gray-300 font-medium">Harga Tiket</span>
                              </div>
-                             <div class="flex items-center gap-2">
+                              <div class="flex items-center gap-2">
                                  <div class="flex items-center gap-2">
-                                     <span class="text-sm text-gray-400" x-text="ticketPrice"></span>
+                                     <span class="text-sm text-gray-400" x-text="ticketPrice ? (isNaN(ticketPrice) ? ticketPrice : 'Rp ' + Number(ticketPrice).toLocaleString('id-ID')) : 'Gratis'"></span>
                                      <svg class="w-3 h-3 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                                  </div>
-                             </div>
+                              </div>
                         </div>
 
                          <!-- Approval -->
@@ -249,7 +247,7 @@
 
                          <!-- Capacity -->
                         <div class="flex justify-between items-center py-2.5 px-2 hover:bg-[#26212c] rounded-lg transition-colors cursor-pointer group"
-                             @click="openCapacityModal = true">
+                             @click="tempCapacityLimit = capacityLimit; openCapacityModal = true">
                              <div class="flex items-center gap-3">
                                  <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                                  <span class="text-[15px] text-gray-300 font-medium">Kapasitas</span>
@@ -299,12 +297,21 @@
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-2">
                          <span class="text-[15px] font-medium text-gray-200">Kapasitas Maksimal</span>
-                         <input type="number" x-model="capacityLimit" 
-                                class="bg-[#2f2936] border border-[#3a3442] rounded-lg w-32 py-2 px-3 text-right text-white font-medium outline-none focus:border-gray-500 placeholder-gray-600 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none">
+                         <input type="number" x-model="tempCapacityLimit" 
+                                :class="(tempCapacityLimit < 1 || tempCapacityLimit > 100000) && tempCapacityLimit !== '' ? 'border-red-500/50' : 'border-[#3a3442]'"
+                                class="bg-[#2f2936] border rounded-lg w-32 py-2 px-3 text-right text-white font-medium outline-none focus:border-gray-500 placeholder-gray-600 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none transition-colors">
                     </div>
+                    <p x-show="(tempCapacityLimit < 1 || tempCapacityLimit > 100000) && tempCapacityLimit !== ''" 
+                       class="text-xs text-red-500/80 mt-1 text-right"
+                       style="display: none;">
+                        Kapasitas harus antara 1 dan 100.000.
+                    </p>
                 </div>
 
-                <button @click="openCapacityModal = false" class="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors">
+                <button @click="capacityLimit = tempCapacityLimit; openCapacityModal = false" 
+                        :disabled="(tempCapacityLimit < 1 || tempCapacityLimit > 100000) && tempCapacityLimit !== ''"
+                        :class="(tempCapacityLimit < 1 || tempCapacityLimit > 100000) && tempCapacityLimit !== '' ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-white hover:bg-gray-200'"
+                        class="w-full text-black font-bold py-3 rounded-xl transition-colors">
                     Konfirmasi
                 </button>
 
@@ -393,17 +400,25 @@
                 <div class="mb-6">
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
-                         <input type="text" x-model="ticketPrice" 
-                                @click="if(ticketPrice === 'Gratis') ticketPrice = ''"
-                                @blur="if(ticketPrice === '') ticketPrice = 'Gratis'"
-                                class="w-full bg-[#2f2936] border border-[#3a3442] rounded-xl pl-12 pr-4 py-3 text-white placeholder-gray-600 outline-none focus:border-gray-500 transition-colors"
+                         <input type="number" x-model="tempTicketPrice" 
+                                :class="tempTicketPrice < 0 && tempTicketPrice !== '' ? 'border-red-500/50' : 'border-[#3a3442]'"
+                                class="w-full bg-[#2f2936] border rounded-xl pl-12 pr-4 py-3 text-white placeholder-gray-600 outline-none focus:border-gray-500 transition-colors appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                                 placeholder="0">
                     </div>
-                    <p class="text-xs text-gray-500 mt-2 ml-1">Kosongkan untuk "Gratis"</p>
+                    <p x-show="tempTicketPrice < 0 && tempTicketPrice !== ''" 
+                       class="text-xs text-red-500/80 mt-2 ml-1"
+                       style="display: none;">
+                        Harga tiket tidak boleh kurang dari 0.
+                    </p>
+                    <p x-show="!(tempTicketPrice < 0 && tempTicketPrice !== '')"
+                       class="text-xs text-gray-500 mt-2 ml-1">Kosongkan untuk "Gratis"</p>
                 </div>
 
                 <!-- Footer -->
-                <button @click="openTicketModal = false" class="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors">
+                <button @click="ticketPrice = tempTicketPrice; openTicketModal = false" 
+                        :disabled="tempTicketPrice < 0 && tempTicketPrice !== ''"
+                        :class="tempTicketPrice < 0 && tempTicketPrice !== '' ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-white hover:bg-gray-200'"
+                        class="w-full text-black font-bold py-3 rounded-xl transition-colors">
                     Selesai
                 </button>
             </div>
@@ -420,12 +435,14 @@
                 eventName: '',
                 location: '',
                 description: '',
-                ticketPrice: 'Gratis',
+                ticketPrice: '',
+                tempTicketPrice: '',
                 requiresApproval: false,
                 
                 // Capacity Logic
                 openCapacityModal: false,
                 capacityLimit: '',
+                tempCapacityLimit: '',
                 waitlistOverCapacity: false,
                 
                 // Description
@@ -435,7 +452,19 @@
                 openLocationModal: false,
                 openTicketModal: false,
 
+                // Validation Helpers
+                isCapacityInvalid() {
+                    return (this.capacityLimit < 1 || this.capacityLimit > 100000) && this.capacityLimit !== '';
+                },
+                isPriceInvalid() {
+                    return this.tempTicketPrice < 0 && this.tempTicketPrice !== '';
+                },
+
                 submitEvent() {
+                     if (this.isCapacityInvalid() || this.isPriceInvalid()) {
+                         alert('Mohon perbaiki kesalahan pada form sebelum melanjutkan.');
+                         return;
+                     }
                      alert(`Event Created: ${this.eventName}\nStart: ${this.startDate}\nEnd: ${this.endDate}`);
                 }
             }
