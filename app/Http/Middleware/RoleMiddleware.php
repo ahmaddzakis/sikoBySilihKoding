@@ -17,7 +17,7 @@ class RoleMiddleware
 
         // role tidak sesuai
         if (auth()->user()->role !== $role) {
-            abort(403, 'Akses ditolak');
+            return redirect('/');
         }
 
         return $next($request);
