@@ -5,7 +5,7 @@
 @section('content')
     <div class="max-w-6xl mx-auto px-6 py-6" x-data="eventForm()">
         
-        <!-- Main Content -->
+        <!-- Konten Utama -->
         <form action="{{ route('event.store') }}" method="POST" class="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12 lg:gap-20">
             @csrf
             
@@ -52,13 +52,13 @@
                 <input type="text" name="title" x-model="eventName" placeholder="Nama Acara" 
                     class="bg-transparent text-5xl font-bold w-full outline-none placeholder-[#545454] focus:placeholder-gray-700 text-white transition-all caret-purple-500">
 
-                <!-- Pemilih Tanggal & Waktu (Alpine component: datePicker) -->
+                <!-- Pemilih Tanggal & Waktu -->
                 <div class="flex flex-col md:flex-row gap-3 mt-2 overflow-visible relative z-10" x-data="datePicker()">
                     
-                    <!-- Date Inputs Card -->
+                    <!-- Kartu Input Tanggal -->
                     <div class="flex-1 bg-[#26212c] border border-[#3a3442] rounded-2xl p-2 relative">
                         
-                        <!-- Start Row -->
+                        <!-- Baris Mulai -->
                         <div class="flex items-center gap-4 p-2 relative">
                             <!-- Label -->
                             <div class="flex items-center gap-3 w-24 pl-2 relative z-10">
@@ -119,8 +119,7 @@
                             </div>
                         </div>
 
-
-                        <!-- End Row -->
+                        <!-- Baris Selesai -->
                         <div class="flex items-center gap-4 p-2 relative z-10">
                              <!-- Label -->
                             <div class="flex items-center gap-3 w-24 pl-2">
@@ -163,7 +162,7 @@
                                             class="w-full h-full bg-[#2f2936] hover:bg-[#383240] rounded-lg px-2 flex items-center justify-center text-[15px] text-gray-200 font-medium transition-colors">
                                         <span x-text="endTime"></span>
                                     </button>
-                                     <!-- Time Dropdown -->
+                                     <!-- Dropdown Waktu -->
                                     <div x-show="openPicker === 'endTime'" @click.outside="openPicker = null" x-transition
                                          class="absolute top-full left-0 mt-2 w-32 bg-[#2d2833] border border-[#3a3442] rounded-xl shadow-xl max-h-60 overflow-y-auto z-50 py-1 scrollBar-hidden">
                                         <template x-for="time in timeSlots">
@@ -178,7 +177,7 @@
                         </div>
                     </div>
 
-                    <!-- Timezone Card -->
+                    <!-- Kartu Zona Waktu -->
                     <div class="hidden md:flex flex-col justify-center gap-1 px-4 py-2 bg-[#26212c] border border-[#3a3442] rounded-2xl min-w-[140px]">
                          <div class="flex items-center gap-2 text-gray-400">
                              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -408,7 +407,7 @@
     <script>
         function eventForm() {
             return {
-                // Form Data (Alpine.js State)
+                // Data Form (State Alpine.js)
                 visibility: 'Kalender Pribadi',
                 eventName: '',
                 location: '',
@@ -417,20 +416,20 @@
                 tempTicketPrice: '',
                 requiresApproval: false,
                 
-                // Capacity Logic
+                // Logika Kapasitas
                 openCapacityModal: false,
                 capacityLimit: '',
                 tempCapacityLimit: '',
                 waitlistOverCapacity: false,
                 
-                // Description
+                // Deskripsi
                 openDescriptionModal: false,
                 
-                // Modals
+                // Modal-modal
                 openLocationModal: false,
                 openTicketModal: false,
 
-                // Validation Helpers
+                // Helper Validasi
                 isCapacityInvalid() {
                     return (this.capacityLimit < 1 || this.capacityLimit > 100000) && this.capacityLimit !== '';
                 },

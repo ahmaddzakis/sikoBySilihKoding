@@ -18,7 +18,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Tailwind Config -->
+    <!-- Konfigurasi Tema Tailwind CSS -->
     <script>
         tailwind.config = {
             theme: {
@@ -62,14 +62,14 @@
         :class="{ 'border-[#3a3442]': window.scrollY > 10 }">
         <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center relative">
 
-            <!-- Logo -->
+            <!-- Logo SIKO -->
             <div class="flex items-center">
                 <a href="/" class="flex items-center gap-2">
                     <img src="{{ asset('images/logo.png') }}" alt="SIKO Logo" class="h-10 w-auto">
                 </a>
             </div>
 
-            <!-- Navigation -->
+            <!-- Navigasi Menu: Desktop Only -->
             <nav class="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
                 <a href="/events"
                     class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 {{ request()->is('events') || request()->is('/') ? 'text-white' : '' }}">
@@ -84,57 +84,43 @@
                 </a>
             </nav>
 
-            <!-- Right Tools -->
+            <!-- Alat Samping Kanan (Search, Notification, Profile) -->
             <div class="flex items-center gap-6 text-sm text-gray-400">
 
+                <!-- Tombol Buat Acara -->
                 <a href="/create" class="hidden md:block text-white hover:text-gray-300 transition-colors font-medium">
                     Buat Acara
                 </a>
 
+                <!-- Tombol Pencarian -->
                 <button @click="searchOpen = true" class="hover:text-white transition-colors">
                     <i class="fa-solid fa-magnifying-glass text-lg"></i>
                 </button>
 
-                <!-- Notification Dropdown -->
-                <div class="relative" x-data="{ showNotifications: false }">
-                    <button @click="showNotifications = !showNotifications"
-                        class="hover:text-white transition-colors relative block">
-                        <i class="fa-regular fa-bell text-lg"></i>
-                    </button>
+                <!-- Dropdown Notifikasi (File Terpisah) -->
+                @include('notification')
 
-                    <!-- Dropdown Content -->
-                    <div x-show="showNotifications" @click.away="showNotifications = false"
-                        x-transition:enter="transition ease-out duration-200"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        class="absolute right-0 mt-3 w-80 bg-[#1a161f] border border-[#3a3442] rounded-xl shadow-2xl z-[60]"
-                        style="display: none;">
-
-                        <div class="py-12 px-8 text-center">
-                            <h3 class="text-white text-lg font-semibold mb-2">Masih Sepi di Sini</h3>
-                            <p class="text-textMuted text-sm leading-relaxed">Buat acara dan undang beberapa teman.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Dropdown -->
+                <!-- Dropdown Profil: Logika untuk user yang sudah Login atau Belum -->
                 @auth
                     <div class="relative" x-data="{ open: false }">
+                        <!-- Avatar User -->
                         <div @click="open = !open"
                             class="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 cursor-pointer border border-[#3a3442] hover:scale-105 transition-transform">
                         </div>
 
-                        <!-- Dropdown Menu -->
+                        <!-- Menu Dropdown Profil -->
                         <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                             class="absolute right-0 mt-3 w-56 bg-[#1a161f] border border-[#3a3442] rounded-2xl shadow-2xl overflow-hidden z-[60]"
                             x-cloak>
-                            <!-- User Info -->
+                            
+                            <!-- Info Singkat User -->
                             <div class="px-4 py-4 border-b border-[#3a3442] bg-[#221d28]/30">
                                 <div class="font-bold text-white">{{ Auth::user()->name }}</div>
                                 <div class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</div>
                             </div>
 
-                            <!-- Menu Items -->
+                            <!-- Pilihan Menu -->
                             <div class="py-2">
                                 @if(Auth::user()->role === 'admin')
                                     <a href="{{ route('dashboard') }}"
@@ -151,14 +137,14 @@
                                     @csrf
                                     <button type="submit"
                                         class="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-400/5 transition-colors text-sm font-medium">
-                                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign
-                                        Out
+                                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign Out
                                     </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 @else
+                    <!-- Link Sign In jika belum login -->
                     <a href="{{ route('login') }}" class="text-white hover:text-gray-300 transition-colors font-medium">
                         Sign In
                     </a>
@@ -177,7 +163,7 @@
         <footer class="max-w-6xl mx-auto px-6 pb-10">
             <div class="mt-64 pt-8 border-t border-border">
                 <div class="flex justify-between items-center">
-                    <!-- Left: Logo & Calendar -->
+                    <!-- Kiri: Logo & kalendar -->
                     <div class="flex items-center gap-3">
                         <img src="{{ asset('images/logo.png') }}" alt="Siko Logo"
                             class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
@@ -187,11 +173,11 @@
                         </a>
                     </div>
 
-                    <!-- Right: Instagram Icon -->
-                    <a href="#" class="text-textMuted hover:text-white transition-colors text-lg">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-                </div>
+                <!-- Sisi Kanan: Icon Instagram -->
+                <a href="#" class="text-textMuted hover:text-white transition-colors text-lg">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
         </footer>
     @endif
 
@@ -202,18 +188,17 @@
         function layoutData() {
             return {
                 searchOpen: false,
+
                 init() {
                     this.$watch('searchOpen', value => {
                         if (value) {
                             document.body.style.overflow = 'hidden';
-                            // Dispatch event to focus input
                             window.dispatchEvent(new CustomEvent('show-search'));
                         } else {
                             document.body.style.overflow = '';
                         }
                     });
 
-                    // Global keyboard shortcut
                     window.addEventListener('keydown', (e) => {
                         if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                             e.preventDefault();
