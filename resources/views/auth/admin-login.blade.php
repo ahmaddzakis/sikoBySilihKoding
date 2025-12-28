@@ -27,7 +27,8 @@
 
             <div class="space-y-2">
                 <label for="email" class="text-white text-sm font-medium">Admin Email</label>
-                <input type="email" name="email" id="email" placeholder="admin@siko.com" value="{{ old('email') }}" required
+                <input type="email" name="email" id="email" placeholder="admin@gmail.com" value="{{ old('email') }}"
+                    required
                     class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-red-500/50 transition-all text-[15px]" />
             </div>
 

@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Register')
+@section('title', 'Daftar')
 
 @section('content')
     <div class="w-full max-w-[400px] bg-[#1a161f] border border-[#2a2a2a] rounded-[28px] p-8 shadow-2xl">
@@ -10,8 +10,8 @@
                 <i class="fa-solid fa-user-plus text-white text-xl"></i>
             </div>
 
-            <h1 class="text-2xl font-bold text-white mb-2">Create an account</h1>
-            <p class="text-gray-400 text-sm">Join Siko to start managing your events.</p>
+            <h1 class="text-2xl font-bold text-white mb-2">Buat Akun</h1>
+            <p class="text-gray-400 text-sm">Gabung Siko untuk mulai mengelola acaramu.</p>
         </div>
 
         <!-- Register Form -->
@@ -29,25 +29,25 @@
             @endif
 
             <div class="space-y-2">
-                <label for="name" class="text-white text-sm font-medium">Full Name</label>
-                <input type="text" name="name" id="name" placeholder="Your name" value="{{ old('name') }}" required
+                <label for="name" class="text-white text-sm font-medium">Nama Lengkap</label>
+                <input type="text" name="name" id="name" placeholder="Nama kamu" value="{{ old('name') }}" required
                     class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px]" />
             </div>
 
             <div class="space-y-2">
                 <label for="email" class="text-white text-sm font-medium">Email</label>
-                <input type="email" name="email" id="email" placeholder="you@email.com" value="{{ old('email') }}" required
+                <input type="email" name="email" id="email" placeholder="kamu@email.com" value="{{ old('email') }}" required
                     class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px]" />
             </div>
 
             <div class="space-y-2">
-                <label for="password" class="text-white text-sm font-medium">Password</label>
+                <label for="password" class="text-white text-sm font-medium">Kata Sandi</label>
                 <input type="password" name="password" id="password" placeholder="••••••••" required
                     class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px]" />
             </div>
 
             <div class="space-y-2">
-                <label for="password_confirmation" class="text-white text-sm font-medium">Confirm Password</label>
+                <label for="password_confirmation" class="text-white text-sm font-medium">Konfirmasi Kata Sandi</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••"
                     required
                     class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px]" />
@@ -55,15 +55,15 @@
 
             <button type="submit"
                 class="w-full bg-white text-black font-semibold py-3.5 rounded-xl hover:bg-gray-200 transition-colors text-[15px] mt-2 shadow-lg">
-                Create Account
+                Buat Akun
             </button>
         </form>
 
         <div class="mt-8 text-center">
             <p class="text-xs text-gray-500">
-                Already have an account?
+                Sudah punya akun?
                 <a href="{{ route('login') }}" class="text-white hover:underline transition-colors">
-                    Log in here
+                    Masuk di sini
                 </a>
             </p>
         </div>

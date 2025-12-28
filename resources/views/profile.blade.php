@@ -44,16 +44,19 @@
                         </div>
                     @endif
                 </div>
-                
+
                 <!-- Edit Overlay -->
-                <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" onclick="document.getElementById('avatar-input').click()">
+                <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                    onclick="document.getElementById('avatar-input').click()">
                     <i class="fa-solid fa-camera text-white text-2xl"></i>
                 </div>
 
                 <!-- Hidden Form -->
-                <form id="avatar-form" action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data" class="hidden">
+                <form id="avatar-form" action="{{ route('profile.avatar.update') }}" method="POST"
+                    enctype="multipart/form-data" class="hidden">
                     @csrf
-                    <input type="file" id="avatar-input" name="avatar" accept="image/*" onchange="document.getElementById('avatar-form').submit()">
+                    <input type="file" id="avatar-input" name="avatar" accept="image/*"
+                        onchange="document.getElementById('avatar-form').submit()">
                 </form>
             </div>
 
@@ -61,9 +64,10 @@
             <div class="flex flex-col justify-center h-32 py-2">
                 <div class="flex items-center gap-4 mb-2 justify-center md:justify-start">
                     <h1 class="text-4xl font-bold text-white tracking-tight">{{ $user->name }}</h1>
-                    
+
                     @if($user->avatar)
-                        <form action="{{ route('profile.avatar.delete') }}" method="POST" onsubmit="return confirm('Hapus foto profil?')">
+                        <form action="{{ route('profile.avatar.delete') }}" method="POST"
+                            onsubmit="return confirm('Hapus foto profil?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-400 hover:text-red-300 text-sm font-medium transition-colors">
@@ -72,14 +76,14 @@
                         </form>
                     @endif
                 </div>
-                
+
                 <div class="flex flex-col gap-2 text-textMuted font-medium text-sm">
                     <div class="flex items-center gap-2 justify-center md:justify-start">
                         <i class="fa-regular fa-calendar text-xs opacity-60"></i>
                         <span>Bergabung {{ $user->created_at->format('F Y') }}</span>
                     </div>
                     <div class="flex items-center gap-2 justify-center md:justify-start">
-                        <span class="text-white">0</span> Dibuat
+                        <span class="text-white">{{ $createdEventsCount }}</span> Dibuat
                         <span class="mx-1 opacity-20">•</span>
                         <span class="text-white">0</span> Diikuti
                     </div>
