@@ -12,6 +12,7 @@ class Event extends Model
     protected $fillable = [
         'organizer_id',
         'category_id',
+        'visibility_id',
         'judul',
         'description',
         'lokasi',
@@ -20,6 +21,7 @@ class Event extends Model
         'harga_tiket',
         'requires_approval',
         'kapasitas',
+        'image',
     ];
 
     protected $casts = [
@@ -38,6 +40,11 @@ class Event extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function visibility()
+    {
+        return $this->belongsTo(EventVisibility::class, 'visibility_id');
+    }
+
     public function images()
     {
         return $this->hasMany(EventImage::class);
@@ -46,5 +53,14 @@ class Event extends Model
     public function registrations()
     {
         return $this->hasMany(Registration::class);
+    }
+
+    public function scopeVisible($query)
+    {
+        return $query->where(function ($q) {
+            $q->whereHas('visibility', function ($sq) {
+                $sq->where('slug', 'public');
+            })->orWhere('organizer_id', auth()->id());
+        });
     }
 }

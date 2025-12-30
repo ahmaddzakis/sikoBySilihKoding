@@ -85,37 +85,99 @@
                     <div class="flex items-center gap-2 justify-center md:justify-start">
                         <span class="text-white">{{ $createdEventsCount }}</span> Dibuat
                         <span class="mx-1 opacity-20">•</span>
-                        <span class="text-white">0</span> Diikuti
+                        <span class="text-white">{{ $registrations->count() }}</span> Diikuti
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Divider -->
-        <div class="h-px bg-border/40 w-full mb-24"></div>
+        <div class="h-px bg-border/40 w-full mb-12"></div>
 
-        <!-- Empty State -->
-        <div class="flex flex-col items-center justify-center text-center">
-            <!-- Empty Icon with 0 -->
-            <div class="mb-12 relative opacity-60 grayscale">
-                <div
-                    class="w-[120px] h-[85px] bg-[#2d2d2d] rounded-2xl p-3 flex flex-wrap gap-2 relative border border-[#3d3d3d]/30">
-                    <div class="w-7 h-4 bg-[#1a1a1a] rounded-md opacity-40"></div>
-                    <div class="w-12 h-4 bg-[#1a1a1a] rounded-md opacity-40"></div>
-                    <div class="w-12 h-8 bg-[#1a1a1a] rounded-md opacity-40"></div>
-                    <div class="w-6 h-8 bg-[#3d3d3d] rounded-md"></div>
-
-                    <div
-                        class="absolute -top-3 -right-3 w-12 h-12 bg-[#2d2d2d] rounded-full border-[6px] border-background flex items-center justify-center shadow-lg">
-                        <span class="text-xl font-black text-[#555]">0</span>
-                    </div>
+        <!-- content sections -->
+        <div class="space-y-16">
+            <!-- Joined Events Section -->
+            <section>
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-3">
+                        <i class="fa-solid fa-ticket text-pink-500"></i>
+                        Acara yang Diikuti
+                    </h2>
                 </div>
-            </div>
 
-            <h2 class="text-2xl font-bold text-white mb-2 tracking-tight">Belum Ada Apa-apa</h2>
-            <p class="text-textMuted max-w-xs text-sm font-medium leading-relaxed">
-                {{ $user->name }} belum memiliki acara publik saat ini.
-            </p>
+                @if($registrations->isEmpty())
+                    <div class="p-12 border-2 border-dashed border-border/50 rounded-3xl flex flex-col items-center justify-center text-center opacity-60">
+                        <i class="fa-solid fa-compass-drafting text-4xl mb-4 text-gray-600"></i>
+                        <p class="text-gray-500 font-medium">Anda belum bergabung di acara apa pun.</p>
+                        <a href="/find" class="mt-4 text-pink-500 font-bold hover:underline">Temukan Acara Resmi</a>
+                    </div>
+                @else
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($registrations as $reg)
+                            <a href="{{ route('events.show', $reg->event->id) }}" class="group block relative">
+                                <div class="bg-yellow-400 rounded-3xl p-6 min-h-[220px] shadow-xl transform transition-transform group-hover:scale-[1.02] overflow-hidden">
+                                    <!-- Background text effect -->
+                                    <div class="absolute -right-4 -bottom-4 opacity-10 select-none pointer-events-none">
+                                        <i class="fa-solid fa-ticket text-[120px] text-black -rotate-12"></i>
+                                    </div>
+                                    
+                                    <div class="relative z-10 h-full flex flex-col justify-between">
+                                        <div>
+                                            <p class="text-[10px] font-black uppercase tracking-widest text-black/50 mb-4">Kamu masuk</p>
+                                            <h3 class="text-4xl font-black text-black leading-none mb-1">DAFTAR</h3>
+                                            <h3 class="text-4xl font-black text-black leading-none mb-4">TAMU*</h3>
+                                            <p class="text-xs font-black text-black max-w-[120px] uppercase">*BETAPA BERUNTUNGNYA KAMU</p>
+                                        </div>
+                                        
+                                        <div class="mt-8">
+                                            <p class="text-sm font-black text-black truncate">{{ $reg->event->judul }}</p>
+                                            <p class="text-[10px] font-bold text-black/60">{{ $reg->event->waktu_mulai->format('d M Y') }}</p>
+                                        </div>
+                                    </div>
+
+                                    @if($reg->status === 'approved')
+                                        <div class="absolute top-4 right-4 w-10 h-10 bg-black rounded-full flex items-center justify-center shadow-lg border-2 border-yellow-400">
+                                            <i class="fa-solid fa-check text-yellow-400"></i>
+                                        </div>
+                                    @else
+                                        <div class="absolute top-4 right-4 px-3 py-1 bg-black/20 text-black text-[10px] font-black rounded-full backdrop-blur-sm">
+                                            MENUNGGU
+                                        </div>
+                                    @endif
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
+            </section>
+
+            <!-- Created Events Section (Brief) -->
+            @if($createdEventsCount > 0)
+            <section>
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-3">
+                        <i class="fa-solid fa-calendar-plus text-pink-500"></i>
+                        Acara yang Dibuat
+                    </h2>
+                    <a href="{{ route('calendar.my-events') }}" class="text-pink-500 text-sm font-bold hover:underline">Lihat Semua</a>
+                </div>
+                
+                <div class="bg-surface border border-border rounded-2xl p-6 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-folder-open text-pink-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold">Koleksi Acara Anda</p>
+                            <p class="text-gray-500 text-xs">Total {{ $createdEventsCount }} acara privat/publik</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('calendar.my-events') }}" class="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-chevron-right text-gray-400"></i>
+                    </a>
+                </div>
+            </section>
+            @endif
         </div>
     </div>
 @endsection

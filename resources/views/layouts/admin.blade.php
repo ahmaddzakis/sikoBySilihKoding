@@ -1,42 +1,99 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Admin Dashboard - @yield('title','Dashboard')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
-</head>
-<body class="bg-slate-100 min-h-screen">
-    <div class="flex">
-        <aside class="w-64 bg-white border-r min-h-screen p-4">
-            <div class="mb-6">
-                <a href="{{ route('dashboard') }}" class="text-xl font-bold">Admin</a>
-            </div>
-            <nav class="space-y-2 text-sm">
-                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded hover:bg-slate-50">Dashboard</a>
+    <title>Admin Dashboard - @yield('title', 'Dashboard')</title>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-                <a href="{{ route('profile') }}" class="block px-3 py-2 rounded hover:bg-slate-50">Profile</a>
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom Config for Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9', // Sky 500
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-[#1a161f] text-gray-200 min-h-screen font-sans selection:bg-pink-500 selection:text-white">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#26212c] border-r border-[#3a3442] p-6 flex flex-col gap-8">
+            <div class="flex items-center gap-3">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto">
+                <span class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Admin</span>
+            </div>
+            
+            <nav class="flex flex-col gap-2">
+                <a href="{{ route('dashboard') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-pink-500/10 text-pink-500 border border-pink-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+
+                <a href="{{ route('dashboard.events.index') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard.events.*') ? 'bg-pink-500/10 text-pink-500 border border-pink-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                    <i class="fa-solid fa-calendar-star"></i>
+                    <span class="font-medium">Manajemen Event</span>
+                </a>
+
+                <a href="{{ route('profile') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                    <i class="fa-regular fa-user"></i>
+                    <span class="font-medium">Profil Saya</span>
+                </a>
             </nav>
-            <div class="mt-6">
+
+            <div class="mt-auto pt-6 border-t border-[#3a3442]">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="text-sm text-red-600">Logout</button>
+                    <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-400/5 transition-all w-full">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="font-medium">Keluar</span>
+                    </button>
                 </form>
             </div>
         </aside>
 
-        <main class="flex-1 p-6">
-            <header class="mb-6">
-                <h1 class="text-2xl font-semibold">@yield('title','Dashboard')</h1>
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <header class="h-20 border-b border-[#3a3442] px-8 flex items-center justify-between bg-[#1a161f]/50 backdrop-blur-md sticky top-0 z-10">
+                <h1 class="text-xl font-bold text-white tracking-tight">@yield('title', 'Dashboard Admin')</h1>
+                
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden sm:block">
+                        <div class="text-sm font-bold text-white">{{ Auth::user()->name }}</div>
+                        <div class="text-[10px] text-gray-500 uppercase tracking-widest">{{ Auth::user()->role }}</div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 border border-[#3a3442]"></div>
+                </div>
             </header>
 
-            <section>
+            <div class="p-8">
+                @if(session('success'))
+                    <div class="mb-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 px-6 py-4 rounded-2xl flex items-center gap-3 text-sm font-medium">
+                        <i class="fa-solid fa-circle-check"></i>
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 @yield('content')
-            </section>
+            </div>
         </main>
     </div>
-
-    @vite(['resources/js/app.js'])
 </body>
+
 </html>

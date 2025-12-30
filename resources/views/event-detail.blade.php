@@ -1,0 +1,242 @@
+@extends('layouts.app')
+
+@section('title', $event->judul)
+
+@section('content')
+    <div class="min-h-screen pb-20">
+        <!-- Hero Section: Background Image with blur -->
+        <div class="relative h-[400px] w-full overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center"
+                style="background-image: url('{{ $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=600&fit=crop' }}'); filter: blur(20px); transform: scale(1.1);">
+            </div>
+            <div class="absolute inset-0 bg-black/60"></div>
+
+            <div class="relative max-w-6xl mx-auto px-6 h-full flex items-end pb-12">
+                <div class="flex flex-col md:flex-row gap-8 items-end w-full">
+                    <!-- Main Image -->
+                    <div
+                        class="w-full md:w-[400px] aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex-shrink-0">
+                        <img src="{{ $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop' }}"
+                            alt="{{ $event->judul }}" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Basic Info -->
+                    <div class="flex-1 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span
+                                class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 text-xs font-bold uppercase tracking-wider border border-pink-500/30">
+                                {{ $event->category->nama ?? 'Lainnya' }}
+                            </span>
+                            <span
+                                class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider border border-blue-500/30">
+                                {{ $event->visibility->nama ?? 'Publik' }}
+                            </span>
+                        </div>
+                        <h1 class="text-4xl md:text-5xl font-black text-white leading-tight">
+                            {{ $event->judul }}
+                        </h1>
+                        <div class="flex items-center gap-3 text-gray-300">
+                            <div
+                                class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
+                                {{ substr($event->organizer->name ?? 'U', 0, 1) }}
+                            </div>
+                            <span class="font-medium">Oleh <span
+                                    class="text-white">{{ $event->organizer->name ?? 'Penyelenggara' }}</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="max-w-6xl mx-auto px-6 mt-12">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+                <!-- Sisi Kiri: Deskripsi & Detail -->
+                <div class="lg:col-span-2 space-y-12">
+                    <!-- Deskripsi Section -->
+                    <section>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                            <i class="fa-solid fa-align-left text-pink-500 text-lg"></i>
+                            Tentang Acara
+                        </h2>
+                        <div class="text-gray-400 leading-relaxed text-lg whitespace-pre-wrap">
+                            {{ $event->description ?: 'Tidak ada deskripsi untuk acara ini.' }}
+                        </div>
+                    </section>
+
+                    <!-- Lokasi Section -->
+                    <section>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                            <i class="fa-solid fa-location-dot text-pink-500 text-lg"></i>
+                            Lokasi
+                        </h2>
+                        <div
+                            class="bg-[#1a161f] border border-[#3a3442] rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-center">
+                            <div
+                                class="w-full md:w-48 h-32 rounded-xl bg-[#26212c] flex items-center justify-center border border-[#3a3442]">
+                                <i class="fa-solid fa-map-location-dot text-4xl text-gray-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-white font-bold text-lg mb-1">{{ $event->lokasi }}</h3>
+                                <p class="text-gray-500">Klik untuk melihat di Google Maps</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode($event->lokasi) }}"
+                                    target="_blank"
+                                    class="inline-flex items-center gap-2 text-pink-500 hover:text-pink-400 font-bold mt-4 transition-colors">
+                                    Lihat Peta <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sisi Kanan: Tiket & Waktu -->
+                <div class="space-y-6">
+                    <!-- Tiket Card -->
+                    <div
+                        class="bg-gradient-to-b from-[#26212c] to-[#1a161f] border border-[#3a3442] rounded-3xl p-8 sticky top-24 shadow-2xl">
+                        <div class="space-y-6">
+                            <!-- Waktu Info -->
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4">
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-pink-500/10 flex items-center justify-center flex-shrink-0 border border-pink-500/20">
+                                        <i class="fa-regular fa-calendar-check text-pink-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">Waktu Mulai</p>
+                                        <p class="text-white font-bold">
+                                            {{ $event->waktu_mulai->translatedFormat('l, d F Y') }}
+                                        </p>
+                                        <p class="text-gray-400 text-sm">{{ $event->waktu_mulai->format('H:i') }} WIB</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4">
+                                    <div
+                                        class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center flex-shrink-0 border border-purple-500/20">
+                                        <i class="fa-regular fa-clock text-purple-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">Waktu Selesai
+                                        </p>
+                                        <p class="text-white font-bold">
+                                            {{ $event->waktu_selesai->translatedFormat('l, d F Y') }}
+                                        </p>
+                                        <p class="text-gray-400 text-sm">{{ $event->waktu_selesai->format('H:i') }} WIB</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="border-[#3a3442]">
+
+                            @php
+                                $isRegistered = auth()->check() ? $event->registrations->where('user_id', auth()->id())->first() : null;
+                                $remainingSlots = $event->kapasitas ? $event->kapasitas - $event->registrations->count() : null;
+                                $isFull = $event->kapasitas && $remainingSlots <= 0;
+                                $isPast = $event->waktu_mulai->isPast();
+                            @endphp
+
+                            <!-- Harga & Kapasitas -->
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Tiket Masuk
+                                    </p>
+                                    <p class="text-3xl font-black text-white">
+                                        {{ $event->harga_tiket > 0 ? 'Rp ' . number_format($event->harga_tiket, 0, ',', '.') : 'Gratis' }}
+                                    </p>
+                                </div>
+                                @if($event->kapasitas)
+                                    <div class="text-right">
+                                        <p class="text-xs font-bold {{ $isFull ? 'text-red-500' : 'text-gray-500' }}">
+                                            {{ max(0, $remainingSlots) }} Slot
+                                        </p>
+                                        <p class="text-[10px] text-gray-600">Tersedia</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Action Button -->
+                            @if(auth()->id() === $event->organizer_id)
+                                <!-- Edit and Delete Buttons for Organizer -->
+                                <div class="space-y-3 mt-4">
+                                    <a href="{{ route('events.edit', $event->id) }}"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        Edit Acara
+                                    </a>
+                                    
+                                    <form action="{{ route('events.destroy', $event->id) }}" method="POST" 
+                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus acara ini? Tindakan ini tidak dapat dibatalkan.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg flex items-center justify-center gap-2">
+                                            <i class="fa-solid fa-trash"></i>
+                                            Hapus Acara
+                                        </button>
+                                    </form>
+                                </div>
+                            @elseif($isPast)
+                                <button disabled
+                                    class="w-full bg-gray-600 text-gray-400 font-black py-4 rounded-2xl cursor-not-allowed shadow-xl text-lg mt-4">
+                                    Acara Selesai
+                                </button>
+                            @elseif($isFull)
+                                <button disabled
+                                    class="w-full bg-red-500/20 text-red-500 border border-red-500/30 font-black py-4 rounded-2xl cursor-not-allowed shadow-xl text-lg mt-4">
+                                    Stok Habis
+                                </button>
+                            @else
+                                <!-- Selalu tampilkan form pendaftaran (mengisi ulang) -->
+                                <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4">
+                                    @csrf
+                                    <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/10">
+                                        <div class="flex justify-between items-center mb-2">
+                                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Data Pendaftaran</p>
+                                            @if($isRegistered)
+                                                <span class="text-[9px] bg-green-500/20 text-green-500 px-2 py-0.5 rounded font-bold uppercase tracking-tighter">Sudah Terdaftar</span>
+                                            @endif
+                                        </div>
+                                        
+                                        <!-- Nama Lengkap -->
+                                        <div>
+                                            <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nama Lengkap</label>
+                                            <input type="text" name="name" required placeholder="Contoh: Ahmad Zaki"
+                                                class="w-full bg-[#1a161f] border border-[#3a3442] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500 transition-all">
+                                        </div>
+
+                                        <!-- Nomor Telepon -->
+                                        <div>
+                                            <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nomor Telepon (WA)</label>
+                                            <input type="tel" name="phone" required placeholder="0812xxxxxxx"
+                                                class="w-full bg-[#1a161f] border border-[#3a3442] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500 transition-all">
+                                        </div>
+                                    </div>
+
+                                    <button type="submit"
+                                        class="w-full bg-white hover:bg-gray-200 text-black font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg">
+                                        Daftar Sekarang
+                                    </button>
+                                </form>
+                            @endif
+
+                            @if($event->requires_approval && $event->visibility->slug !== 'private')
+                                <p class="text-center text-xs text-gray-500 italic">
+                                    * Pendaftaran membutuhkan persetujuan penyelenggara.
+                                </p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Tombol Kembali -->
+                    <a href="javascript:history.back()"
+                        class="flex items-center justify-center gap-2 text-gray-500 hover:text-white transition-colors py-4 font-bold text-sm">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        Kembali ke halaman sebelumnya
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+@endsection

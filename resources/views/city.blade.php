@@ -61,111 +61,48 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
             
             <!-- Events List (Left Column) -->
-            <div class="lg:col-span-2 space-y-12">
-                
-                <!-- Today -->
-                <div>
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
-                        <span class="text-white font-bold">Hari ini</span>
-                        <span class="text-gray-500">Minggu</span>
-                    </div>
-
-                    <!-- Event Card -->
-                    <div class="bg-[#26212c] rounded-2xl border border-[#3a3442] p-5 hover:bg-[#2f2936] transition-all cursor-pointer group flex gap-5">
-                        <!-- Date/Time Column can go here if needed layout diff -->
-                        <div class="flex-1">
-                            <div class="text-orange-500 text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-                                LIVE 16.30
-                            </div>
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Goodie Oldie Thai Woodie 2025</h3>
-                            
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="flex -space-x-2">
-                                    <div class="w-5 h-5 rounded-full bg-pink-500 border border-[#26212c]"></div>
-                                    <div class="w-5 h-5 rounded-full bg-blue-500 border border-[#26212c]"></div>
+            <div class="lg:col-span-2 space-y-8">
+                @if(count($events) > 0)
+                    @foreach($events as $event)
+                        <!-- Event Card -->
+                        <a href="{{ route('events.show', $event['id']) }}" class="bg-[#26212c] rounded-2xl border border-[#3a3442] p-5 hover:bg-[#2f2936] transition-all cursor-pointer group flex gap-5">
+                            <div class="flex-1">
+                                <div class="text-gray-500 text-xs font-bold mb-1">{{ $event['time'] }}</div>
+                                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">{{ $event['title'] }}</h3>
+                                
+                                <div class="flex items-center gap-2 mb-3">
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($event['organizer']) }}&background=random" class="w-5 h-5 rounded-full">
+                                    <span class="text-gray-400 text-sm">Oleh <span class="text-gray-300">{{ $event['organizer'] }}</span></span>
                                 </div>
-                                <span class="text-gray-400 text-sm">Oleh <span class="text-gray-300">welove, ชัยรัตน์, dkk...</span></span>
+
+                                <div class="text-gray-500 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    {{ $event['location'] }}
+                                </div>
+                                <div class="text-gray-500 text-[10px] mt-2 italic">
+                                    {{ $event['date'] }}
+                                </div>
                             </div>
 
-                            <div class="text-gray-500 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot"></i>
-                                ChangChui Creative Park
+                            <!-- Thumbnail -->
+                            <div class="w-32 h-32 rounded-xl bg-cover bg-center shrink-0 border border-[#3a3442] overflow-hidden">
+                                @if($event['image'])
+                                    <img src="{{ $event['image'] }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-[#1a161f] flex items-center justify-center">
+                                        <i class="fa-solid fa-image text-gray-800 text-2xl"></i>
+                                    </div>
+                                @endif
                             </div>
-                            
-                            <div class="mt-4 flex -space-x-2">
-                                <img src="https://ui-avatars.com/api/?name=A&background=random" class="w-6 h-6 rounded-full border border-[#26212c]">
-                                <img src="https://ui-avatars.com/api/?name=B&background=random" class="w-6 h-6 rounded-full border border-[#26212c]">
-                                <img src="https://ui-avatars.com/api/?name=C&background=random" class="w-6 h-6 rounded-full border border-[#26212c]">
-                                <div class="w-6 h-6 rounded-full bg-[#3a3442] border border-[#26212c] text-[9px] text-gray-300 flex items-center justify-center">+85</div>
-                            </div>
-                        </div>
-
-                        <!-- Thumbnail -->
-                        <div class="w-32 h-32 rounded-xl bg-cover bg-center shrink-0 border border-[#3a3442]" style="background-image: url('https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=2574&auto=format&fit=crop');">
-                            <div class="w-full h-full bg-black/20 group-hover:bg-transparent transition-colors"></div>
-                        </div>
+                        </a>
+                    @endforeach
+                @else
+                    <div class="py-20 text-center">
+                        <div class="text-5xl mb-6">🏜️</div>
+                        <h3 class="text-xl font-bold text-white mb-2">Belum Ada Acara</h3>
+                        <p class="text-gray-500">Tidak ada acara mendatang di {{ ucfirst($city) }} saat ini.</p>
                     </div>
-                </div>
-
-                <!-- Tomorrow -->
-                <div>
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
-                        <span class="text-white font-bold">Besok</span>
-                        <span class="text-gray-500">Senin</span>
-                    </div>
-
-                    <!-- Event Card 2 -->
-                    <div class="bg-[#26212c] rounded-2xl border border-[#3a3442] p-5 hover:bg-[#2f2936] transition-all cursor-pointer group flex gap-5">
-                        <div class="flex-1">
-                            <div class="text-gray-500 text-xs font-bold mb-1">18.30</div>
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Satoshi Square Monday #608</h3>
-                            
-                            <div class="flex items-center gap-2 mb-3">
-                                <img src="https://ui-avatars.com/api/?name=S&background=random" class="w-5 h-5 rounded-full">
-                                <span class="text-gray-400 text-sm">Oleh <span class="text-gray-300">Sean</span></span>
-                            </div>
-
-                            <div class="text-gray-500 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot"></i>
-                                CRAFT (Sukhumvit 23)
-                            </div>
-                        </div>
-                        <div class="w-32 h-32 rounded-xl bg-cover bg-center shrink-0 border border-[#3a3442]" style="background-image: url('https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2669&auto=format&fit=crop');"></div>
-                    </div>
-                </div>
-
-                 <!-- Future Date -->
-                <div>
-                     <div class="flex items-center gap-2 mb-6">
-                        <div class="w-1.5 h-1.5 rounded-full bg-gray-500"></div>
-                        <span class="text-white font-bold">24 Des</span>
-                        <span class="text-gray-500">Rabu</span>
-                    </div>
-
-                    <!-- Event Card 3 -->
-                    <div class="bg-[#26212c] rounded-2xl border border-[#3a3442] p-5 hover:bg-[#2f2936] transition-all cursor-pointer group flex gap-5">
-                         <div class="flex-1">
-                            <div class="text-gray-500 text-xs font-bold mb-1">18.00</div>
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Boardgame Night with Uniswap and TP Squad</h3>
-                             <div class="flex items-center gap-2 mb-3">
-                                <img src="https://ui-avatars.com/api/?name=TP&background=random" class="w-5 h-5 rounded-full">
-                                <span class="text-gray-400 text-sm">Oleh <span class="text-gray-300">TPSquad | TH & Gun | Uniswap</span></span>
-                            </div>
-                            <div class="text-gray-500 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-location-dot"></i>
-                                Krung Thep Maha Nakhon
-                            </div>
-                            <div class="mt-4 flex -space-x-2">
-                                <div class="w-6 h-6 rounded-full bg-[#3a3442] border border-[#26212c] text-[9px] text-gray-300 flex items-center justify-center">+22</div>
-                            </div>
-                        </div>
-                         <div class="w-32 h-32 rounded-xl bg-cover bg-center shrink-0 border border-[#3a3442]" style="background-image: url('https://images.unsplash.com/photo-1610890716271-e21f35b8705b?q=80&w=2670&auto=format&fit=crop');"></div>
-                    </div>
-                </div>
-
+                @endif
             </div>
 
              <!-- Sidebar (Right Column) -->

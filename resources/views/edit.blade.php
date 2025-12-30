@@ -1,21 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Buat Acara')
+@section('title', 'Edit Acara')
 
 @section('content')
     <div class="max-w-6xl mx-auto px-6 py-6" x-data="eventForm()">
 
         <!-- Konten Utama -->
-        <form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data"
+        <form action="{{ route('events.update', $event->id) }}" method="POST" enctype="multipart/form-data"
             class="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12 lg:gap-20">
             @csrf
+            @method('PUT')
 
             <!-- Sisi Kiri: Preview dan Upload Gambar -->
             <div class="flex flex-col gap-5">
                 <!-- Wrapper Gambar: Menggunakan aspect-square agar tetap kotak -->
                 <div
                     class="relative aspect-square w-full rounded-3xl overflow-hidden border border-[#3a3442] shadow-2xl shadow-black/50">
-                    <img :src="imagePreview || '{{ asset('images/invite.jpg') }}'" class="w-full h-full object-cover">
+                    <img :src="imagePreview || '{{ $event->image ? asset('storage/' . $event->image) : asset('images/invite.jpg') }}'"
+                        class="w-full h-full object-cover">
 
                     <!-- Tombol Upload  -->
                     <label for="imageUpload"
@@ -64,6 +66,7 @@
 
                 <!-- Input Judul Acara: Menggunakan font besar dan transparan -->
                 <input type="text" name="judul" x-model="eventName" placeholder="Nama Acara"
+                    value="{{ old('judul', $event->judul) }}"
                     class="bg-transparent text-5xl font-bold w-full outline-none placeholder-[#545454] focus:placeholder-gray-700 text-white transition-all caret-purple-500">
 
                 <!-- Pemilih Tanggal & Waktu -->
@@ -328,7 +331,7 @@
                 <div class="pt-6">
                     <button type="submit"
                         class="w-full bg-white hover:bg-gray-200 text-black font-bold text-lg py-3.5 rounded-xl transition-all transform active:scale-[0.98] shadow-lg">
-                        Buat Acara
+                        Perbarui Acara
                     </button>
                 </div>
 
@@ -481,24 +484,27 @@
     <script>
         function eventForm() {
             const today = new Date();
+            const eventStartDate = new Date('{{ $event->waktu_mulai }}');
+            const eventEndDate = new Date('{{ $event->waktu_selesai }}');
+
             return {
-                // Data Form (State Alpine.js)
-                categoryId: '',
-                categoryName: '',
-                visibilityId: '{{ $visibilities->first()->id ?? 1 }}',
-                visibilityName: '{{ $visibilities->first()->nama ?? "Pribadi" }}',
-                eventName: '',
-                location: '',
-                description: '',
-                ticketPrice: '',
-                tempTicketPrice: '',
-                requiresApproval: false,
+                // Data Form (State Alpine.js) - Pre-filled with existing event data
+                categoryId: '{{ $event->category_id }}',
+                categoryName: '{{ $event->category->nama ?? "" }}',
+                visibilityId: '{{ $event->visibility_id }}',
+                visibilityName: '{{ $event->visibility->nama ?? "Pribadi" }}',
+                eventName: '{{ $event->judul }}',
+                location: '{{ $event->lokasi }}',
+                description: `{{ str_replace(["\r", "\n"], ["", "\\n"], $event->description ?? "") }}`,
+                ticketPrice: '{{ $event->harga_tiket }}',
+                tempTicketPrice: '{{ $event->harga_tiket }}',
+                requiresApproval: {{ $event->requires_approval ? 'true' : 'false' }},
                 imagePreview: null,
 
                 // Logika Kapasitas
                 openCapacityModal: false,
-                capacityLimit: '',
-                tempCapacityLimit: '',
+                capacityLimit: '{{ $event->kapasitas ?? "" }}',
+                tempCapacityLimit: '{{ $event->kapasitas ?? "" }}',
                 waitlistOverCapacity: false,
 
                 // Deskripsi
@@ -508,14 +514,14 @@
                 openLocationModal: false,
                 openTicketModal: false,
 
-                // Date Picker logic merged
+                // Date Picker logic merged - Pre-filled with event dates
                 openPicker: null,
-                startDate: new Date(),
-                endDate: new Date(),
-                startTime: '14:00',
-                endTime: '15:00',
-                currentMonth: today.getMonth(),
-                currentYear: today.getFullYear(),
+                startDate: eventStartDate,
+                endDate: eventEndDate,
+                startTime: '{{ $event->waktu_mulai->format("H:i") }}',
+                endTime: '{{ $event->waktu_selesai->format("H:i") }}',
+                currentMonth: eventStartDate.getMonth(),
+                currentYear: eventStartDate.getFullYear(),
                 monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                 days: [],
                 blanks: [],
