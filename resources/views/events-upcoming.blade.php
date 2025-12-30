@@ -6,19 +6,20 @@
             <div class="flex flex-col gap-4 w-full md:w-1/3">
                 <!-- Event Poster -->
                 <div
-                    class="aspect-square bg-[#F5E625] rounded-2xl flex flex-col justify-center items-center p-6 text-black relative overflow-hidden select-none">
+                    class="aspect-square rounded-2xl flex flex-col justify-center items-center relative overflow-hidden select-none {{ $event['image'] ? 'bg-gray-800' : 'bg-[#F5E625] p-6 text-black' }}">
                     @if($event['image'])
                         <img src="{{ $event['image'] }}"
-                            class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-20">
+                            class="absolute inset-0 w-full h-full object-cover">
+                    @else
+                        <h2 class="text-5xl font-black leading-[0.85] tracking-tighter mix-blend-multiply mb-auto"
+                            style="font-family: sans-serif;">
+                            YOU'RE<br>ON THE<br>GUEST-<br>LIST*
+                        </h2>
+                        <div class="absolute bottom-6 right-6 text-2xl font-black leading-none tracking-tighter rotate-[-5deg] text-right"
+                            style="font-family: sans-serif;">
+                            *HOW<br>LUCKY<br>YOU<br>ARE
+                        </div>
                     @endif
-                    <h2 class="text-5xl font-black leading-[0.85] tracking-tighter mix-blend-multiply mb-auto"
-                        style="font-family: sans-serif;">
-                        YOU'RE<br>ON THE<br>GUEST-<br>LIST*
-                    </h2>
-                    <div class="absolute bottom-6 right-6 text-2xl font-black leading-none tracking-tighter rotate-[-5deg] text-right"
-                        style="font-family: sans-serif;">
-                        *HOW<br>LUCKY<br>YOU<br>ARE
-                    </div>
                 </div>
 
                 <!-- Host Info -->
