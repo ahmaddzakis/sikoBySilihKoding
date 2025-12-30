@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Siko - @yield('title', 'Home')</title>
+    <title>Siko - @yield('title', 'Beranda')</title>
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -93,6 +93,12 @@
                     Acara
                 </a>
 
+                <a href="/find"
+                    class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 {{ request()->is('find') ? 'text-white' : '' }}">
+                    <i class="fa-solid fa-compass"></i>
+                    Temukan
+                </a>
+
                 <a href="/calendar"
                     class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 {{ request()->is('calendar') ? 'text-white' : '' }}">
                     <i class="fa-regular fa-calendar-days"></i>
@@ -103,15 +109,15 @@
             <!-- Alat Samping Kanan (Search, Notification, Profile) -->
             <div class="flex items-center gap-6 text-sm text-gray-400">
 
-                <!-- Tombol Buat Acara -->
-                <a href="/create" class="hidden md:block text-white hover:text-gray-300 transition-colors font-medium">
-                    Buat Acara
-                </a>
-
                 <!-- Tombol Pencarian -->
                 <button @click="searchOpen = true" class="hover:text-white transition-colors">
                     <i class="fa-solid fa-magnifying-glass text-lg"></i>
                 </button>
+
+                <!-- Tombol Buat Acara -->
+                <a href="/create" class="hidden md:block text-white hover:text-gray-300 transition-colors font-medium">
+                    Buat Acara
+                </a>
 
                 <!-- Dropdown Notifikasi (File Terpisah) -->
                 @include('notification')
@@ -121,7 +127,19 @@
                     <div class="relative" x-data="{ open: false }">
                         <!-- Avatar User -->
                         <div @click="open = !open"
-                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-green-400 to-blue-500 cursor-pointer border border-[#3a3442] hover:scale-105 transition-transform">
+                            class="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-green-400 to-green-600 cursor-pointer border-2 border-[#3a3442] hover:scale-105 transition-all flex items-center justify-center">
+                            @if(Auth::user()->avatar)
+                                <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
+                                    class="w-full h-full object-cover">
+                            @else
+                                <div class="relative w-6 h-6 flex items-center justify-center">
+                                    <div class="absolute top-1.5 left-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                    <div class="absolute top-1.5 right-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                    <div
+                                        class="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-2 border-b-2 border-black/80 rounded-full">
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         <!-- Menu Dropdown Profil -->
@@ -153,8 +171,7 @@
                                     @csrf
                                     <button type="submit"
                                         class="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-400/5 transition-colors text-sm font-medium">
-                                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign
-                                        Out
+                                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Keluar
                                     </button>
                                 </form>
                             </div>
@@ -163,7 +180,7 @@
                 @else
                     <!-- Link Sign In jika belum login -->
                     <a href="{{ route('login') }}" class="text-white hover:text-gray-300 transition-colors font-medium">
-                        Sign In
+                        Masuk
                     </a>
                 @endauth
             </div>
@@ -172,6 +189,32 @@
 
     <!-- ================= CONTENT ================= -->
     <main>
+        @if(session('success'))
+            <div class="max-w-6xl mx-auto px-6 mt-8">
+                <div
+                    class="bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-3">
+                    <i class="fa-solid fa-circle-check"></i>
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="max-w-6xl mx-auto px-6 mt-8">
+                <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm font-medium">
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span class="font-bold">Ada beberapa masalah:</span>
+                    </div>
+                    <ul class="list-disc list-inside ml-7 mt-1 opacity-80 decoration-none">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
         @yield('content')
     </main>
 

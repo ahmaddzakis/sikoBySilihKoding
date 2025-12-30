@@ -27,14 +27,17 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                 <!-- Kartu Kalender User -->
-                <a href="{{ route('calendar.events') }}" class="block">
-                    <div class="bg-surface border border-border rounded-xl p-6 hover:border-textMuted transition-colors cursor-pointer group h-full">
+                <a href="{{ route('calendar.my-events') }}" class="block">
+                    <div
+                        class="bg-surface border border-border rounded-xl p-6 hover:border-textMuted transition-colors cursor-pointer group h-full">
                         <div class="flex flex-col items-start gap-3">
-                            
+
                             <!-- Avatar profile-->
-                            <div class="w-12 h-12 rounded-full overflow-hidden border border-border bg-gradient-to-tr from-green-400 to-blue-500">
+                            <div
+                                class="w-12 h-12 rounded-full overflow-hidden border border-border bg-gradient-to-tr from-green-400 to-blue-500">
                                 @if(Auth::user()->avatar)
-                                    <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                                    <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
+                                        class="w-full h-full object-cover">
                                 @endif
                             </div>
 

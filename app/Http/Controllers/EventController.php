@@ -10,7 +10,8 @@ class EventController extends Controller
     {
         $activeTab = $request->query('tab', 'upcoming');
 
-        $upcomingEvents = \App\Models\Event::where('waktu_mulai', '>=', now())
+        $upcomingEvents = \App\Models\Event::where('organizer_id', auth()->id())
+            ->where('waktu_mulai', '>=', now())
             ->orderBy('waktu_mulai', 'asc')
             ->get()
             ->map(function ($event) {
@@ -30,7 +31,8 @@ class EventController extends Controller
                 ];
             });
 
-        $pastEvents = \App\Models\Event::where('waktu_mulai', '<', now())
+        $pastEvents = \App\Models\Event::where('organizer_id', auth()->id())
+            ->where('waktu_mulai', '<', now())
             ->orderBy('waktu_mulai', 'desc')
             ->get()
             ->map(function ($event) {
@@ -51,45 +53,160 @@ class EventController extends Controller
     public function create()
     {
         $categories = \App\Models\Category::all();
-        return view('create', compact('categories'));
+        $visibilities = \App\Models\EventVisibility::where('slug', 'private')->get();
+        return view('create', compact('categories', 'visibilities'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'judul' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required',
-            'lokasi' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        \Log::info('Event store request received', $request->all());
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('events', 'public');
+        try {
+            $request->validate([
+                'judul' => 'required|string|max:255',
+                'category_id' => 'required|exists:categories,id',
+                'visibility_id' => 'required|exists:event_visibilities,id',
+                'waktu_mulai' => 'required',
+                'waktu_selesai' => 'required',
+                'lokasi' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed', $e->errors());
+            throw $e;
         }
 
-        \App\Models\Event::create([
-            'organizer_id' => auth()->id() ?? 1,
-            'category_id' => $request->category_id,
-            'judul' => $request->judul,
-            'description' => $request->description,
-            'image' => $imagePath,
-            'lokasi' => $request->lokasi,
-            'waktu_mulai' => $request->waktu_mulai,
-            'waktu_selesai' => $request->waktu_selesai,
-            'harga_tiket' => $request->harga_tiket ?? 0,
-            'requires_approval' => $request->has('requires_approval'),
-            'kapasitas' => $request->kapasitas,
-        ]);
+        try {
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('events', 'public');
+            }
 
-        return redirect()->route('home', ['tab' => 'upcoming'])->with('success', 'Acara berhasil dibuat!');
+            $event = \App\Models\Event::create([
+                'organizer_id' => auth()->id(),
+                'category_id' => $request->category_id,
+                'visibility_id' => $request->visibility_id,
+                'judul' => $request->judul,
+                'description' => $request->description,
+                'image' => $imagePath,
+                'lokasi' => $request->lokasi,
+                'waktu_mulai' => $request->waktu_mulai,
+                'waktu_selesai' => $request->waktu_selesai,
+                'harga_tiket' => $request->filled('harga_tiket') ? $request->harga_tiket : 0,
+                'requires_approval' => $request->requires_approval == 1,
+                'kapasitas' => $request->filled('kapasitas') ? $request->kapasitas : null,
+            ]);
+
+            \Log::info('Event created successfully', ['id' => $event->id]);
+
+            return redirect()->route('home', ['tab' => 'upcoming'])->with('success', 'Acara berhasil dibuat!');
+        } catch (\Exception $e) {
+            \Log::error('Error saving event: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withInput()->withErrors(['error' => 'Gagal menyimpan acara: ' . $e->getMessage()]);
+        }
+    }
+
+    public function edit($id)
+    {
+        $event = \App\Models\Event::findOrFail($id);
+
+        // Authorization: Only organizer can edit
+        if ($event->organizer_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit acara ini.');
+        }
+
+        $categories = \App\Models\Category::all();
+        $visibilities = \App\Models\EventVisibility::where('slug', 'private')->get();
+
+        return view('edit', compact('event', 'categories', 'visibilities'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $event = \App\Models\Event::findOrFail($id);
+
+        // Authorization: Only organizer can update
+        if ($event->organizer_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengubah acara ini.');
+        }
+
+        try {
+            $request->validate([
+                'judul' => 'required|string|max:255',
+                'category_id' => 'required|exists:categories,id',
+                'visibility_id' => 'required|exists:event_visibilities,id',
+                'waktu_mulai' => 'required',
+                'waktu_selesai' => 'required',
+                'lokasi' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed', $e->errors());
+            throw $e;
+        }
+
+        try {
+            $imagePath = $event->image;
+            if ($request->hasFile('image')) {
+                // Delete old image if exists
+                if ($event->image && \Storage::disk('public')->exists($event->image)) {
+                    \Storage::disk('public')->delete($event->image);
+                }
+                $imagePath = $request->file('image')->store('events', 'public');
+            }
+
+            $event->update([
+                'category_id' => $request->category_id,
+                'visibility_id' => $request->visibility_id,
+                'judul' => $request->judul,
+                'description' => $request->description,
+                'image' => $imagePath,
+                'lokasi' => $request->lokasi,
+                'waktu_mulai' => $request->waktu_mulai,
+                'waktu_selesai' => $request->waktu_selesai,
+                'harga_tiket' => $request->filled('harga_tiket') ? $request->harga_tiket : 0,
+                'requires_approval' => $request->requires_approval == 1,
+                'kapasitas' => $request->filled('kapasitas') ? $request->kapasitas : null,
+            ]);
+
+            \Log::info('Event updated successfully', ['id' => $event->id]);
+
+            return redirect()->route('events.show', $event->id)->with('success', 'Acara berhasil diperbarui!');
+        } catch (\Exception $e) {
+            \Log::error('Error updating event: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withInput()->withErrors(['error' => 'Gagal memperbarui acara: ' . $e->getMessage()]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $event = \App\Models\Event::findOrFail($id);
+
+        // Authorization: Only organizer can delete
+        if ($event->organizer_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses untuk menghapus acara ini.');
+        }
+
+        try {
+            // Delete image if exists
+            if ($event->image && \Storage::disk('public')->exists($event->image)) {
+                \Storage::disk('public')->delete($event->image);
+            }
+
+            $event->delete();
+
+            \Log::info('Event deleted successfully', ['id' => $id]);
+
+            return redirect()->route('home')->with('success', 'Acara berhasil dihapus!');
+        } catch (\Exception $e) {
+            \Log::error('Error deleting event: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withErrors(['error' => 'Gagal menghapus acara: ' . $e->getMessage()]);
+        }
     }
 
     public function show($id)
     {
-        $event = \App\Models\Event::with('organizer')->findOrFail($id);
+        $event = \App\Models\Event::visible()->with('organizer')->findOrFail($id);
         return view('event-detail', compact('event'));
     }
 
@@ -101,8 +218,10 @@ class EventController extends Controller
             return response()->json([]);
         }
 
-        $events = \App\Models\Event::where('judul', 'like', "%{$query}%")
-            ->orWhere('lokasi', 'like', "%{$query}%")
+        $events = \App\Models\Event::visible()->where(function ($q) use ($query) {
+            $q->where('judul', 'like', "%{$query}%")
+                ->orWhere('lokasi', 'like', "%{$query}%");
+        })
             ->take(5)
             ->get()
             ->map(function ($event) {
@@ -117,4 +236,81 @@ class EventController extends Controller
 
         return response()->json($events);
     }
+    public function category($name)
+    {
+        $category = \App\Models\Category::where('nama', 'like', $name)->first();
+        if (!$category) {
+            $category = \App\Models\Category::where('nama', 'ilike', $name)->first();
+        }
+
+        if (!$category) {
+            abort(404);
+        }
+
+        $events = $category->events()->visible()
+            ->where('waktu_mulai', '>=', now())
+            ->orderBy('waktu_mulai')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'title' => $event->judul,
+                    'date' => $event->waktu_mulai->format('j/n'),
+                    'location' => $event->lokasi,
+                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'month_name' => $event->waktu_mulai->translatedFormat('F'),
+                ];
+            });
+
+        return view('category', [
+            'category' => $category->nama,
+            'description' => $category->deskripsi,
+            'events' => $events,
+            'eventCount' => $category->events()->visible()->count(),
+        ]);
+    }
+
+    public function city($city)
+    {
+        $events = \App\Models\Event::visible()->where('lokasi', 'like', '%' . $city . '%')
+            ->where('waktu_mulai', '>=', now())
+            ->orderBy('waktu_mulai')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'title' => $event->judul,
+                    'date' => $event->waktu_mulai->translatedFormat('l, d F'),
+                    'time' => $event->waktu_mulai->format('H.i'),
+                    'location' => $event->lokasi,
+                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'organizer' => $event->organizer->name,
+                ];
+            });
+
+    }
+
+    public function discover()
+    {
+        // Ambil acara yang dibuat oleh admin (role: admin)
+        $events = \App\Models\Event::whereHas('organizer', function ($query) {
+            $query->where('role', 'admin');
+        })->where('waktu_mulai', '>=', now())
+            ->orderBy('waktu_mulai')
+            ->get()
+            ->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'title' => $event->judul,
+                    'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
+                    'location' => $event->lokasi,
+                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'organizer' => $event->organizer->name,
+                    'price' => $event->harga_tiket,
+                ];
+            });
+
+        return view('find', compact('events'));
+    }
 }
+

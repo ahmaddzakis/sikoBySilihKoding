@@ -10,9 +10,13 @@ class ProfileController extends Controller
 {
     public function show()
     {
+        $user = Auth::user();
         return view('profile', [
-            'user' => Auth::user(),
-            'createdEventsCount' => \App\Models\Event::where('organizer_id', Auth::id())->count(),
+            'user' => $user,
+            'createdEventsCount' => \App\Models\Event::where('organizer_id', $user->id)->count(),
+            'registrations' => \App\Models\Registration::with('event')
+                ->where('user_id', $user->id)
+                ->get(),
         ]);
     }
 
@@ -20,6 +24,10 @@ class ProfileController extends Controller
     {
         $request->validate([
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ], [
+            'avatar.image' => 'File harus berupa gambar.',
+            'avatar.mimes' => 'Format gambar yang diperbolehkan hanya jpeg, png, jpg, gif, atau svg.',
+            'avatar.max' => 'Ukuran gambar tidak boleh melebihi 2MB.',
         ]);
 
         $user = Auth::user();

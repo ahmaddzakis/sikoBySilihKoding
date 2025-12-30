@@ -51,30 +51,34 @@ Route::middleware('auth')->group(function () {
     Route::get('/calendar/my-events', function () {
         $events = Auth::user()->events()->withCount('registrations')->orderBy('waktu_mulai')->get();
         return view('my-events', compact('events'));
-    })->name('calendar.events');
+    })->name('calendar.my-events');
 
     Route::get('/help', function () {
         return view('help');
     })->name('help');
 
-    // ================== CREATE EVENT ==================
+    // ================== REGISTRATION & TICKETS ==================
+    Route::post('/events/{event}/register', [\App\Http\Controllers\RegistrationController::class, 'store'])->name('events.register');
+    Route::get('/tickets/{registration}/download', [\App\Http\Controllers\RegistrationController::class, 'downloadTicket'])->name('tickets.download');
+
+    // Management (Organizer)
+    Route::get('/dashboard/registrations/{event}', [\App\Http\Controllers\RegistrationController::class, 'index'])->name('dashboard.registrations.index');
+    Route::patch('/dashboard/registrations/{registration}/status', [\App\Http\Controllers\RegistrationController::class, 'updateStatus'])->name('dashboard.registrations.status');
+
+    // ================== CREATE & EDIT EVENT ==================
     Route::get('/create', [EventController::class, 'create'])->name('create');
-
     Route::post('/create', [EventController::class, 'store'])->name('event.store');
+    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
 
-    Route::get('/find', function () {
-        return view('find');
-    })->name('find');
+    Route::get('/find', [EventController::class, 'discover'])->name('find');
 
     Route::get('/search', [EventController::class, 'search'])->name('events.search');
 
-    Route::get('/find/city/{city}', function ($city) {
-        return view('city', compact('city'));
-    })->name('find.city');
+    Route::get('/find/city/{city}', [EventController::class, 'city'])->name('find.city');
 
-    Route::get('/find/{category}', function ($category) {
-        return view('category', compact('category'));
-    })->name('find.category');
+    Route::get('/find/{category}', [EventController::class, 'category'])->name('find.category');
 });
 
 // ================== SIGN IN (LEGACY) ==================
