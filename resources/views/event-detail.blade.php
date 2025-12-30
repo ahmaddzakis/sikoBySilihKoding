@@ -133,7 +133,7 @@
                                 $isRegistered = auth()->check() ? $event->registrations->where('user_id', auth()->id())->first() : null;
                                 $remainingSlots = $event->kapasitas ? $event->kapasitas - $event->registrations->count() : null;
                                 $isFull = $event->kapasitas && $remainingSlots <= 0;
-                                $isPast = $event->waktu_mulai->isPast();
+                                $isPast = $event->waktu_selesai->isPast();
                             @endphp
 
                             <!-- Harga & Kapasitas -->
@@ -156,7 +156,7 @@
                             </div>
 
                             <!-- Action Button -->
-                            @if(auth()->id() === $event->organizer_id)
+                            @if(auth()->id() === $event->organizer_id && !$isPast)
                                 <!-- Edit and Delete Buttons for Organizer -->
                                 <div class="space-y-3 mt-4">
                                     <a href="{{ route('events.edit', $event->id) }}"
