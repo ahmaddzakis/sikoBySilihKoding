@@ -9,11 +9,15 @@ use App\Http\Controllers\AdminEventController;
 use App\Http\Controllers\ProfileController;
 
 // ================== AUTH ==================
-Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
-Route::get('/admin/login', [AuthController::class, 'adminLoginForm'])->name('admin.login');
-Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+// ================== GUEST MIDDLEWARE ==================
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+    Route::get('/admin/login', [AuthController::class, 'adminLoginForm'])->name('admin.login');
+    Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+});
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ================== PROTECTED ROUTES ==================
@@ -32,6 +36,11 @@ Route::middleware('auth')->group(function () {
 
     // ================== MAIN APP (Previously Public) ==================
     Route::get('/', function () {
+        if (auth()->check()) {
+            return auth()->user()->role === 'admin' 
+                ? redirect()->route('dashboard') 
+                : redirect()->route('home');
+        }
         return redirect()->route('login');
     });
 
@@ -84,13 +93,10 @@ Route::middleware('auth')->group(function () {
 // ================== SIGN IN (LEGACY) ==================
 // Kept for backward compatibility, though /login is the main auth route.
 Route::get('/signin', function () {
-    return view('signin');
+    return redirect()->route('login');
 })->name('signin');
 
-Route::post('/signin', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required|min:6',
-    ]);
-    return redirect('/');
+// Deprecated POST route - redirect to login in case of cached forms
+Route::post('/signin', function () {
+    return redirect()->route('login');
 })->name('signin.post');

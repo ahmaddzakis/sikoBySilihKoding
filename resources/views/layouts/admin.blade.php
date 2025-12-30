@@ -26,6 +26,7 @@
             }
         }
     </script>
+    @stack('styles')
 </head>
 
 <body class="bg-[#1a161f] text-gray-200 min-h-screen font-sans selection:bg-pink-500 selection:text-white">
@@ -94,6 +95,7 @@
             </div>
         </main>
     </div>
+    @stack('scripts')
 </body>
 
 </html>

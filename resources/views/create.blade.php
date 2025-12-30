@@ -2,6 +2,11 @@
 
 @section('title', 'Buat Acara')
 
+@push('styles')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+@endpush
+
 @section('content')
     <div class="max-w-6xl mx-auto px-6 py-6" x-data="eventForm()">
 
@@ -422,12 +427,25 @@
                         </svg>
                     </button>
                 </div>
-                <div class="mb-6">
-                    <input type="text" x-model="location"
+                <div class="mb-6 relative">
+                    <input type="text" x-model="location" @input.debounce.500ms="fetchSuggestions()"
                         class="w-full bg-[#2f2936] border border-[#3a3442] rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none focus:border-gray-500 transition-colors"
-                        placeholder="Cari lokasi atau masukkan tautan...">
+                        placeholder="Lokasi atau jalan">
+                    
+                    <!-- Suggestions Dropdown -->
+                    <div x-show="suggestions.length > 0" class="absolute z-50 w-full bg-[#26212c] border border-[#3a3442] rounded-xl shadow-xl mt-1 max-h-60 overflow-y-auto" style="display: none;">
+                        <template x-for="item in suggestions" :key="item.place_id">
+                            <div @click="selectSuggestion(item)" class="p-3 hover:bg-[#2f2936] cursor-pointer text-sm text-gray-300 border-b border-[#3a3442] last:border-0 transition-colors">
+                                <span x-text="item.display_name"></span>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Map Container -->
+                    <div id="user-map" class="h-64 w-full mt-4 rounded-xl border border-[#3a3442] z-0 relative"></div>
+                    <p class="text-xs text-gray-500 mt-2">Klik pada peta untuk memilih lokasi secara otomatis.</p>
                 </div>
-                <button @click="openLocationModal = false"
+                <button @click="openLocationModal = false; suggestions = []"
                     class="w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors">
                     Selesai
                 </button>
@@ -478,6 +496,10 @@
 @endsection
 
 @push('scripts')
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <script>
         function eventForm() {
             const today = new Date();
@@ -508,6 +530,11 @@
                 openLocationModal: false,
                 openTicketModal: false,
 
+                // Map Logic
+                map: null,
+                marker: null,
+                suggestions: [],
+
                 // Date Picker logic merged
                 openPicker: null,
                 startDate: new Date(),
@@ -523,6 +550,89 @@
                 init() {
                     this.calculateDays();
                     this.generateTimeSlots();
+
+                    // Watchers for Map
+                    this.$watch('openLocationModal', value => {
+                        if (value) {
+                            this.$nextTick(() => {
+                                this.initMap();
+                                if(this.map) {
+                                    setTimeout(() => {
+                                        this.map.invalidateSize();
+                                    }, 200);
+                                }
+                            });
+                        }
+                    });
+                },
+
+                initMap() {
+                    if (this.map) return;
+
+                    // Init Map
+                    this.map = L.map('user-map').setView([-6.2088, 106.8456], 13);
+                    
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    }).addTo(this.map);
+
+                    // Click Event
+                    this.map.on('click', (e) => {
+                        const { lat, lng } = e.latlng;
+
+                        // Move/Add Marker
+                        if (this.marker) {
+                            this.marker.setLatLng([lat, lng]);
+                        } else {
+                            this.marker = L.marker([lat, lng]).addTo(this.map);
+                        }
+
+                        // Reverse Geocode
+                        this.location = "Mengambil alamat...";
+                        
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.location = data.display_name || `${lat}, ${lng}`;
+                            })
+                            .catch(err => {
+                                console.error('Error fetching address:', err);
+                                this.location = `${lat}, ${lng}`;
+                            });
+                    });
+                },
+
+                fetchSuggestions() {
+                    if (this.location.length < 3) {
+                        this.suggestions = [];
+                        return;
+                    }
+                    
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(this.location)}&limit=5`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.suggestions = data;
+                        })
+                        .catch(err => console.error(err));
+                },
+
+                selectSuggestion(item) {
+                    this.location = item.display_name;
+                    this.suggestions = [];
+                    
+                    const lat = parseFloat(item.lat);
+                    const lon = parseFloat(item.lon);
+
+                    if (!this.map) this.initMap();
+                    
+                    this.map.setView([lat, lon], 16);
+                    
+                    if (this.marker) {
+                        this.marker.setLatLng([lat, lon]);
+                    } else {
+                        this.marker = L.marker([lat, lon]).addTo(this.map);
+                    }
                 },
 
                 calculateDays() {
