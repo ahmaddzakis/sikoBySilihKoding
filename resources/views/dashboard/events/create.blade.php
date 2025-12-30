@@ -54,7 +54,7 @@
                     >
                         <option value="">Pilih Kategori</option>
                         @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->nama }}</option>
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->nama }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -70,7 +70,7 @@
                     >
                         <option value="">Pilih Visibilitas</option>
                         @foreach($visibilities as $visibility)
-                            <option value="{{ $visibility->id }}">{{ $visibility->nama }}</option>
+                            <option value="{{ $visibility->id }}" {{ old('visibility_id') == $visibility->id ? 'selected' : '' }}>{{ $visibility->nama }}</option>
                         @endforeach
                     </select>
                 </div>

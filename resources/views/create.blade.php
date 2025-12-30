@@ -505,22 +505,22 @@
             const today = new Date();
             return {
                 // Data Form (State Alpine.js)
-                categoryId: '',
-                categoryName: '',
-                visibilityId: '{{ $visibilities->first()->id ?? 1 }}',
-                visibilityName: '{{ $visibilities->first()->nama ?? "Pribadi" }}',
-                eventName: '',
-                location: '',
-                description: '',
-                ticketPrice: '',
-                tempTicketPrice: '',
-                requiresApproval: false,
+                categoryId: '{{ old('category_id') }}',
+                categoryName: '{{ old('category_id') && $categories->find(old('category_id')) ? $categories->find(old('category_id'))->nama : "" }}',
+                visibilityId: '{{ old('visibility_id', $visibilities->first()->id ?? 1) }}',
+                visibilityName: '{{ old('visibility_id') && $visibilities->find(old('visibility_id')) ? $visibilities->find(old('visibility_id'))->nama : ($visibilities->first()->nama ?? "Pribadi") }}',
+                eventName: '{{ old('judul') }}',
+                location: '{{ old('lokasi') }}',
+                description: '{{ old('description') }}',
+                ticketPrice: '{{ old('harga_tiket') }}',
+                tempTicketPrice: '{{ old('harga_tiket') }}',
+                requiresApproval: {{ old('requires_approval') ? 'true' : 'false' }},
                 imagePreview: null,
 
                 // Logika Kapasitas
                 openCapacityModal: false,
-                capacityLimit: '',
-                tempCapacityLimit: '',
+                capacityLimit: '{{ old('kapasitas') }}',
+                tempCapacityLimit: '{{ old('kapasitas') }}',
                 waitlistOverCapacity: false,
 
                 // Deskripsi
@@ -537,10 +537,11 @@
 
                 // Date Picker logic merged
                 openPicker: null,
-                startDate: new Date(),
-                endDate: new Date(),
-                startTime: '14:00',
-                endTime: '15:00',
+                // Parse old dates or default to now
+                startDate: new Date('{{ old('waktu_mulai') ? \Carbon\Carbon::parse(old('waktu_mulai'))->format('Y-m-d') : now()->format('Y-m-d') }}'),
+                endDate: new Date('{{ old('waktu_selesai') ? \Carbon\Carbon::parse(old('waktu_selesai'))->format('Y-m-d') : now()->format('Y-m-d') }}'),
+                startTime: '{{ old('waktu_mulai') ? \Carbon\Carbon::parse(old('waktu_mulai'))->format('H:i') : "14:00" }}',
+                endTime: '{{ old('waktu_selesai') ? \Carbon\Carbon::parse(old('waktu_selesai'))->format('H:i') : "15:00" }}',
                 currentMonth: today.getMonth(),
                 currentYear: today.getFullYear(),
                 monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
