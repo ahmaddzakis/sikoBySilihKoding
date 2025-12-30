@@ -12,9 +12,9 @@ class AdminEventController extends Controller
     {
         $events = [];
         if (Auth::check()) {
-            $query = Event::where('organizer_id', Auth::id());
+            $query = Event::query();
 
-            if ($request->has('search')) {
+            if ($request->filled('search')) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
@@ -22,9 +22,24 @@ class AdminEventController extends Controller
                 });
             }
 
+            if ($request->filled('visibility')) {
+                $slug = $request->visibility;
+                $query->whereHas('visibility', function ($q) use ($slug) {
+                    $q->where('slug', $slug);
+                });
+            }
+
+            if ($request->filled('category')) {
+                $query->where('category_id', $request->category);
+            }
+
             $events = $query->orderBy('waktu_mulai', 'desc')->get();
         }
-        return view('dashboard.events.index', compact('events'));
+        
+        $categories = \App\Models\Category::all();
+        $visibilities = \App\Models\EventVisibility::all();
+
+        return view('dashboard.events.index', compact('events', 'categories', 'visibilities'));
     }
 
     public function create()
@@ -96,9 +111,8 @@ class AdminEventController extends Controller
     {
         // Authorization check? Assuming admin/organizer logic is in middleware or similar, 
         // but explicit check is good.
-        if ($event->organizer_id !== Auth::id()) {
-            abort(403);
-        }
+        // Authorization check skipped as this is an Admin route
+
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -116,9 +130,8 @@ class AdminEventController extends Controller
 
     public function destroy(Event $event)
     {
-        if ($event->organizer_id !== Auth::id()) {
-            abort(403);
-        }
+        // Authorization check skipped as this is an Admin route
+
         $event->delete();
         return redirect()->route('dashboard.events.index')->with('success', 'Event berhasil dihapus');
     }
