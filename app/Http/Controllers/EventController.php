@@ -11,7 +11,7 @@ class EventController extends Controller
         $activeTab = $request->query('tab', 'upcoming');
 
         $upcomingEvents = \App\Models\Event::where('organizer_id', auth()->id())
-            ->where('waktu_mulai', '>=', now())
+            ->where('waktu_selesai', '>=', now())
             ->orderBy('waktu_mulai', 'asc')
             ->get()
             ->map(function ($event) {
@@ -32,7 +32,7 @@ class EventController extends Controller
             });
 
         $pastEvents = \App\Models\Event::where('organizer_id', auth()->id())
-            ->where('waktu_mulai', '<', now())
+            ->where('waktu_selesai', '<', now())
             ->orderBy('waktu_mulai', 'desc')
             ->get()
             ->map(function ($event) {
