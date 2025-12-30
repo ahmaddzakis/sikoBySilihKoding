@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="min-h-screen bg-slate-100 p-8">
+    <div class="min-h-screen bg-slate-100 p-8" x-data="{ search: '{{ request('search') }}' }">
         <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-8">
 
             <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
@@ -42,7 +42,7 @@
 
                         {{-- SEARCH INPUT --}}
                         <div class="relative w-full md:w-48">
-                            <input type="text" name="search" value="{{ request('search') }}" 
+                            <input type="text" name="search" x-model="search"
                                 placeholder="Cari..."
                                 class="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm">
                             <div class="absolute left-3 top-2.5 text-slate-400">
@@ -110,7 +110,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-slate-700">
                         @forelse($events as $e)
-                            <tr class="hover:bg-slate-50 transition">
+                            <tr class="hover:bg-slate-50 transition" x-show="!search || '{{ strtolower($e->judul) }}'.includes(search.toLowerCase()) || '{{ strtolower($e->lokasi) }}'.includes(search.toLowerCase())">
                                 <td class="p-4">
                                     <div class="font-medium text-slate-800">{{ $e->judul }}</div>
                                     <div class="text-xs text-slate-500 mb-1">{{ $e->lokasi }}</div>

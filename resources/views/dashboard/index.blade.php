@@ -15,7 +15,7 @@
             <div class="flex items-center gap-4 mb-6">
                 <div
                     class="w-12 h-12 rounded-2xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-500">
-                    <i class="fa-solid fa-calendar-star text-xl"></i>
+                    <i class="fa-solid fa-calendar-days text-xl"></i>
                 </div>
                 <h3 class="text-gray-400 font-bold uppercase tracking-widest text-xs">Total Acara</h3>
             </div>

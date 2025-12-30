@@ -21,6 +21,12 @@
                 extend: {
                     colors: {
                         primary: '#0ea5e9', // Sky 500
+                        background: '#1a161f',
+                        surface: '#26212c',
+                        surfaceHover: '#2f2936',
+                        border: '#3a3442',
+                        textMain: '#ededed',
+                        textMuted: '#a1a1aa',
                     }
                 }
             }
@@ -47,8 +53,14 @@
 
                 <a href="{{ route('dashboard.events.index') }}" 
                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard.events.*') ? 'bg-pink-500/10 text-pink-500 border border-pink-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
-                    <i class="fa-solid fa-calendar-star"></i>
+                    <i class="fa-solid fa-calendar-days"></i>
                     <span class="font-medium">Manajemen Event</span>
+                </a>
+
+                <a href="{{ route('dashboard.users.index') }}" 
+                   class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard.users.*') ? 'bg-pink-500/10 text-pink-500 border border-pink-500/20' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                    <i class="fa-solid fa-users"></i>
+                    <span class="font-medium">Manajemen Pengguna</span>
                 </a>
 
                 <a href="{{ route('profile') }}" 
@@ -79,7 +91,11 @@
                         <div class="text-sm font-bold text-white">{{ Auth::user()->name }}</div>
                         <div class="text-[10px] text-gray-500 uppercase tracking-widest">{{ Auth::user()->role }}</div>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 border border-[#3a3442]"></div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 border border-[#3a3442] overflow-hidden flex items-center justify-center">
+                        @if(Auth::user()->avatar)
+                            <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                        @endif
+                    </div>
                 </div>
             </header>
 
