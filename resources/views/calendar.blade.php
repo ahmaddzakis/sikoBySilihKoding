@@ -11,17 +11,11 @@
 
         <!-- Bagian: Kalender Saya -->
         <div class="mb-12">
-            <!-- Header Bagian: Judul dan Tombol Tambah -->
+            <!-- Header Bagian: Judul -->
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-white">Kalender Saya</h2>
-
-                <!-- Tombol 'Buat'-->
-                <button
-                    class="flex items-center gap-2 px-3 py-1.5 bg-surface/50 border border-border hover:bg-surfaceHover rounded text-sm font-medium transition-colors text-white">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                    Buat
-                </button>
             </div>
+
 
             <!-- Grid Layout untuk Kartu Kalender -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

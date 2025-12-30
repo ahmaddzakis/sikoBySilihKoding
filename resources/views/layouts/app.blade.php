@@ -55,7 +55,7 @@
     [&::-webkit-scrollbar-track]:bg-transparent 
     [&::-webkit-scrollbar-thumb]:bg-pink-900/50 
     [&::-webkit-scrollbar-thumb]:rounded 
-    [&::-webkit-scrollbar-thumb:hover]:bg-pink-800" x-data="layoutData()">
+    [&::-webkit-scrollbar-thumb:hover]:bg-pink-800 flex flex-col" x-data="layoutData()">
 
     <!-- ================= NAVBAR ================= -->
     <header class="sticky top-0 bg-[#1a161f]/90 backdrop-blur-md z-50 border-b border-transparent transition-all"
@@ -188,7 +188,7 @@
     </header>
 
     <!-- ================= CONTENT ================= -->
-    <main>
+    <main class="flex-grow">
         @if(session('success'))
             <div class="max-w-6xl mx-auto px-6 mt-8">
                 <div
@@ -220,25 +220,35 @@
 
     <!-- ================= FOOTER ================= -->
     @if(!request()->is('create'))
-        <footer class="max-w-6xl mx-auto px-6 pb-10">
-            <div class="mt-20 pt-8 border-t border-border">
-                <div class="flex justify-between items-center">
-                    <!-- Kiri: Logo & kalendar -->
-                    <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="Siko Logo"
-                            class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
-                        <a href="/calendar"
-                            class="text-textMuted hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
-                            <span>Kalender</span>
+        <footer class="w-full mt-auto">
+            <div class="max-w-6xl mx-auto px-6 pb-10">
+                <div class="mt-20 pt-8 border-t border-border">
+                    <div class="flex justify-between items-center">
+                        <!-- Kiri: Logo & Navigasi -->
+                        <div class="flex items-center gap-6">
+                            <img src="{{ asset('images/logo.png') }}" alt="Siko Logo"
+                                class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
+                            <div class="flex items-center gap-4">
+                                <a href="/find"
+                                    class="text-textMuted hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                                    <span>Temukan</span>
+                                </a>
+                                <span class="text-gray-800 text-xs">|</span>
+                                <a href="/calendar"
+                                    class="text-textMuted hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                                    <span>Kalender</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Sisi Kanan: Icon Instagram -->
+                        <a href="https://instagram.com/siko.events" target="_blank"
+                            class="text-textMuted hover:text-white transition-colors text-lg">
+                            <i class="fa-brands fa-instagram"></i>
                         </a>
                     </div>
-
-                    <!-- Sisi Kanan: Icon Instagram -->
-                    <a href="https://www.instagram.com/__mustikaaa?igsh=MTVyMmV4bTF6cWhycQ==" target="_blank"
-                        class="text-textMuted hover:text-white transition-colors text-lg">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
                 </div>
+            </div>
         </footer>
     @endif
 
