@@ -18,6 +18,12 @@
                     <i class="fa-solid fa-location-dot text-xs text-gray-600"></i>
                     {{ $event['location'] }}
                 </div>
+                
+                <div class="mt-4 pt-4 border-t border-[#3a3442]">
+                    <a href="{{ route('events.show', $event['id']) }}" class="inline-flex items-center gap-2 text-sm font-bold text-gray-300 hover:text-white transition-colors">
+                        Lihat Detail <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
             </div>
         </div>
     @endforeach
