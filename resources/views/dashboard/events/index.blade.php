@@ -113,7 +113,15 @@
                             <tr class="hover:bg-slate-50 transition">
                                 <td class="p-4">
                                     <div class="font-medium text-slate-800">{{ $e->judul }}</div>
-                                    <div class="text-xs text-slate-500">{{ $e->lokasi }}</div>
+                                    <div class="text-xs text-slate-500 mb-1">{{ $e->lokasi }}</div>
+                                    <div class="flex gap-2 mt-1">
+                                        <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200">
+                                            {{ $e->category->nama ?? 'Uncategorized' }}
+                                        </span>
+                                        <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full {{ $e->visibility->slug == 'public' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                                            {{ ucfirst($e->visibility->nama ?? 'Unknown') }}
+                                        </span>
+                                    </div>
                                 </td>
                                 <td class="p-4 text-sm whitespace-nowrap">
                                     {{ \Carbon\Carbon::parse($e->waktu_mulai)->format('d M Y H:i') }} <br>
