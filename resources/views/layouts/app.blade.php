@@ -50,12 +50,12 @@
     @stack('styles')
 </head>
 
-<body class="min-h-screen font-sans antialiased bg-background text-textMain selection:bg-purple-500 selection:text-white 
+<body class="min-h-screen font-sans antialiased bg-gradient-to-br from-gray-950 via-[#13111C] to-[#341020] text-textMain selection:bg-pink-500 selection:text-white 
     [&::-webkit-scrollbar]:w-2 
-    [&::-webkit-scrollbar-track]:bg-background 
-    [&::-webkit-scrollbar-thumb]:bg-border 
+    [&::-webkit-scrollbar-track]:bg-transparent 
+    [&::-webkit-scrollbar-thumb]:bg-pink-900/50 
     [&::-webkit-scrollbar-thumb]:rounded 
-    [&::-webkit-scrollbar-thumb:hover]:bg-[#4a4452]" x-data="layoutData()">
+    [&::-webkit-scrollbar-thumb:hover]:bg-pink-800" x-data="layoutData()">
 
     <!-- ================= NAVBAR ================= -->
     <header class="sticky top-0 bg-[#1a161f]/90 backdrop-blur-md z-50 border-b border-transparent transition-all"
@@ -63,10 +63,26 @@
         <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center relative">
 
             <!-- Logo SIKO -->
-            <div class="flex items-center">
+            <div class="flex items-center gap-4">
                 <a href="/" class="flex items-center gap-2">
                     <img src="{{ asset('images/logo.png') }}" alt="SIKO Logo" class="h-10 w-auto">
                 </a>
+                <div x-data="{ 
+                    time: '', 
+                    updateTime() {
+                        const now = new Date();
+                        // Format: 10:17 PM
+                        let timeStr = now.toLocaleTimeString('en-US', { 
+                            hour: '2-digit', 
+                            minute: '2-digit', 
+                            hour12: true 
+                        });
+                        this.time = timeStr + ' GMT+7';
+                    }
+                }" x-init="updateTime(); setInterval(() => updateTime(), 60000)"
+                    class="hidden sm:block text-gray-500 font-medium text-xs tracking-tight border-l border-gray-800 pl-4 py-1">
+                    <span x-text="time"></span>
+                </div>
             </div>
 
             <!-- Navigasi Menu: Desktop Only -->
@@ -113,7 +129,7 @@
                             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                             class="absolute right-0 mt-3 w-56 bg-[#1a161f] border border-[#3a3442] rounded-2xl shadow-2xl overflow-hidden z-[60]"
                             x-cloak>
-                            
+
                             <!-- Info Singkat User -->
                             <div class="px-4 py-4 border-b border-[#3a3442] bg-[#221d28]/30">
                                 <div class="font-bold text-white">{{ Auth::user()->name }}</div>
@@ -137,7 +153,8 @@
                                     @csrf
                                     <button type="submit"
                                         class="w-full text-left px-4 py-2.5 text-red-400 hover:text-red-300 hover:bg-red-400/5 transition-colors text-sm font-medium">
-                                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign Out
+                                        <i class="fa-solid fa-arrow-right-from-bracket mr-2 text-xs opacity-50"></i> Sign
+                                        Out
                                     </button>
                                 </form>
                             </div>
@@ -161,7 +178,7 @@
     <!-- ================= FOOTER ================= -->
     @if(!request()->is('create'))
         <footer class="max-w-6xl mx-auto px-6 pb-10">
-            <div class="mt-64 pt-8 border-t border-border">
+            <div class="mt-20 pt-8 border-t border-border">
                 <div class="flex justify-between items-center">
                     <!-- Kiri: Logo & kalendar -->
                     <div class="flex items-center gap-3">
@@ -173,11 +190,12 @@
                         </a>
                     </div>
 
-                <!-- Sisi Kanan: Icon Instagram -->
-                <a href="#" class="text-textMuted hover:text-white transition-colors text-lg">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-            </div>
+                    <!-- Sisi Kanan: Icon Instagram -->
+                    <a href="https://www.instagram.com/__mustikaaa?igsh=MTVyMmV4bTF6cWhycQ==" target="_blank"
+                        class="text-textMuted hover:text-white transition-colors text-lg">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
         </footer>
     @endif
 

@@ -35,47 +35,38 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('login');
     });
 
-    Route::get('/home', function (Request $request) {
-        $activeTab = $request->query('tab', 'upcoming');
-
-        $upcomingEvents = [];
-        $pastEvents = [];
-
-        return view('events', [
-            'activeTab' => $activeTab,
-            'upcomingEvents' => $upcomingEvents,
-            'pastEvents' => $pastEvents,
-        ]);
-    })->name('home');
+    // HOME & EVENTS
+    Route::get('/home', [EventController::class, 'index'])->name('home');
 
     Route::get('/events', function (Request $request) {
         return redirect()->route('home', ['tab' => $request->query('tab', 'upcoming')]);
     })->name('events.index');
 
+    Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+
     Route::get('/calendar', function () {
         return view('calendar');
     })->name('calendar');
+
+    Route::get('/calendar/my-events', function () {
+        $events = Auth::user()->events()->withCount('registrations')->orderBy('waktu_mulai')->get();
+        return view('my-events', compact('events'));
+    })->name('calendar.events');
 
     Route::get('/help', function () {
         return view('help');
     })->name('help');
 
     // ================== CREATE EVENT ==================
-    Route::get('/create', function () {
-        return view('create');
-    })->name('create');
+    Route::get('/create', [EventController::class, 'create'])->name('create');
 
-    Route::post('/create', function (Request $request) {
-        $request->validate([
-            'title' => 'required|max:255',
-        ]);
-        return redirect()->back()->with('success', 'Acara berhasil dibuat!');
-    })->name('event.store');
+    Route::post('/create', [EventController::class, 'store'])->name('event.store');
 
-    // ================== FIND ==================
     Route::get('/find', function () {
         return view('find');
     })->name('find');
+
+    Route::get('/search', [EventController::class, 'search'])->name('events.search');
 
     Route::get('/find/city/{city}', function ($city) {
         return view('city', compact('city'));

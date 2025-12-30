@@ -13,10 +13,19 @@ class Event extends Model
         'organizer_id',
         'category_id',
         'judul',
-        'lokasi',
         'description',
+        'lokasi',
         'waktu_mulai',
         'waktu_selesai',
+        'harga_tiket',
+        'requires_approval',
+        'kapasitas',
+    ];
+
+    protected $casts = [
+        'waktu_mulai' => 'datetime',
+        'waktu_selesai' => 'datetime',
+        'requires_approval' => 'boolean',
     ];
 
     public function organizer()

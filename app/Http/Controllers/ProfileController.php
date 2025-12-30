@@ -11,7 +11,8 @@ class ProfileController extends Controller
     public function show()
     {
         return view('profile', [
-            'user' => Auth::user()
+            'user' => Auth::user(),
+            'createdEventsCount' => \App\Models\Event::where('organizer_id', Auth::id())->count(),
         ]);
     }
 
