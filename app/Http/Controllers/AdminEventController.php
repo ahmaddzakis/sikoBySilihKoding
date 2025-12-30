@@ -33,7 +33,7 @@ class AdminEventController extends Controller
                 $query->where('category_id', $request->category);
             }
 
-            $events = $query->orderBy('waktu_mulai', 'desc')->get();
+            $events = $query->with(['category', 'visibility'])->orderBy('waktu_mulai', 'desc')->get();
         }
         
         $categories = \App\Models\Category::all();
