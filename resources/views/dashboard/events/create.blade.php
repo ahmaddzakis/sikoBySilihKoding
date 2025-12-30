@@ -110,14 +110,27 @@
                 <label class="block text-sm font-medium text-slate-700 mb-2">
                     Lokasi <span class="text-red-500">*</span>
                 </label>
-                <input 
-                    type="text" 
-                    name="lokasi" 
-                    value="{{ old('lokasi') }}"
-                    placeholder="Contoh: Ruang Seminar A, Gedung XYZ"
-                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
-                    required
-                >
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        name="lokasi" 
+                        id="lokasi-input"
+                        value="{{ old('lokasi') }}"
+                        placeholder="Lokasi atau jalan"
+                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                        required
+                        autocomplete="off"
+                    >
+                    <button type="button" id="toggle-map" class="absolute right-3 top-3 text-slate-400 hover:text-sky-600">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </button>
+                    <!-- Suggestions Dropdown -->
+                    <div id="suggestions" class="absolute z-50 w-full bg-white border border-slate-300 rounded-lg shadow-lg mt-1 hidden max-h-60 overflow-y-auto"></div>
+                </div>
+                <div id="map-container" class="hidden mt-2 border border-slate-300 rounded-lg overflow-hidden">
+                    <div id="map" class="h-64 w-full z-0"></div>
+                    <p class="text-xs text-slate-500 p-2 bg-slate-50">Klik pada peta untuk memilih lokasi</p>
+                </div>
             </div>
 
             <!-- Deskripsi -->
@@ -221,4 +234,145 @@
         </form>
     </div>
 </div>
+
 @endsection
+
+@push('styles')
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+@endpush
+
+@push('scripts')
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.getElementById('lokasi-input');
+            const mapContainer = document.getElementById('map-container');
+            const toggleBtn = document.getElementById('toggle-map');
+            let map = null;
+            let marker = null;
+    
+            function initMap() {
+                if (map) return;
+                
+                // Default to Jakarta/Bandung or generic Indonesia coords if no location
+                // Using a generic Jakarta coordinate: -6.2088, 106.8456
+                map = L.map('map').setView([-6.2088, 106.8456], 13);
+    
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+    
+                // Click handler
+                map.on('click', function(e) {
+                    const lat = e.latlng.lat;
+                    const lng = e.latlng.lng;
+    
+                    if (marker) {
+                        marker.setLatLng([lat, lng]);
+                    } else {
+                        marker = L.marker([lat, lng]).addTo(map);
+                    }
+    
+                    // Reverse Geocoding
+                    input.value = "Mengambil alamat...";
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            input.value = data.display_name || `${lat}, ${lng}`;
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            input.value = `${lat}, ${lng}`;
+                        });
+                });
+            }
+    
+            function toggleMap() {
+                mapContainer.classList.toggle('hidden');
+                if (!mapContainer.classList.contains('hidden')) {
+                    // Initialize map if not exists, and invalidate size to fix render issues
+                    if (!map) initMap();
+                    setTimeout(() => {
+                        map.invalidateSize();
+                    }, 100);
+                }
+            }
+    
+            toggleBtn.addEventListener('click', toggleMap);
+
+            input.addEventListener('focus', function() {
+               // Optional: open map on focus or just show suggestions
+               // toggleMap(); 
+            });
+    
+            // Autocomplete Logic
+            const suggestionsBox = document.getElementById('suggestions');
+            let debounceTimer;
+    
+            input.addEventListener('input', function() {
+                const query = this.value;
+                clearTimeout(debounceTimer);
+    
+                if (query.length < 3) {
+                    suggestionsBox.classList.add('hidden');
+                    return;
+                }
+    
+                debounceTimer = setTimeout(() => {
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`)
+                        .then(response => response.json())
+                        .then(data => {
+                            suggestionsBox.innerHTML = '';
+                            if (data.length > 0) {
+                                suggestionsBox.classList.remove('hidden');
+                                data.forEach(item => {
+                                    const div = document.createElement('div');
+                                    div.className = 'p-3 hover:bg-slate-100 cursor-pointer text-sm text-slate-700 border-b border-slate-100 last:border-0';
+                                    div.textContent = item.display_name;
+                                    div.onclick = () => {
+                                        input.value = item.display_name;
+                                        suggestionsBox.classList.add('hidden');
+                                        
+                                        // Update Map
+                                        if (!map) initMap();
+                                        
+                                        const lat = parseFloat(item.lat);
+                                        const lon = parseFloat(item.lon);
+                                        
+                                        // Show map if hidden
+                                        if(mapContainer.classList.contains('hidden')) {
+                                            mapContainer.classList.remove('hidden');
+                                            setTimeout(() => map.invalidateSize(), 100);
+                                        }
+    
+                                        map.setView([lat, lon], 16);
+                                        
+                                        if (marker) {
+                                            marker.setLatLng([lat, lon]);
+                                        } else {
+                                            marker = L.marker([lat, lon]).addTo(map);
+                                        }
+                                    };
+                                    suggestionsBox.appendChild(div);
+                                });
+                            } else {
+                                suggestionsBox.classList.add('hidden');
+                            }
+                        })
+                        .catch(error => console.error('Error fetching suggestions:', error));
+                }, 500); // 500ms debounce
+            });
+    
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (e.target !== input && e.target !== suggestionsBox) {
+                    suggestionsBox.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+@endpush
