@@ -223,7 +223,15 @@ class EventController extends Controller
     public function show($id)
     {
         $event = \App\Models\Event::visible()->with('organizer')->findOrFail($id);
-        return view('event-detail', compact('event'));
+        
+        $existingRegistration = null;
+        if (\Auth::check()) {
+            $existingRegistration = $event->registrations()
+                ->where('user_id', \Auth::id())
+                ->first();
+        }
+
+        return view('event-detail', compact('event', 'existingRegistration'));
     }
 
     public function search(Request $request)

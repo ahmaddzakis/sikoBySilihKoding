@@ -12,7 +12,7 @@
                         
                         {{-- Visibility Filter --}}
                         <div class="relative">
-                            <select name="visibility" onchange="this.form.submit()" class="appearance-none w-full md:w-32 pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-slate-600 bg-white cursor-pointer">
+                            <select name="visibility" onchange="this.form.submit()" class="appearance-none w-full md:w-32 pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-black bg-white cursor-pointer">
                                 <option value="">Status</option>
                                 @foreach($visibilities as $v)
                                     <option value="{{ $v->slug }}" {{ request('visibility') == $v->slug ? 'selected' : '' }}>
@@ -27,7 +27,7 @@
 
                          {{-- Category Filter --}}
                          <div class="relative">
-                            <select name="category" onchange="this.form.submit()" class="appearance-none w-full md:w-32 pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-slate-600 bg-white cursor-pointer">
+                            <select name="category" onchange="this.form.submit()" class="appearance-none w-full md:w-32 pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-black bg-white cursor-pointer">
                                 <option value="">Kategori</option>
                                 @foreach($categories as $c)
                                     <option value="{{ $c->id }}" {{ request('category') == $c->id ? 'selected' : '' }}>
@@ -44,7 +44,7 @@
                         <div class="relative w-full md:w-48">
                             <input type="text" name="search" x-model="search"
                                 placeholder="Cari..."
-                                class="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm">
+                                class="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-black placeholder-slate-500">
                             <div class="absolute left-3 top-2.5 text-slate-400">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">

@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siko - @yield('title', 'Beranda')</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -120,7 +122,8 @@
                 </a>
 
                 <!-- Dropdown Notifikasi (File Terpisah) -->
-                @include('notification')
+                <!-- Dropdown Notifikasi removed as requested -->
+
 
                 <!-- Dropdown Profil: Logika untuk user yang sudah Login atau Belum -->
                 @auth
