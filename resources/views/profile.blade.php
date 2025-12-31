@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-2xl mx-auto px-6 py-20 text-center md:text-left">
-        <!-- Alert Messages -->
+        <!-- pesan alert -->
         @if(session('success'))
             <div class="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-500 text-sm">
                 {{ session('success') }}
@@ -25,9 +25,9 @@
             </div>
         @endif
 
-        <!-- Header: Avatar & Info -->
+        <!-- header: avatar dan info -->
         <div class="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12">
-            <!-- Avatar -->
+            <!-- avatar -->
             <div class="flex flex-col items-center gap-4">
                 <div class="group relative">
                     <div
@@ -35,7 +35,7 @@
                         @if($user->avatar)
                             <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                         @else
-                            <!-- Simple smiley face using div/icon -->
+                            <!-- gambar senyum/icon -->
                             <div class="relative w-16 h-16">
                                 <div class="absolute top-4 left-2 w-2.5 h-3 bg-black/80 rounded-full"></div>
                                 <div class="absolute top-4 right-2 w-2.5 h-3 bg-black/80 rounded-full"></div>
@@ -46,13 +46,13 @@
                         @endif
                     </div>
 
-                    <!-- Edit Overlay -->
+                    <!-- overlay edit -->
                     <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                         onclick="document.getElementById('avatar-input').click()">
                         <i class="fa-solid fa-camera text-white text-2xl"></i>
                     </div>
 
-                    <!-- Hidden Form -->
+                    <!-- form sembunyi -->
                     <form id="avatar-form" action="{{ route('profile.avatar.update') }}" method="POST"
                         enctype="multipart/form-data" class="hidden">
                         @csrf
@@ -73,7 +73,7 @@
                 @endif
             </div>
 
-            <!-- Info -->
+            <!-- info -->
             <div class="flex flex-col justify-center h-32 py-2">
                 <div class="flex items-center gap-4 mb-2 justify-center md:justify-start">
                     <h1 class="text-4xl font-bold text-white tracking-tight">{{ $user->name }}</h1>
@@ -95,12 +95,10 @@
             </div>
         </div>
 
-        <!-- Divider -->
         <div class="h-px bg-border/40 w-full mb-12"></div>
 
-        <!-- content sections -->
         <div class="space-y-16">
-            <!-- Joined Events Section -->
+            <!-- bagian acara yang diikuti -->
             <section>
                 <div class="flex justify-between items-center mb-8">
                     <h2 class="text-xl font-bold text-white flex items-center gap-3">
@@ -120,17 +118,17 @@
                         @foreach($registrations as $reg)
                             <a href="{{ route('events.show', $reg->event->id) }}" class="group block relative">
                                 <div class="relative rounded-3xl overflow-hidden aspect-[4/3] shadow-xl group-hover:scale-[1.02] transition-transform duration-300">
-                                    <!-- Event Image -->
+                                    <!-- gambar acara -->
                                     <img src="{{ asset('storage/' . $reg->event->image) }}" 
                                          alt="{{ $reg->event->judul }}" 
                                          class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                                     
-                                    <!-- Overlay -->
+                                    <!-- overlay -->
                                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100"></div>
 
-                                    <!-- Content -->
+                                    <!-- konten -->
                                     <div class="absolute inset-0 p-6 flex flex-col justify-between">
-                                        <!-- Header: Status -->
+                                        <!-- header: status -->
                                         <div class="flex justify-between items-start">
                                             <div class="bg-black/30 backdrop-blur-md border border-white/10 rounded-full px-3 py-1">
                                                 <p class="text-[10px] font-bold text-white uppercase tracking-wider">
@@ -149,7 +147,7 @@
                                             @endif
                                         </div>
 
-                                        <!-- Footer: Info -->
+                                        <!-- footer: info -->
                                         <div>
                                             <p class="text-pink-400 text-xs font-bold mb-1">
                                                 {{ $reg->event->waktu_mulai->translatedFormat('d F Y • H:i') }}
@@ -170,7 +168,7 @@
                 @endif
             </section>
 
-            <!-- Created Events Section (Brief) -->
+            <!-- bagian acara yang dibuat -->
             @if($createdEventsCount > 0)
             <section>
                 <div class="flex justify-between items-center mb-8">

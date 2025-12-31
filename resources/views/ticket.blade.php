@@ -10,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
+        // settingan warna tema Siko 
         tailwind.config = {
             theme: {
                 extend: {
@@ -33,6 +34,7 @@
             color: #ededed;
         }
 
+        /* Ini buat ngatur tampilan pas diprint biar ngga berantakan */
         @media print {
             .no-print {
                 display: none !important;
@@ -44,6 +46,7 @@
             }
         }
 
+        /* Wadah kartu tiketnya, dikasih border sama radius gede biar cakep */
         .ticket-container {
             background: #26212c;
             border-radius: 1.5rem;
@@ -55,9 +58,10 @@
             position: relative;
         }
 
+        /* Header tiket pake gradasi warna pink-ungu ciri khas Siko */
         .ticket-header {
             background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
-            /* Pink to Purple */
+            /* Pink ke Ungu */
             color: white;
             padding: 2rem;
             text-align: center;
@@ -65,7 +69,7 @@
             overflow: hidden;
         }
         
-        /* Decorative circle in header */
+        /* Buletan hiasan di header */
         .ticket-header::before {
             content: '';
             position: absolute;
@@ -120,17 +124,17 @@
             position: relative;
         }
         
-        /* Dashed divider look */
+        /* Tampilan garis putus-putus */
         .divider.dashed {
             background: transparent;
             border-top: 2px dashed #3a3442;
         }
 
-        /* Cutout circles for ticket look */
+        /* Buletan potong di kiri-kanan biar kelihatannya kayak tiket disobek */
         .ticket-container::before, .ticket-container::after {
             content: '';
             position: absolute;
-            top: 260px; /* Adjust based on header/content height */
+            top: 260px; 
             width: 40px;
             height: 40px;
             background: #1a161f;
@@ -170,7 +174,7 @@
             }
 
             body {
-                background: #1a161f; /* Try to force dark bg in PDF */
+                background: #1a161f; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -185,8 +189,9 @@
 
 <body class="flex flex-col items-center justify-center min-h-screen p-6">
 
+    <!-- Bagian ini buat bungkus konten tiketnya -->
     <div id="ticket-capture" class="ticket-container">
-        <!-- Header -->
+        <!-- Header Tiket -->
         <div class="ticket-header">
             <div class="mb-2 opacity-80">
                 <i class="fa-solid fa-ticket text-3xl"></i>
@@ -195,9 +200,9 @@
             <p class="text-white/80 text-sm mt-1 font-medium">SIKO EVENT</p>
         </div>
 
-        <!-- Content -->
+        <!-- Isi data tiket -->
         <div class="ticket-content">
-            <!-- Reg & Date -->
+            <!-- Info No Registrasi & Tanggal -->
             <div class="flex justify-between items-center mb-8 bg-[#1a161f] p-4 rounded-xl border border-[#3a3442]">
                 <div>
                     <div class="text-[#a1a1aa] text-xs font-bold uppercase tracking-wider mb-1">No. Registrasi</div>
@@ -211,7 +216,7 @@
 
             <div class="divider dashed"></div>
 
-            <!-- User & Event Info -->
+            <!-- Info peserta dan acara -->
             <div class="space-y-4">
                 <div class="info-row">
                     <span class="info-label">Event</span>
@@ -246,7 +251,7 @@
 
             <div class="divider"></div>
 
-            <!-- Status -->
+            <!-- Status pendaftaran -->
             <div class="text-center">
                 @if($registration->status === 'approved')
                     <div class="status-badge">
@@ -264,7 +269,7 @@
              <div class="mt-8 text-center">
                 <p class="text-[#a1a1aa] text-xs">Simpan bukti ini sebagai tiket masuk acara.</p>
                 <div class="mt-4 opacity-50">
-                    <!-- Barcode dummy -->
+                    <!-- Barcode bohongan -->
                     <div class="h-12 bg-white/20 rounded mx-auto w-2/3"></div>
                 </div>
             </div>
@@ -273,6 +278,7 @@
 
     <!-- Controls -->
     <div class="mt-8 flex gap-4 no-print">
+        <!-- Tombol buat download pake fungsi print browser -->
         <button onclick="window.print()"
             class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-3 transition-all shadow-lg shadow-purple-500/20">
             <i class="fa-solid fa-file-pdf"></i>
@@ -284,9 +290,9 @@
         </a>
     </div>
 
-    <!-- Script untuk auto-print jika diperlukan, atau sekadar helper -->
+    {{-- // Script buat handle print atau bantuan lainnya --}}
     <script>
-        // Opsional: Bisa tambahkan logika lain jika perlu
+
     </script>
 </body>
 </html>

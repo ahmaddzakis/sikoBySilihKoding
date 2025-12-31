@@ -16,13 +16,13 @@
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-    <!-- Custom Config for Tailwind -->
+    <!-- Settingan warna tema khusus admin, biar serasi sama bagian user -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0ea5e9', // Sky 500
+                        primary: '#0ea5e9', 
                         background: '#1a161f',
                         surface: '#26212c',
                         surfaceHover: '#2f2936',
@@ -39,7 +39,7 @@
 
 <body class="bg-[#1a161f] text-gray-200 min-h-screen font-sans selection:bg-pink-500 selection:text-white">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
+        <!-- sidebar kiri buat menu-menu admin -->
         <aside class="w-64 bg-[#26212c] border-r border-[#3a3442] p-6 flex flex-col gap-8">
             <div class="flex items-center gap-3">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto">
@@ -83,16 +83,19 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- konten utama -->
         <main class="flex-1 overflow-y-auto">
+            <!-- header atas admin -->
             <header class="h-20 border-b border-[#3a3442] px-8 flex items-center justify-between bg-[#1a161f]/50 backdrop-blur-md sticky top-0 z-10">
                 <h1 class="text-xl font-bold text-white tracking-tight">@yield('title', 'Dashboard Admin')</h1>
                 
                 <div class="flex items-center gap-4">
+                    <!-- info admin yang lagi login -->
                     <div class="text-right hidden sm:block">
                         <div class="text-sm font-bold text-white">{{ Auth::user()->name }}</div>
                         <div class="text-[10px] text-gray-500 uppercase tracking-widest">{{ Auth::user()->role }}</div>
                     </div>
+                    <!-- foto profil admin -->
                     <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 border border-[#3a3442] overflow-hidden flex items-center justify-center">
                         @if(Auth::user()->avatar)
                             <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">

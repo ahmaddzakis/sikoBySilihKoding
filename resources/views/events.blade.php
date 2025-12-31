@@ -4,11 +4,11 @@
 
 @section('content')
     <div class="max-w-5xl mx-auto px-6 py-6">
-        <!-- Header: Judul dan Toggle Mendatang/Lampau -->
+        <!-- header: judul sama toggle mendatang/lampau -->
         <div class="flex justify-between items-center mb-16">
             <h1 class="text-4xl font-bold text-white tracking-tight">Acara</h1>
 
-            <!-- Toggle Tab -->
+            <!-- toggle tab -->
             <div class="bg-[#26212c] p-1 rounded-xl border border-[#3a3442] flex text-sm">
                 <a href="?tab=upcoming"
                     class="px-5 py-2 rounded-lg transition-all font-semibold {{ $activeTab === 'upcoming' ? 'bg-[#3a3442] text-white' : 'text-gray-400 hover:text-gray-200' }}">
@@ -32,7 +32,7 @@
                 @include('events-timeline', ['events' => $displayEvents])
             @endif
         @else
-            <!-- Tampilan Kosong (Empty State) -->
+            <!-- kalo kosong muncul ini -->
             <div class="flex flex-col items-center justify-center min-h-[400px] text-center">
                 <div class="mb-4"></div>
                 <h2 class="text-3xl font-black text-white mb-4 tracking-tight">
