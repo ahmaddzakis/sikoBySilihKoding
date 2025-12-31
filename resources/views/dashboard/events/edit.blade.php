@@ -148,18 +148,40 @@
                         >{{ old('description', $event->description) }}</textarea>
                     </div>
 
+                    {{-- VISIBILITY --}}
+                    <div class="mt-4">
+                        <label class="block text-sm font-bold text-black mb-1">
+                            Visibility <span class="text-red-500">*</span>
+                        </label>
+                        <select
+                            name="visibility_id"
+                            class="mt-1 w-full rounded-lg border-slate-300 text-black font-medium"
+                            required
+                        >
+                            @foreach($visibilities as $visibility)
+                                <option value="{{ $visibility->id }}" {{ old('visibility_id', $event->visibility_id) == $visibility->id ? 'selected' : '' }}>
+                                    {{ ucfirst($visibility->nama) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     {{-- CATEGORY --}}
                      <div class="mt-4">
                         <label class="block text-sm font-bold text-black mb-1">
                             Category ID (Optional)
                         </label>
-                        <input
-                            type="number"
+                        <select
                             name="category_id"
-                            value="{{ old('category_id', $event->category_id) }}"
-                            placeholder="ID Kategori"
                             class="mt-1 w-full rounded-lg border-slate-300 text-black font-medium"
                         >
+                           <option value="">-- Pilih Kategori --</option>
+                           @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id', $event->category_id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->nama }}
+                                </option>
+                           @endforeach
+                        </select>
                     </div>
 
                     {{-- BUTTON --}}

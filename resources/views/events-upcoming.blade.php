@@ -23,15 +23,7 @@
                 </div>
 
                 <!-- info host -->
-                <div class="flex flex-col gap-1">
-                    <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Diselenggarakan Oleh</span>
-                    <div class="flex items-center gap-2">
-                        <div class="w-6 h-6 rounded-full bg-emerald-400 flex items-center justify-center overflow-hidden">
-                            <div class="w-full h-full bg-gradient-to-br from-emerald-400 to-teal-600"></div>
-                        </div>
-                        <span class="font-bold text-white text-sm">{{ $event['organizer'] }}</span>
-                    </div>
-                </div>
+
             </div>
 
             <!-- kolom kanan: detail -->
