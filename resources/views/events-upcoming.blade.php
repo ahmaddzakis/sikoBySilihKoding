@@ -13,18 +13,18 @@
                     @else
                         <h2 class="text-5xl font-black leading-[0.85] tracking-tighter mix-blend-multiply mb-auto"
                             style="font-family: sans-serif;">
-                            YOU'RE<br>ON THE<br>GUEST-<br>LIST*
+                            KAMU<br>MASUK<br>DAFTAR<br>TAMU*
                         </h2>
                         <div class="absolute bottom-6 right-6 text-2xl font-black leading-none tracking-tighter rotate-[-5deg] text-right"
                             style="font-family: sans-serif;">
-                            *HOW<br>LUCKY<br>YOU<br>ARE
+                            *BETAPA<br>BERUNTUNGNYA<br>KAMU
                         </div>
                     @endif
                 </div>
 
                 <!-- Host Info -->
                 <div class="flex flex-col gap-1">
-                    <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Hosted By</span>
+                    <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Diselenggarakan Oleh</span>
                     <div class="flex items-center gap-2">
                         <div class="w-6 h-6 rounded-full bg-emerald-400 flex items-center justify-center overflow-hidden">
                             <div class="w-full h-full bg-gradient-to-br from-emerald-400 to-teal-600"></div>
@@ -43,9 +43,9 @@
                             <span
                                 class="bg-[#3a2a4b] text-[#d4b3eb] px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 border border-[#4d3664]">
                                 @if($event['requires_approval'])
-                                    <i class="fa-solid fa-lock text-[10px]"></i> Requires Approval
+                                    <i class="fa-solid fa-lock text-[10px]"></i> Butuh Persetujuan
                                 @else
-                                    <i class="fa-solid fa-globe text-[10px]"></i> Public Event
+                                    <i class="fa-solid fa-globe text-[10px]"></i> Acara Publik
                                 @endif
                             </span>
                         </div>
@@ -65,7 +65,7 @@
                         </div>
                         <div>
                             <div class="font-bold text-white text-md">{{ $event['date'] }}</div>
-                            <div class="text-gray-400 text-sm">Join the community for this event</div>
+                            <div class="text-gray-400 text-sm">Bergabunglah dengan komunitas untuk acara ini</div>
                         </div>
                     </div>
 
@@ -91,9 +91,8 @@
                                 <i class="fa-solid fa-user-check text-xs"></i>
                             </div>
                             <div>
-                                <div class="font-bold text-white text-sm mb-0.5">Approval Required</div>
-                                <div class="text-gray-400 text-xs leading-relaxed">Your registration is subject to host
-                                    approval.</div>
+                                <div class="font-bold text-white text-sm mb-0.5">Butuh Persetujuan</div>
+                                <div class="text-gray-400 text-xs leading-relaxed">Pendaftaran Anda memerlukan persetujuan tuan rumah.</div>
                             </div>
                         </div>
                     </div>
@@ -104,7 +103,7 @@
                 <!-- Actions -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Price:</span>
+                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Harga:</span>
                         <span
                             class="text-sm font-bold text-pink-500">{{ $event['price'] > 0 ? 'Rp ' . number_format($event['price'], 0, ',', '.') : 'GRATIS' }}</span>
                     </div>

@@ -103,9 +103,9 @@
                 <table class="w-full text-left border-collapse">
                     <thead class="sticky top-0 bg-slate-50 z-10 shadow-sm">
                         <tr class="text-slate-600 text-sm uppercase tracking-wider">
-                            <th class="p-4 border-b border-slate-200">Event Name</th>
-                            <th class="p-4 border-b border-slate-200">Schedule</th>
-                            <th class="p-4 border-b border-slate-200 text-center">Action</th>
+                            <th class="p-4 border-b border-slate-200">Nama Acara</th>
+                            <th class="p-4 border-b border-slate-200">Jadwal</th>
+                            <th class="p-4 border-b border-slate-200 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-slate-700">
@@ -116,16 +116,16 @@
                                     <div class="text-xs text-slate-500 mb-1">{{ $e->lokasi }}</div>
                                     <div class="flex gap-2 mt-1">
                                         <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-indigo-100 text-indigo-700 border border-indigo-200">
-                                            {{ $e->category->nama ?? 'Uncategorized' }}
+                                            {{ $e->category->nama ?? 'Tanpa Kategori' }}
                                         </span>
                                         <span class="px-2 py-0.5 text-[10px] font-semibold rounded-full {{ $e->visibility->slug == 'public' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
-                                            {{ ucfirst($e->visibility->nama ?? 'Unknown') }}
+                                            {{ ucfirst($e->visibility->nama ?? 'Tidak Diketahui') }}
                                         </span>
                                     </div>
                                 </td>
                                 <td class="p-4 text-sm whitespace-nowrap">
                                     {{ \Carbon\Carbon::parse($e->waktu_mulai)->format('d M Y H:i') }} <br>
-                                    <span class="text-xs text-slate-400">to</span>
+                                    <span class="text-xs text-slate-400">s/d</span>
                                     {{ \Carbon\Carbon::parse($e->waktu_selesai)->format('H:i') }}
                                 </td>
                                 <td class="p-4 text-center">

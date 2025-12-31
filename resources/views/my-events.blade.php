@@ -18,7 +18,7 @@
                 <a href="{{ route('events.show', $event->id) }}" class="bg-[#1a161f] p-5 rounded-3xl border border-[#2d2d2d] flex flex-col justify-between relative group hover:border-gray-600 transition-all h-full block">
                     <!-- Top Section: Time -->
                     <div class="text-gray-400 text-sm font-medium mb-2">
-                        {{ $event->waktu_mulai->format('g:i A') }}
+                        {{ $event->waktu_mulai->format('H:i') }} WIB
                     </div>
 
                     <div class="flex justify-between items-start gap-4">
@@ -39,7 +39,7 @@
                             <!-- Guests -->
                             <div class="flex items-center gap-2 text-gray-500 text-sm">
                                 <i class="fa-solid fa-user-group text-xs w-4 text-center flex-shrink-0"></i>
-                                <span>{{ $event->registrations_count ?? 0 }} guests</span>
+                                <span>{{ $event->registrations_count ?? 0 }} tamu</span>
                             </div>
                         </div>
 

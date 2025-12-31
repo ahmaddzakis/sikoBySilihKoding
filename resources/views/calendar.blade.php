@@ -28,10 +28,17 @@
 
                             <!-- Avatar profile-->
                             <div
-                                class="w-12 h-12 rounded-full overflow-hidden border border-border bg-gradient-to-tr from-green-400 to-blue-500">
+                                class="w-12 h-12 rounded-full overflow-hidden border border-border flex items-center justify-center {{ Auth::user()->avatar ? '' : 'bg-gradient-to-tr from-green-400 to-green-600' }}">
                                 @if(Auth::user()->avatar)
                                     <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
                                         class="w-full h-full object-cover">
+                                @else
+                                    <!-- Scaled down smiley -->
+                                    <div class="relative w-6 h-6">
+                                        <div class="absolute top-1.5 left-1 w-1 h-1.5 bg-black/80 rounded-full"></div>
+                                        <div class="absolute top-1.5 right-1 w-1 h-1.5 bg-black/80 rounded-full"></div>
+                                        <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-2 border-b-2 border-black/80 rounded-full"></div>
+                                    </div>
                                 @endif
                             </div>
 

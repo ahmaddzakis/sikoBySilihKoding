@@ -97,15 +97,15 @@
                     <!-- Decorative Text -->
                     <div class="absolute top-8 right-8 writing-vertical-rl text-[10px] text-gray-600 tracking-widest font-mono uppercase opacity-50 hidden md:block"
                         style="writing-mode: vertical-rl;">
-                        Startups<br>Hackathon Bootcamp<br>AR/VR Product Design
+                        Startups<br>Hackathon Bootcamp<br>Desain Produk AR/VR
                     </div>
 
                     <!-- Bottom Labels -->
                     <div class="absolute bottom-6 left-8 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
-                        Discover
+                        Jelajahi
                     </div>
                     <div class="absolute bottom-6 right-8 text-[10px] font-bold uppercase tracking-widest flex gap-1">
-                        <span class="text-purple-500">Tech</span> <span class="text-gray-600">Events</span>
+                        <span class="text-purple-500">Acara</span> <span class="text-gray-600">Teknologi</span>
                     </div>
 
                 </div>

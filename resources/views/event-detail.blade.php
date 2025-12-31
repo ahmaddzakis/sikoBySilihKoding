@@ -228,12 +228,15 @@
                                 </a>
 
                             @else
-                                <!-- Selalu tampilkan form pendaftaran (jika belum daftar) -->
-                                <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4" enctype="multipart/form-data">
+                                <!-- Selalu tampilkan form pendaftaran (mengisi ulang) -->
+                                <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4">
                                     @csrf
                                     <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/10">
                                         <div class="flex justify-between items-center mb-2">
                                             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Data Pendaftaran</p>
+                                            @if($isRegistered)
+                                                <span class="text-[9px] bg-green-500/20 text-green-500 px-2 py-0.5 rounded font-bold uppercase tracking-tighter">Sudah Terdaftar</span>
+                                            @endif
                                         </div>
                                         
                                         <!-- Nama Lengkap -->
@@ -254,24 +257,7 @@
                                             @error('phone')
                                                 <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
                                             @enderror
-                                    </div>
-
-                                    @if($event->harga_tiket > 0)
-                                        <div class="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
-                                            <p class="text-sm text-yellow-500 font-bold mb-2">Informasi Pembayaran</p>
-                                            <p class="text-xs text-gray-400 mb-4">Silakan transfer biaya pendaftaran sebesar <span class="text-white font-bold">Rp {{ number_format($event->harga_tiket, 0, ',', '.') }}</span> ke rekening berikut:</p>
-                                            <div class="bg-black/20 p-3 rounded-lg border border-white/5 mb-4">
-                                                <p class="text-sm text-white font-mono">BCA 1234567890</p>
-                                                <p class="text-xs text-gray-500">a.n. Siko By Silih Koding</p>
-                                            </div>
-
-                                            <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Upload Bukti Transfer</label>
-                                            <input type="file" name="payment_proof" accept="image/*" required class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 cursor-pointer">
-                                            @error('payment_proof')
-                                                <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
-                                            @enderror
                                         </div>
-                                    @endif
                                     </div>
 
                                     <button type="submit"
@@ -280,8 +266,8 @@
                                     </button>
                                 </form>
                             @endif
-
-                            @if($event->requires_approval && $event->visibility->slug !== 'private')
+    
+                            @if($event->requires_approval && $event->visibility->slug !== 'private' && !$isRegistered)
                                 <p class="text-center text-xs text-gray-500 italic">
                                     * Pendaftaran membutuhkan persetujuan penyelenggara.
                                 </p>

@@ -73,13 +73,13 @@
                     time: '', 
                     updateTime() {
                         const now = new Date();
-                        // Format: 10:17 PM
-                        let timeStr = now.toLocaleTimeString('en-US', { 
+                        // Format: 22.17 WIB
+                        let timeStr = now.toLocaleTimeString('id-ID', { 
                             hour: '2-digit', 
                             minute: '2-digit', 
-                            hour12: true 
+                            hour12: false 
                         });
-                        this.time = timeStr + ' GMT+7';
+                        this.time = timeStr.replace('.', ':') + ' WIB';
                     }
                 }" x-init="updateTime(); setInterval(() => updateTime(), 60000)"
                     class="hidden sm:block text-gray-500 font-medium text-xs tracking-tight border-l border-gray-800 pl-4 py-1">

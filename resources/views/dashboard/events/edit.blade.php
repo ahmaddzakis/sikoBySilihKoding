@@ -3,20 +3,48 @@
 @section('content')
 <div class="min-h-screen bg-slate-100 p-8">
     <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        <div class="grid grid-cols-1 md:grid-cols-3">
+        <form action="{{ route('dashboard.events.update', $event->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="grid grid-cols-1 md:grid-cols-3">
 
             {{-- LEFT : EVENT IMAGE --}}
-            <div class="bg-gradient-to-br from-purple-500 to-pink-500 p-6 flex items-center justify-center">
-                <div class="w-full aspect-square bg-white/20 rounded-lg flex items-center justify-center text-white text-lg">
-                    Edit Cover
+            {{-- LEFT : EVENT IMAGE --}}
+            <div class="bg-gray-100 p-6 flex flex-col items-center justify-center border-r border-gray-200">
+                <div class="w-full aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden shadow-md mb-4 relative group">
+                    @if($event->image)
+                        <img id="image-preview" src="{{ asset('storage/' . $event->image) }}" alt="Event Cover" class="w-full h-full object-cover">
+                    @else
+                        <img id="image-preview" src="" alt="Event Cover Preview" class="w-full h-full object-cover hidden">
+                        <div id="placeholder-icon" class="w-full h-full flex items-center justify-center text-gray-400">
+                            <i class="fa-solid fa-image text-4xl"></i>
+                        </div>
+                    @endif
+                    
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <p class="text-white font-bold text-sm">Ganti Gambar</p>
+                    </div>
                 </div>
+                
+                <label class="block w-full">
+                    <span class="sr-only">Choose profile photo</span>
+                    <span class="sr-only">Choose profile photo</span>
+                    <input type="file" name="image" id="image-input" class="block w-full text-sm text-slate-500
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-full file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-violet-50 file:text-violet-700
+                      hover:file:bg-violet-100
+                    "/>
+                </label>
+                <p class="text-xs text-red-500 mt-2 italic">* Biarkan kosong jika tidak ingin mengubah gambar</p>
             </div>
 
             {{-- RIGHT : FORM --}}
             <div class="md:col-span-2 p-8 space-y-6">
 
                 <div class="flex justify-between items-center">
-                    <h1 class="text-2xl font-bold text-slate-800">
+                    <h1 class="text-2xl font-bold text-black">
                         Edit Event
                     </h1>
                     <a href="{{ route('dashboard.events.index') }}" class="text-sm text-slate-500 hover:text-slate-800">Back onto list</a>
@@ -32,13 +60,11 @@
                     </div>
                 @endif
 
-                <form action="{{ route('dashboard.events.update', $event->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
+
 
                     {{-- EVENT NAME --}}
                     <div>
-                        <label class="block text-sm font-medium text-slate-600">
+                        <label class="block text-sm font-bold text-black mb-1">
                             Event Name
                         </label>
                         <input
@@ -46,7 +72,7 @@
                             name="judul"
                             value="{{ old('judul', $event->judul) }}"
                             placeholder="Nama Event"
-                            class="mt-1 w-full rounded-lg border-slate-300"
+                            class="mt-1 w-full rounded-lg border-slate-300 text-black font-medium"
                             required
                         >
                     </div>
@@ -54,27 +80,28 @@
                     {{-- DATE & TIME --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-600">
+                            <label class="block text-sm font-bold text-black mb-1">
                                 Start
                             </label>
                             <input
                                 type="datetime-local"
                                 name="waktu_mulai"
+                                name="waktu_mulai"
                                 value="{{ old('waktu_mulai', $event->waktu_mulai) }}"
-                                class="mt-1 w-full rounded-lg border-slate-300"
+                                class="mt-1 w-full rounded-lg border-slate-300 text-black font-medium"
                                 required
                             >
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-slate-600">
+                            <label class="block text-sm font-bold text-black mb-1">
                                 End
                             </label>
                             <input
                                 type="datetime-local"
                                 name="waktu_selesai"
                                 value="{{ old('waktu_selesai', $event->waktu_selesai) }}"
-                                class="mt-1 w-full rounded-lg border-slate-300"
+                                class="mt-1 w-full rounded-lg border-slate-300 text-black font-medium"
                                 required
                             >
                         </div>
@@ -82,7 +109,7 @@
 
                     {{-- LOCATION --}}
                     <div>
-                        <label class="block text-sm font-medium text-slate-600 mb-2">
+                        <label class="block text-sm font-bold text-black mb-2">
                             Location <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
@@ -92,7 +119,7 @@
                                 id="lokasi-input"
                                 value="{{ old('lokasi', $event->lokasi) }}"
                                 placeholder="Lokasi atau jalan"
-                                class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                                class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-black font-medium"
                                 required
                                 autocomplete="off"
                             >
@@ -110,20 +137,20 @@
 
                     {{-- DESCRIPTION --}}
                     <div class="mt-4">
-                        <label class="block text-sm font-medium text-slate-600">
+                        <label class="block text-sm font-bold text-black mb-1">
                             Description
                         </label>
                         <textarea
                             name="description"
                             rows="4"
                             placeholder="Deskripsi event"
-                            class="mt-1 w-full rounded-lg border-slate-300"
+                            class="mt-1 w-full rounded-lg border-slate-300 text-black font-medium"
                         >{{ old('description', $event->description) }}</textarea>
                     </div>
 
                     {{-- CATEGORY --}}
                      <div class="mt-4">
-                        <label class="block text-sm font-medium text-slate-600">
+                        <label class="block text-sm font-bold text-black mb-1">
                             Category ID (Optional)
                         </label>
                         <input
@@ -131,7 +158,7 @@
                             name="category_id"
                             value="{{ old('category_id', $event->category_id) }}"
                             placeholder="ID Kategori"
-                            class="mt-1 w-full rounded-lg border-slate-300"
+                            class="mt-1 w-full rounded-lg border-slate-300 text-black font-medium"
                         >
                     </div>
 
@@ -145,9 +172,10 @@
                         </button>
                     </div>
 
-                </form>
+
             </div>
         </div>
+        </form>
     </div>
 </div>
 @endsection
@@ -163,6 +191,26 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Image Preview Logic
+            const imageInput = document.getElementById('image-input');
+            const imagePreview = document.getElementById('image-preview');
+            const placeholderIcon = document.getElementById('placeholder-icon');
+
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                            imagePreview.classList.remove('hidden');
+                            if (placeholderIcon) placeholderIcon.classList.add('hidden');
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
             const input = document.getElementById('lokasi-input');
             const mapContainer = document.getElementById('map-container');
             const toggleBtn = document.getElementById('toggle-map');
