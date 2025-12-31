@@ -201,15 +201,21 @@
                                         <!-- Nama Lengkap -->
                                         <div>
                                             <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nama Lengkap</label>
-                                            <input type="text" name="name" required placeholder="Contoh: Ahmad Zaki"
-                                                class="w-full bg-[#1a161f] border border-[#3a3442] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500 transition-all">
+                                            <input type="text" name="name" required placeholder="Contoh: Ahmad Zaki" pattern="[a-zA-Z\s]+" title="Nama hanya boleh berisi huruf dan spasi" value="{{ old('name', auth()->user()->name ?? '') }}"
+                                                class="w-full bg-[#1a161f] border {{ $errors->has('name') ? 'border-red-500' : 'border-[#3a3442]' }} rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500 transition-all">
+                                            @error('name')
+                                                <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
+                                            @enderror
                                         </div>
 
                                         <!-- Nomor Telepon -->
                                         <div>
                                             <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nomor Telepon (WA)</label>
-                                            <input type="tel" name="phone" required placeholder="0812xxxxxxx"
-                                                class="w-full bg-[#1a161f] border border-[#3a3442] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500 transition-all">
+                                            <input type="tel" name="phone" required placeholder="0812xxxxxxx" pattern="[0-9]+" title="Nomor telepon hanya boleh berisi angka" value="{{ old('phone') }}"
+                                                class="w-full bg-[#1a161f] border {{ $errors->has('phone') ? 'border-red-500' : 'border-[#3a3442]' }} rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500 transition-all">
+                                            @error('phone')
+                                                <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
+                                            @enderror
                                         </div>
                                     </div>
 
