@@ -120,7 +120,8 @@
                 </button>
 
                 <!-- tombol buat acara -->
-                <a href="/create" class="hidden md:block text-white hover:text-gray-300 transition-colors font-medium">
+                <a href="{{ Auth::check() ? '/create' : route('login') }}" 
+                   class="hidden md:block text-white hover:text-gray-300 transition-colors font-medium">
                     Buat Acara
                 </a>
 
