@@ -62,9 +62,28 @@
                         <input type="hidden" name="category_id" :value="categoryId">
                     </div>
 
-                    @if($visibilities->count() > 0)
-                        <input type="hidden" name="visibility_id" value="{{ $visibilities->first()->id }}">
-                    @endif
+                    <!-- dropdown visibilitas -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button type="button" @click="open = !open" @click.outside="open = false"
+                            class="bg-[#26212c] hover:bg-[#2f2936] text-gray-300 text-xs font-medium px-3 py-1.5 rounded-lg border border-[#3a3442] flex items-center gap-2 transition-colors">
+                            <div class="w-2 h-2 rounded-full" :class="visibilityName.toLowerCase() === 'public' ? 'bg-green-500' : 'bg-yellow-500'"></div>
+                            <span x-text="visibilityName || 'Pilih Visibilitas'"></span>
+                            <svg class="w-3 h-3 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="open" x-transition
+                            class="absolute top-full left-0 mt-2 w-48 bg-[#26212c] border border-[#3a3442] rounded-xl shadow-xl z-20 py-1">
+                            @foreach($visibilities as $visibility)
+                                <button type="button"
+                                    @click="visibilityId = {{ $visibility->id }}; visibilityName = '{{ $visibility->nama }}'; open = false"
+                                    class="w-full text-left px-4 py-2 hover:bg-[#2f2936] text-sm text-gray-300">
+                                    {{ ucfirst($visibility->nama) }}
+                                </button>
+                            @endforeach
+                        </div>
+                        <input type="hidden" name="visibility_id" :value="visibilityId">
+                    </div>
                 </div>
 
                 <!-- Input judul acara -->

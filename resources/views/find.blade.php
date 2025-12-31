@@ -76,13 +76,7 @@
                                 </div>
 
                                 <div class="mt-6 pt-6 border-t border-border flex justify-between items-center">
-                                    <div class="flex items-center gap-2">
-                                        <div
-                                            class="w-6 h-6 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center">
-                                            <i class="fa-solid fa-user-shield text-[10px] text-white"></i>
-                                        </div>
-                                        <span class="text-xs text-gray-500 font-medium">{{ $event['organizer'] }}</span>
-                                    </div>
+
                                     <span
                                         class="text-pink-500 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
                                         Detail <i class="fa-solid fa-chevron-right text-[10px]"></i>
