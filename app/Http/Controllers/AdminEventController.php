@@ -100,11 +100,9 @@ class AdminEventController extends Controller
 
     public function edit(Event $event)
     {
-        // Return view with edit form
-        // Since we are refactoring to blade, we might need a separate edit page or use a modal with JS filling.
-        // Simplest is a separate edit page for standard MVC.
-        // But to keep it close to the "Single Page" feel without Livewire, maybe a separate page is safer.
-        return view('dashboard.events.edit', compact('event'));
+        $categories = \App\Models\Category::all();
+        $visibilities = \App\Models\EventVisibility::all();
+        return view('dashboard.events.edit', compact('event', 'categories', 'visibilities'));
     }
 
     public function update(Request $request, Event $event)
@@ -117,7 +115,11 @@ class AdminEventController extends Controller
             'description' => 'nullable|string',
             'waktu_mulai' => 'required|date',
             'waktu_selesai' => 'required|date|after:waktu_mulai',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
+            'visibility_id' => 'required|exists:event_visibilities,id',
+            'harga_tiket' => 'nullable|numeric|min:0',
+            'kapasitas' => 'nullable|integer|min:1',
+            'requires_approval' => 'nullable|boolean',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -128,6 +130,9 @@ class AdminEventController extends Controller
             }
             $validated['image'] = $request->file('image')->store('events', 'public');
         }
+
+        // Handle checkbox boolean
+        $validated['requires_approval'] = $request->has('requires_approval');
 
         $event->update($validated);
 
