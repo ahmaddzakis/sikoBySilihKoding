@@ -137,8 +137,8 @@
                     <div class="absolute bottom-1/3 right-1/4 w-2 h-2 bg-gray-500 rounded-full"></div>
 
                     <!-- Labels based on screenshot -->
-                    <div class="absolute top-4 left-4 text-gray-400 text-xs font-medium">Nonthaburi</div>
-                    <div class="absolute top-1/2 left-1/2 mt-4 -ml-6 text-white text-sm font-bold shadow-black drop-shadow-md">Bangkok</div>
+                    <div class="absolute top-4 left-4 text-gray-400 text-xs font-medium">Jakarta Pusat</div>
+                    <div class="absolute top-1/2 left-1/2 mt-4 -ml-6 text-white text-sm font-bold shadow-black drop-shadow-md">Jakarta</div>
                     
                     <!-- Overlay on Hover -->
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

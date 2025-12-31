@@ -19,7 +19,6 @@ class RegistrationController extends Controller
         $user = Auth::user();
 
         // 2. Cek apakah sudah terdaftar (DINONAKTIFKAN agar bisa daftar berkali-kali)
-        /*
         $alreadyRegistered = Registration::where('event_id', $event->id)
             ->where('user_id', $user->id)
             ->exists();
@@ -27,7 +26,6 @@ class RegistrationController extends Controller
         if ($alreadyRegistered) {
             return back()->with('info', 'Anda sudah terdaftar di acara ini.');
         }
-        */
 
         // 3. Cek apakah sudah penuh (stok)
         if ($event->kapasitas && $event->registrations()->count() >= $event->kapasitas) {

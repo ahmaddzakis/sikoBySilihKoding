@@ -80,10 +80,10 @@
                 <table class="w-full text-left border-collapse">
                     <thead class="sticky top-0 bg-slate-50 z-10 shadow-sm">
                         <tr class="text-slate-600 text-sm uppercase tracking-wider">
-                            <th class="p-4 border-b border-slate-200">Name</th>
+                            <th class="p-4 border-b border-slate-200">Nama</th>
                             <th class="p-4 border-b border-slate-200">Email</th>
-                            <th class="p-4 border-b border-slate-200">Role</th>
-                            <th class="p-4 border-b border-slate-200 text-center">Action</th>
+                            <th class="p-4 border-b border-slate-200">Peran</th>
+                            <th class="p-4 border-b border-slate-200 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 text-slate-700">
@@ -108,7 +108,7 @@
                                         <form action="{{ route('dashboard.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition" title="Delete">
+                                            <button type="submit" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition" title="Hapus">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
@@ -116,7 +116,7 @@
                                         </form>
                                     </div>
                                 @else
-                                    <span class="text-xs text-slate-400 italic">Current</span>
+                                    <span class="text-xs text-slate-400 italic">Saat Ini</span>
                                 @endif
                             </td>
                         </tr>
@@ -130,7 +130,7 @@
             </div>
             
             <div class="mt-4 text-xs text-slate-400 text-center">
-                &darr; Scroll untuk melihat lebih banyak user &darr;
+                &darr; Scroll untuk melihat lebih banyak pengguna &darr;
             </div>
         </div>
     </div>
