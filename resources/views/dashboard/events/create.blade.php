@@ -85,6 +85,7 @@
                     <input 
                         type="datetime-local" 
                         name="waktu_mulai" 
+                        id="waktu_mulai"
                         value="{{ old('waktu_mulai') }}"
                         class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
                         required
@@ -98,6 +99,7 @@
                     <input 
                         type="datetime-local" 
                         name="waktu_selesai" 
+                        id="waktu_selesai"
                         value="{{ old('waktu_selesai') }}"
                         class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
                         required
@@ -154,10 +156,17 @@
                 <input 
                     type="file" 
                     name="image" 
+                    id="image-input"
                     accept="image/*"
                     class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100"
                 >
-                <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG, JPEG (Max: 2MB)</p>
+                <div class="mt-4 relative w-full h-64 bg-black rounded-lg overflow-hidden group">
+                    <img id="image-preview" src="{{ asset('storage/events/default.jpg') }}" alt="Event Preview" class="w-full h-full object-cover text-white">
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="text-white font-medium">Preview Gambar</span>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG, JPEG (Max: 2MB). Jika dikosongkan akan menggunakan gambar default di atas.</p>
             </div>
 
             <!-- Opsi Acara -->
@@ -248,6 +257,42 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Date Validation
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const minDateTime = now.toISOString().slice(0, 16);
+            
+            const waktuMulai = document.getElementById('waktu_mulai');
+            const waktuSelesai = document.getElementById('waktu_selesai');
+
+            waktuMulai.min = minDateTime;
+            waktuSelesai.min = minDateTime;
+
+            waktuMulai.addEventListener('change', function() {
+                waktuSelesai.min = this.value;
+                if (waktuSelesai.value && waktuSelesai.value < this.value) {
+                    waktuSelesai.value = this.value;
+                }
+            });
+
+            // Image Preview
+            const imageInput = document.getElementById('image-input');
+            const imagePreview = document.getElementById('image-preview');
+
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    // Revert to default
+                     imagePreview.src = "{{ asset('storage/events/default.jpg') }}";
+                }
+            });
+
             const input = document.getElementById('lokasi-input');
             const mapContainer = document.getElementById('map-container');
             const toggleBtn = document.getElementById('toggle-map');

@@ -15,7 +15,7 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($events as $event)
-                <div class="bg-[#1a161f] p-5 rounded-3xl border border-[#2d2d2d] flex flex-col justify-between relative group hover:border-gray-600 transition-all h-full">
+                <a href="{{ route('events.show', $event->id) }}" class="bg-[#1a161f] p-5 rounded-3xl border border-[#2d2d2d] flex flex-col justify-between relative group hover:border-gray-600 transition-all h-full block">
                     <!-- Top Section: Time -->
                     <div class="text-gray-400 text-sm font-medium mb-2">
                         {{ $event->waktu_mulai->format('g:i A') }}
@@ -54,7 +54,7 @@
                             @endif
                         </div>
                     </div>
-                </div>
+                </a>
             @empty
                 <!-- Empty State -->
                 <div class="col-span-full flex flex-col items-center justify-center py-20 text-center opacity-60">

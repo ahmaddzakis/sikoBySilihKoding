@@ -28,36 +28,49 @@
         <!-- Header: Avatar & Info -->
         <div class="flex flex-col md:flex-row items-center md:items-start gap-8 mb-12">
             <!-- Avatar -->
-            <div class="group relative">
-                <div
-                    class="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-tr {{ $user->avatar ? '' : 'from-green-400 to-green-600' }} flex items-center justify-center border-4 border-background shadow-2xl shrink-0">
-                    @if($user->avatar)
-                        <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
-                    @else
-                        <!-- Simple smiley face using div/icon -->
-                        <div class="relative w-16 h-16">
-                            <div class="absolute top-4 left-2 w-2.5 h-3 bg-black/80 rounded-full"></div>
-                            <div class="absolute top-4 right-2 w-2.5 h-3 bg-black/80 rounded-full"></div>
-                            <div
-                                class="absolute bottom-2 left-1/2 -translate-x-1/2 w-10 h-5 border-b-4 border-black/80 rounded-full">
+            <div class="flex flex-col items-center gap-4">
+                <div class="group relative">
+                    <div
+                        class="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-tr {{ $user->avatar ? '' : 'from-green-400 to-green-600' }} flex items-center justify-center border-4 border-background shadow-2xl shrink-0">
+                        @if($user->avatar)
+                            <img src="{{ Storage::url($user->avatar) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                        @else
+                            <!-- Simple smiley face using div/icon -->
+                            <div class="relative w-16 h-16">
+                                <div class="absolute top-4 left-2 w-2.5 h-3 bg-black/80 rounded-full"></div>
+                                <div class="absolute top-4 right-2 w-2.5 h-3 bg-black/80 rounded-full"></div>
+                                <div
+                                    class="absolute bottom-2 left-1/2 -translate-x-1/2 w-10 h-5 border-b-4 border-black/80 rounded-full">
+                                </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
+
+                    <!-- Edit Overlay -->
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                        onclick="document.getElementById('avatar-input').click()">
+                        <i class="fa-solid fa-camera text-white text-2xl"></i>
+                    </div>
+
+                    <!-- Hidden Form -->
+                    <form id="avatar-form" action="{{ route('profile.avatar.update') }}" method="POST"
+                        enctype="multipart/form-data" class="hidden">
+                        @csrf
+                        <input type="file" id="avatar-input" name="avatar" accept="image/*"
+                            onchange="document.getElementById('avatar-form').submit()">
+                    </form>
                 </div>
 
-                <!-- Edit Overlay -->
-                <div class="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                    onclick="document.getElementById('avatar-input').click()">
-                    <i class="fa-solid fa-camera text-white text-2xl"></i>
-                </div>
-
-                <!-- Hidden Form -->
-                <form id="avatar-form" action="{{ route('profile.avatar.update') }}" method="POST"
-                    enctype="multipart/form-data" class="hidden">
-                    @csrf
-                    <input type="file" id="avatar-input" name="avatar" accept="image/*"
-                        onchange="document.getElementById('avatar-form').submit()">
-                </form>
+                @if($user->avatar)
+                    <form action="{{ route('profile.avatar.delete') }}" method="POST"
+                        onsubmit="return confirm('Hapus foto profil?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-400 hover:text-red-300 text-sm font-medium transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-trash-can"></i> Hapus
+                        </button>
+                    </form>
+                @endif
             </div>
 
             <!-- Info -->
@@ -65,16 +78,7 @@
                 <div class="flex items-center gap-4 mb-2 justify-center md:justify-start">
                     <h1 class="text-4xl font-bold text-white tracking-tight">{{ $user->name }}</h1>
 
-                    @if($user->avatar)
-                        <form action="{{ route('profile.avatar.delete') }}" method="POST"
-                            onsubmit="return confirm('Hapus foto profil?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-400 hover:text-red-300 text-sm font-medium transition-colors">
-                                <i class="fa-solid fa-trash-can mr-1"></i> Hapus
-                            </button>
-                        </form>
-                    @endif
+
                 </div>
 
                 <div class="flex flex-col gap-2 text-textMuted font-medium text-sm">
