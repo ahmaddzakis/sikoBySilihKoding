@@ -119,35 +119,50 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @foreach($registrations as $reg)
                             <a href="{{ route('events.show', $reg->event->id) }}" class="group block relative">
-                                <div class="bg-yellow-400 rounded-3xl p-6 min-h-[220px] shadow-xl transform transition-transform group-hover:scale-[1.02] overflow-hidden">
-                                    <!-- Background text effect -->
-                                    <div class="absolute -right-4 -bottom-4 opacity-10 select-none pointer-events-none">
-                                        <i class="fa-solid fa-ticket text-[120px] text-black -rotate-12"></i>
-                                    </div>
+                                <div class="relative rounded-3xl overflow-hidden aspect-[4/3] shadow-xl group-hover:scale-[1.02] transition-transform duration-300">
+                                    <!-- Event Image -->
+                                    <img src="{{ asset('storage/' . $reg->event->image) }}" 
+                                         alt="{{ $reg->event->judul }}" 
+                                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                                     
-                                    <div class="relative z-10 h-full flex flex-col justify-between">
-                                        <div>
-                                            <p class="text-[10px] font-black uppercase tracking-widest text-black/50 mb-4">Kamu masuk</p>
-                                            <h3 class="text-4xl font-black text-black leading-none mb-1">DAFTAR</h3>
-                                            <h3 class="text-4xl font-black text-black leading-none mb-4">TAMU*</h3>
-                                            <p class="text-xs font-black text-black max-w-[120px] uppercase">*BETAPA BERUNTUNGNYA KAMU</p>
+                                    <!-- Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100"></div>
+
+                                    <!-- Content -->
+                                    <div class="absolute inset-0 p-6 flex flex-col justify-between">
+                                        <!-- Header: Status -->
+                                        <div class="flex justify-between items-start">
+                                            <div class="bg-black/30 backdrop-blur-md border border-white/10 rounded-full px-3 py-1">
+                                                <p class="text-[10px] font-bold text-white uppercase tracking-wider">
+                                                    {{ $reg->event->category->nama ?? 'Event' }}
+                                                </p>
+                                            </div>
+                                            
+                                            @if($reg->status === 'approved')
+                                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg ring-2 ring-black/20">
+                                                    <i class="fa-solid fa-check text-white text-xs"></i>
+                                                </div>
+                                            @else
+                                                <div class="px-3 py-1 bg-yellow-500/20 backdrop-blur-md border border-yellow-500/50 text-yellow-500 text-[10px] font-black rounded-full">
+                                                    MENUNGGU
+                                                </div>
+                                            @endif
                                         </div>
-                                        
-                                        <div class="mt-8">
-                                            <p class="text-sm font-black text-black truncate">{{ $reg->event->judul }}</p>
-                                            <p class="text-[10px] font-bold text-black/60">{{ $reg->event->waktu_mulai->format('d M Y') }}</p>
+
+                                        <!-- Footer: Info -->
+                                        <div>
+                                            <p class="text-pink-400 text-xs font-bold mb-1">
+                                                {{ $reg->event->waktu_mulai->translatedFormat('d F Y • H:i') }}
+                                            </p>
+                                            <h3 class="text-xl font-bold text-white leading-tight mb-2 line-clamp-2">
+                                                {{ $reg->event->judul }}
+                                            </h3>
+                                            <div class="flex items-center gap-2 text-gray-300 text-xs">
+                                                <i class="fa-solid fa-location-dot text-gray-500"></i>
+                                                <span class="truncate">{{ $reg->event->lokasi }}</span>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    @if($reg->status === 'approved')
-                                        <div class="absolute top-4 right-4 w-10 h-10 bg-black rounded-full flex items-center justify-center shadow-lg border-2 border-yellow-400">
-                                            <i class="fa-solid fa-check text-yellow-400"></i>
-                                        </div>
-                                    @else
-                                        <div class="absolute top-4 right-4 px-3 py-1 bg-black/20 text-black text-[10px] font-black rounded-full backdrop-blur-sm">
-                                            MENUNGGU
-                                        </div>
-                                    @endif
                                 </div>
                             </a>
                         @endforeach
