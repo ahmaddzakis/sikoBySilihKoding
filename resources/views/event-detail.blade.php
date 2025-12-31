@@ -159,22 +159,11 @@
                             @if(auth()->id() === $event->organizer_id && !$isPast)
                                 <!-- Edit and Delete Buttons for Organizer -->
                                 <div class="space-y-3 mt-4">
-                                    <a href="{{ route('events.edit', $event->id) }}"
+                                    <a href="{{ route('dashboard.events.edit', $event->id) }}"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg flex items-center justify-center gap-2">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                         Edit Acara
                                     </a>
-                                    
-                                    <form action="{{ route('events.destroy', $event->id) }}" method="POST" 
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus acara ini? Tindakan ini tidak dapat dibatalkan.')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg flex items-center justify-center gap-2">
-                                            <i class="fa-solid fa-trash"></i>
-                                            Hapus Acara
-                                        </button>
-                                    </form>
                                 </div>
                             @elseif($isPast)
                                 <button disabled
@@ -229,7 +218,7 @@
 
                             @else
                                 <!-- Selalu tampilkan form pendaftaran (mengisi ulang) -->
-                                <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4">
+                                <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4" enctype="multipart/form-data">
                                     @csrf
                                     <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/10">
                                         <div class="flex justify-between items-center mb-2">
@@ -258,11 +247,36 @@
                                                 <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
                                             @enderror
                                         </div>
+
+                                        @if($event->harga_tiket > 0)
+                                            <div class="pt-2 border-t border-white/10"></div>
+                                            <!-- Info Pembayaran -->
+                                            <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
+                                                <div class="flex justify-between items-center mb-2">
+                                                    <span class="text-xs text-yellow-500 font-bold uppercase">Total Tagihan</span>
+                                                    <span class="text-lg font-black text-white">Rp {{ number_format($event->harga_tiket, 0, ',', '.') }}</span>
+                                                </div>
+                                                <p class="text-[10px] text-gray-400 leading-relaxed">
+                                                    Silakan transfer ke rekening <b>BCA 1234567890 (a.n. Siko Project)</b> dan upload bukti transfer di bawah ini.
+                                                </p>
+                                            </div>
+
+                                            <!-- Upload Bukti -->
+                                            <div>
+                                                <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Bukti Transfer</label>
+                                                <input type="file" name="payment_proof" required accept="image/*"
+                                                    class="w-full bg-[#1a161f] border {{ $errors->has('payment_proof') ? 'border-red-500' : 'border-[#3a3442]' }} rounded-xl px-4 py-2 text-sm text-gray-400 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-pink-500/20 file:text-pink-500 hover:file:bg-pink-500/30 transition-all">
+                                                <p class="text-[10px] text-gray-500 mt-1 italic">* Hanya file gambar (JPG, PNG) yang diperbolehkan</p>
+                                                @error('payment_proof')
+                                                    <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <button type="submit"
                                         class="w-full bg-white hover:bg-gray-200 text-black font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg">
-                                        Daftar Sekarang
+                                        {{ $event->harga_tiket > 0 ? 'Bayar & Daftar' : 'Daftar Sekarang' }}
                                     </button>
                                 </form>
                             @endif
