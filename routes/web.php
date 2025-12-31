@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
     Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
+});
+
+// ================== PUBLIC ROUTES ==================
 
     // ================== MAIN APP (Previously Public) ==================
     Route::get('/', function () {
@@ -41,10 +44,10 @@ Route::middleware('auth')->group(function () {
                 ? redirect()->route('dashboard') 
                 : redirect()->route('home');
         }
-        return redirect()->route('login');
+        return redirect()->route('home'); // Redirect guests to home instead of login
     });
 
-    // HOME & EVENTS
+    // HOME & EVENTS (Public Access)
     Route::get('/home', [EventController::class, 'index'])->name('home');
 
     Route::get('/events', function (Request $request) {
@@ -55,18 +58,19 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/calendar', function () {
         return view('calendar');
-    })->name('calendar');
+    })->name('calendar')->middleware('auth'); // Keep calendar protected? Usually personal.
 
     Route::get('/calendar/my-events', function () {
         $events = Auth::user()->events()->withCount('registrations')->orderBy('waktu_mulai')->get();
         return view('my-events', compact('events'));
-    })->name('calendar.my-events');
+    })->name('calendar.my-events')->middleware('auth');
 
     Route::get('/help', function () {
         return view('help');
     })->name('help');
 
-    // ================== REGISTRATION & TICKETS ==================
+    // ================== REGISTRATION & TICKETS (Protected) ==================
+Route::middleware('auth')->group(function () {
     Route::post('/events/{event}/register', [\App\Http\Controllers\RegistrationController::class, 'store'])->name('events.register');
     Route::get('/tickets/{registration}/download', [\App\Http\Controllers\RegistrationController::class, 'downloadTicket'])->name('tickets.download');
 
@@ -80,6 +84,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+}); // End of Protected Event Management
+
+// ================== DISCOVERY (Public) ==================
 
     Route::get('/find', [EventController::class, 'discover'])->name('find');
 
@@ -88,7 +95,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/find/city/{city}', [EventController::class, 'city'])->name('find.city');
 
     Route::get('/find/{category}', [EventController::class, 'category'])->name('find.category');
-});
+    Route::get('/find/{category}', [EventController::class, 'category'])->name('find.category');
+// End of file cleanup (removed trailing closure from original file)
 
 // ================== SIGN IN (LEGACY) ==================
 // Kept for backward compatibility, though /login is the main auth route.

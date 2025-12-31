@@ -42,7 +42,7 @@
                     {{ $activeTab === 'upcoming' ? 'Anda tidak memiliki acara mendatang.' : 'Anda belum mengikuti acara apa pun.' }}
                 </p>
                 @if($activeTab === 'upcoming')
-                    <a href="/create"
+                    <a href="{{ Auth::check() ? '/create' : route('login') }}"
                         class="flex items-center gap-2 bg-[#2d2d30] hover:bg-[#3a3a3d] text-white px-8 py-3.5 rounded-xl transition-all border border-[#3e3e42] font-bold text-sm shadow-xl mt-8">
                         <i class="fa-solid fa-plus text-xs opacity-50"></i>
                         Buat Acara
