@@ -109,10 +109,7 @@ class AdminEventController extends Controller
 
     public function update(Request $request, Event $event)
     {
-        // Authorization check? Assuming admin/organizer logic is in middleware or similar, 
-        // but explicit check is good.
         // Authorization check skipped as this is an Admin route
-
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
@@ -121,7 +118,16 @@ class AdminEventController extends Controller
             'waktu_mulai' => 'required|date',
             'waktu_selesai' => 'required|date|after:waktu_mulai',
             'category_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($event->image && \Storage::disk('public')->exists($event->image)) {
+                \Storage::disk('public')->delete($event->image);
+            }
+            $validated['image'] = $request->file('image')->store('events', 'public');
+        }
 
         $event->update($validated);
 
