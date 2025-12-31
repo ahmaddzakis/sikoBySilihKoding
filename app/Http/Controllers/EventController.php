@@ -10,7 +10,18 @@ class EventController extends Controller
     {
         $activeTab = $request->query('tab', 'upcoming');
 
-        $upcomingEvents = \App\Models\Event::where('organizer_id', auth()->id())
+        // Logic for "Explore Events": Show all valid upcoming events
+        // If user is logged in, they might want to see their own?
+        // But "Explore" usually means public discovery.
+        // Let's assume Home is the Explore feed.
+        
+        $query = \App\Models\Event::with('organizer');
+
+        // If you want to only show "Public" events, ensure filtering is correct.
+        // Assuming 'requires_approval' or 'visibility_id' handles that? 
+        // For now, let's just show all active events for the home feed.
+        
+        $upcomingEvents = (clone $query)
             ->where('waktu_selesai', '>=', now())
             ->orderBy('waktu_mulai', 'asc')
             ->get()
@@ -31,7 +42,7 @@ class EventController extends Controller
                 ];
             });
 
-        $pastEvents = \App\Models\Event::where('organizer_id', auth()->id())
+        $pastEvents = (clone $query)
             ->where('waktu_selesai', '<', now())
             ->orderBy('waktu_mulai', 'desc')
             ->get()
@@ -42,7 +53,7 @@ class EventController extends Controller
                     'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
                     'location' => $event->lokasi,
                     'description' => $event->description,
-                    'image' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=200&fit=crop', // Placeholder
+                    'image' => $event->image ? asset('storage/' . $event->image) : asset('images/categories/lainnya.jpg'), // Safe fallback
                     'attendees' => $event->registrations()->count(),
                 ];
             });
