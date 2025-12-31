@@ -19,20 +19,33 @@
             <div class="flex flex-col gap-5">
                 <!-- Wrapper Gambar: Menggunakan aspect-square agar tetap kotak -->
                 <div
-                    class="relative aspect-square w-full rounded-3xl overflow-hidden border border-[#3a3442] shadow-2xl shadow-black/50">
-                    <img :src="imagePreview || '{{ asset('images/invite.jpg') }}'" class="w-full h-full object-cover">
+                    class="relative aspect-square w-full rounded-3xl overflow-hidden border border-[#3a3442] shadow-2xl shadow-black/50 group">
+                    <img :src="imagePreview || getDefaultImage()" class="w-full h-full object-cover transition-opacity duration-300">
 
-                    <!-- Tombol Upload  -->
-                    <label for="imageUpload"
-                        class="absolute bottom-4 right-4 cursor-pointer bg-[#26212c]/90 hover:bg-[#2f2936] backdrop-blur-sm border border-[#3a3442] rounded-full p-3 flex items-center justify-center transition-all shadow-lg">
-                        <svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </label>
+                    <!-- Overlay Actions -->
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                         <!-- Tombol Upload -->
+                        <label for="imageUpload" class="cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-full p-3 transition-transform hover:scale-110 active:scale-95" title="Ganti Gambar">
+                            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                            </svg>
+                        </label>
+                        
+                        <!-- Tombol Reset/Hapus -->
+                         <button type="button" @click="resetImage()" x-show="imagePreview !== null" class="bg-red-500/80 hover:bg-red-500 backdrop-blur-md border border-red-500/20 rounded-full p-3 transition-transform hover:scale-110 active:scale-95" title="Kembalikan ke Default">
+                            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+
                     <input type="file" id="imageUpload" name="image" accept="image/*" class="hidden"
-                        @change="handleImageUpload($event)">
+                        @change="handleImageUpload($event)" x-ref="fileInput">
                 </div>
+                <p class="text-xs text-center text-gray-500">
+                    <span x-show="!imagePreview">Gambar default kategori ditampilkan.</span>
+                    <span x-show="imagePreview">Gambar kustom dipilih.</span>
+                </p>
             </div>
 
             <!-- Sisi Kanan: Form Detail Acara -->
@@ -54,7 +67,7 @@
                             class="absolute top-full left-0 mt-2 w-48 bg-[#26212c] border border-[#3a3442] rounded-xl shadow-xl z-20 py-1">
                             @foreach($categories as $category)
                                 <button type="button"
-                                    @click="categoryId = {{ $category->id }}; categoryName = '{{ $category->nama }}'; open = false"
+                                    @click="selectCategory({{ $category->id }}, '{{ $category->nama }}')"
                                     class="w-full text-left px-4 py-2 hover:bg-[#2f2936] text-sm text-gray-300">{{ $category->nama }}</button>
                             @endforeach
                         </div>
@@ -115,8 +128,9 @@
                                             </template>
                                             <template x-for="date in days">
                                                 <button type="button" @click="selectDate(date, 'start')"
-                                                    class="h-8 w-8 rounded-full text-sm flex items-center justify-center hover:bg-[#2f2936] transition-colors"
-                                                    :class="isToday(date) ? 'bg-purple-600 text-white hover:bg-purple-600' : 'text-gray-300'"
+                                                    class="h-8 w-8 rounded-full text-sm flex items-center justify-center transition-colors"
+                                                    :class="isPast(date) ? 'text-gray-600 cursor-not-allowed' : (isSameDate(date, 'start') ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-[#2f2936]')"
+                                                    :disabled="isPast(date)"
                                                     x-text="date"></button>
                                             </template>
                                         </div>
@@ -134,8 +148,9 @@
                                         class="absolute top-full left-0 mt-2 w-32 bg-[#2d2833] border border-[#3a3442] rounded-xl shadow-xl max-h-60 overflow-y-auto z-50 py-1 scrollBar-hidden">
                                         <template x-for="time in timeSlots">
                                             <button type="button" @click="startTime = time; openPicker = null"
-                                                class="w-full text-left px-4 py-2 hover:bg-[#2f2936] text-sm text-gray-300"
-                                                :class="startTime === time ? 'bg-[#2f2936] text-white' : ''"
+                                                class="w-full text-left px-4 py-2 text-sm"
+                                                :class="isTimePast(time, 'start') ? 'text-gray-600 cursor-not-allowed' : (startTime === time ? 'bg-[#2f2936] text-white' : 'text-gray-300 hover:bg-[#2f2936]')"
+                                                :disabled="isTimePast(time, 'start')"
                                                 x-text="time"></button>
                                         </template>
                                     </div>
@@ -180,8 +195,9 @@
                                             </template>
                                             <template x-for="date in days">
                                                 <button type="button" @click="selectDate(date, 'end')"
-                                                    class="h-8 w-8 rounded-full text-sm flex items-center justify-center hover:bg-[#2f2936] transition-colors"
-                                                    :class="isSameDate(date, 'end') ? 'bg-purple-600 text-white' : 'text-gray-300'"
+                                                    class="h-8 w-8 rounded-full text-sm flex items-center justify-center transition-colors"
+                                                    :class="isPast(date) ? 'text-gray-600 cursor-not-allowed' : (isSameDate(date, 'end') ? 'bg-purple-600 text-white' : 'text-gray-300 hover:bg-[#2f2936]')"
+                                                    :disabled="isPast(date)"
                                                     x-text="date"></button>
                                             </template>
                                         </div>
@@ -199,8 +215,9 @@
                                         class="absolute top-full left-0 mt-2 w-32 bg-[#2d2833] border border-[#3a3442] rounded-xl shadow-xl max-h-60 overflow-y-auto z-50 py-1 scrollBar-hidden">
                                         <template x-for="time in timeSlots">
                                             <button type="button" @click="endTime = time; openPicker = null"
-                                                class="w-full text-left px-4 py-2 hover:bg-[#2f2936] text-sm text-gray-300"
-                                                :class="endTime === time ? 'bg-[#2f2936] text-white' : ''"
+                                                class="w-full text-left px-4 py-2 text-sm"
+                                                :class="isTimePast(time, 'end') ? 'text-gray-600 cursor-not-allowed' : (endTime === time ? 'bg-[#2f2936] text-white' : 'text-gray-300 hover:bg-[#2f2936]')"
+                                                :disabled="isTimePast(time, 'end')"
                                                 x-text="time"></button>
                                         </template>
                                     </div>
@@ -535,6 +552,19 @@
                 marker: null,
                 suggestions: [],
 
+                // Default Images
+                defaultImages: {
+                    'Teknologi': '{{ asset('storage/events/defaults/teknologi.jpg') }}',
+                    'Makanan': '{{ asset('storage/events/defaults/makanan.jpg') }}',
+                    'Musik': '{{ asset('storage/events/defaults/musik.jpg') }}',
+                    'Seni': '{{ asset('storage/events/defaults/seni.jpg') }}',
+                    'Kesehatan': '{{ asset('storage/events/defaults/kesehatan.jpg') }}',
+                    'Ai': '{{ asset('storage/events/defaults/ai.jpg') }}',
+                    'Iklim': '{{ asset('storage/events/defaults/iklim.jpg') }}',
+                    'Kebugaran': '{{ asset('storage/events/defaults/kebugaran.jpg') }}',
+                    'Lainnya': '{{ asset('storage/events/defaults/lainnya.jpg') }}'
+                },
+
                 // Date Picker logic merged
                 openPicker: null,
                 // Parse old dates or default to now
@@ -670,6 +700,10 @@
 
                 selectDate(day, type) {
                     const selected = new Date(this.currentYear, this.currentMonth, day);
+                    const now = new Date();
+                    now.setHours(0,0,0,0);
+                    if (selected < now) return;
+
                     if (type === 'start') this.startDate = selected;
                     else this.endDate = selected;
                     this.openPicker = null;
@@ -687,6 +721,34 @@
                     return d.toDateString() === target.toDateString();
                 },
 
+                isPast(day) {
+                    const d = new Date(this.currentYear, this.currentMonth, day);
+                    const now = new Date();
+                    now.setHours(0,0,0,0);
+                    return d < now;
+                },
+
+                isTimePast(time, type) {
+                    const now = new Date();
+                    const targetDate = type === 'start' ? this.startDate : this.endDate;
+                    
+                    // If target date is not today, time is never "past" in this context (unless we check for past dates, which are already disabled)
+                    if (targetDate.toDateString() !== now.toDateString()) {
+                        // If target date is in the past (which shouldn't happen due to isPast), disable all
+                        if (targetDate < new Date().setHours(0,0,0,0)) return true;
+                        return false;
+                    }
+
+                    // It is today, check time
+                    const [hours, minutes] = time.split(':').map(Number);
+                    const currentHours = now.getHours();
+                    const currentMinutes = now.getMinutes();
+
+                    if (hours < currentHours) return true;
+                    if (hours === currentHours && minutes < currentMinutes) return true;
+                    return false;
+                },
+
                 formatDate(date) {
                     const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
                     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
@@ -702,6 +764,24 @@
                         };
                         reader.readAsDataURL(file);
                     }
+                },
+
+                resetImage() {
+                    this.imagePreview = null;
+                    this.$refs.fileInput.value = ''; // Clear input file
+                },
+
+                getDefaultImage() {
+                    if (this.categoryName && this.defaultImages[this.categoryName]) {
+                        return this.defaultImages[this.categoryName];
+                    }
+                    return this.defaultImages['Lainnya'];
+                },
+
+                selectCategory(id, name) {
+                    this.categoryId = id;
+                    this.categoryName = name;
+                    this.open = false;
                 },
 
                 timeSlots: [],

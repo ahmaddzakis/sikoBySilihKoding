@@ -77,7 +77,23 @@ class EventController extends Controller
         }
 
         try {
-            $imagePath = null;
+            // Default images mapping
+            $defaultImages = [
+                1 => 'teknologi.jpg', // Teknologi
+                2 => 'makanan.jpg',   // Makanan
+                3 => 'musik.jpg',     // Musik
+                4 => 'seni.jpg',      // Seni
+                5 => 'kesehatan.jpg', // Kesehatan
+                6 => 'ai.jpg',        // Ai
+                7 => 'iklim.jpg',     // Iklim
+                8 => 'kebugaran.jpg', // Kebugaran
+                9 => 'lainnya.jpg',   // Lainnya
+            ];
+
+            // Get default image based on category, fallback to 'lainnya.jpg' if not found
+            $defaultImageName = $defaultImages[$request->category_id] ?? 'lainnya.jpg';
+            $imagePath = 'events/defaults/' . $defaultImageName;
+
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('events', 'public');
             }
