@@ -14,13 +14,13 @@
     <!-- Alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 
-    <!-- Font Awesome -->
+    <!-- Font awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Konfigurasi Tema Tailwind CSS -->
+    <!-- settingan warna tema Siko -->
     <script>
         tailwind.config = {
             theme: {
@@ -52,6 +52,7 @@
     @stack('styles')
 </head>
 
+<!-- pake background gradasi biar kelihatannya bagus -->
 <body class="min-h-screen font-sans antialiased bg-gradient-to-br from-gray-950 via-[#13111C] to-[#341020] text-textMain selection:bg-pink-500 selection:text-white 
     [&::-webkit-scrollbar]:w-2 
     [&::-webkit-scrollbar-track]:bg-transparent 
@@ -59,16 +60,18 @@
     [&::-webkit-scrollbar-thumb]:rounded 
     [&::-webkit-scrollbar-thumb:hover]:bg-pink-800 flex flex-col" x-data="layoutData()">
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- navbar -->
+    <!-- header yang nempel di atas -->
     <header class="sticky top-0 bg-[#1a161f]/90 backdrop-blur-md z-50 border-b border-transparent transition-all"
         :class="{ 'border-[#3a3442]': window.scrollY > 10 }">
         <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center relative">
 
-            <!-- Logo SIKO -->
+            <!-- logo SIKO -->
             <div class="flex items-center gap-4">
                 <a href="/" class="flex items-center gap-2">
                     <img src="{{ asset('images/logo.png') }}" alt="SIKO Logo" class="h-10 w-auto">
                 </a>
+                <!-- jam digital kecil -->
                 <div x-data="{ 
                     time: '', 
                     updateTime() {
@@ -87,7 +90,7 @@
                 </div>
             </div>
 
-            <!-- Navigasi Menu: Desktop Only -->
+            <!-- navigasi menu -->
             <nav class="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
                 <a href="/events"
                     class="text-gray-400 hover:text-white transition-colors text-sm font-medium flex items-center gap-2 {{ request()->is('events') || request()->is('/') ? 'text-white' : '' }}">
@@ -108,27 +111,26 @@
                 </a>
             </nav>
 
-            <!-- Alat Samping Kanan (Search, Notification, Profile) -->
+            <!--  buat samping kanan (search, profile, dll) -->
             <div class="flex items-center gap-6 text-sm text-gray-400">
 
-                <!-- Tombol Pencarian -->
+                <!-- tombol pencarian -->
                 <button @click="searchOpen = true" class="hover:text-white transition-colors">
                     <i class="fa-solid fa-magnifying-glass text-lg"></i>
                 </button>
 
-                <!-- Tombol Buat Acara -->
+                <!-- tombol buat acara -->
                 <a href="/create" class="hidden md:block text-white hover:text-gray-300 transition-colors font-medium">
                     Buat Acara
                 </a>
 
-                <!-- Dropdown Notifikasi (File Terpisah) -->
-                <!-- Dropdown Notifikasi removed as requested -->
+                <!-- dropdown notifikasi (file terpisah) -->
 
-
-                <!-- Dropdown Profil: Logika untuk user yang sudah Login atau Belum -->
+                <!-- dropdown profil: logika buat yang udah login atau belum -->
                 @auth
+
                     <div class="relative" x-data="{ open: false }">
-                        <!-- Avatar User -->
+                        <!-- avatar user -->
                         <div @click="open = !open"
                             class="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-green-400 to-green-600 cursor-pointer border-2 border-[#3a3442] hover:scale-105 transition-all flex items-center justify-center">
                             @if(Auth::user()->avatar)
@@ -145,19 +147,19 @@
                             @endif
                         </div>
 
-                        <!-- Menu Dropdown Profil -->
+                        <!-- menu dropdown profil -->
                         <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
                             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                             class="absolute right-0 mt-3 w-56 bg-[#1a161f] border border-[#3a3442] rounded-2xl shadow-2xl overflow-hidden z-[60]"
                             x-cloak>
 
-                            <!-- Info Singkat User -->
+                            <!-- info singkat user -->
                             <div class="px-4 py-4 border-b border-[#3a3442] bg-[#221d28]/30">
                                 <div class="font-bold text-white">{{ Auth::user()->name }}</div>
                                 <div class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</div>
                             </div>
 
-                            <!-- Pilihan Menu -->
+                            <!-- pilihan menu -->
                             <div class="py-2">
                                 @if(Auth::user()->role === 'admin')
                                     <a href="{{ route('dashboard') }}"
@@ -181,7 +183,7 @@
                         </div>
                     </div>
                 @else
-                    <!-- Link Sign In jika belum login -->
+                    <!-- link sign in jika belum login -->
                     <a href="{{ route('login') }}" class="text-white hover:text-gray-300 transition-colors font-medium">
                         Masuk
                     </a>
@@ -190,7 +192,7 @@
         </div>
     </header>
 
-    <!-- ================= CONTENT ================= -->
+    <!-- CONTENT -->
     <main class="flex-grow">
         @if(session('success'))
             <div class="max-w-6xl mx-auto px-6 mt-8">
@@ -218,16 +220,18 @@
             </div>
         @endif
 
+        <!-- tempat naruh isi konten tiap halaman -->
         @yield('content')
     </main>
 
-    <!-- ================= FOOTER ================= -->
+    <!-- FOOTER -->
+    <!-- footer bawah -->
     @if(!request()->is('create'))
         <footer class="w-full mt-auto">
             <div class="max-w-6xl mx-auto px-6 pb-10">
                 <div class="mt-20 pt-8 border-t border-border">
                     <div class="flex justify-between items-center">
-                        <!-- Kiri: Logo & Navigasi -->
+                        <!-- buat kiri: logo & navigasi -->
                         <div class="flex items-center gap-6">
                             <img src="{{ asset('images/logo.png') }}" alt="Siko Logo"
                                 class="h-6 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all">
@@ -244,7 +248,7 @@
                             </div>
                         </div>
 
-                        <!-- Sisi Kanan: Icon Instagram -->
+                        <!-- buat sisi kanan: icon instagram -->
                         <a href="https://instagram.com/siko.events" target="_blank"
                             class="text-textMuted hover:text-white transition-colors text-lg">
                             <i class="fa-brands fa-instagram"></i>
@@ -257,7 +261,7 @@
 
     @include('search')
 
-    <!-- ================= SCRIPTS ================= -->
+    <!-- SCRIPTS -->
     <script>
         function layoutData() {
             return {

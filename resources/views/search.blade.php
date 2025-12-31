@@ -1,13 +1,13 @@
-<!-- ================= SEARCH OVERLAY ================= -->
+<!-- bagian pencarian -->
 <div x-show="searchOpen" @keydown.window.escape="searchOpen = false"
     x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
     class="fixed inset-0 z-[100] flex items-start justify-center pt-24 px-4 sm:px-6" x-cloak>
-    <!-- Backdrop -->
+    <!-- background blur -->
     <div class="fixed inset-0 bg-[#0a0a0a]/80 backdrop-blur-sm" @click="searchOpen = false"></div>
 
-    <!-- Modal Content -->
+    <!-- isi modal -->
     <div x-show="searchOpen" x-transition:enter="transition ease-out duration-300 transform"
         x-transition:enter-start="opacity-0 scale-95 translate-y-[-20px]"
         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
@@ -49,9 +49,9 @@
             }
         }">
 
-        <!-- Search/Shortcuts View -->
+        <!-- tampilan cari-->
         <div>
-            <!-- Search Input Area -->
+            <!-- area kotak cari -->
             <div class="relative p-4 border-b border-[#2d2d2d]">
                 <div class="absolute inset-y-0 left-6 flex items-center pointer-events-none">
                     <i class="fa-solid fa-magnifying-glass text-gray-500"
@@ -61,19 +61,19 @@
                     class="w-full bg-transparent pl-12 pr-4 py-2 text-lg text-white placeholder-gray-600 focus:outline-none"
                     x-model="query" @input.debounce.300ms="search" x-ref="searchInput"
                     @show-search.window="setTimeout(() => $refs.searchInput.focus(), 100)">
-                <!-- Clear Button -->
+                <!-- tombol clear -->
                 <button x-show="query.length > 0" @click="query = ''; results = []"
                     class="absolute inset-y-0 right-6 flex items-center text-gray-400 hover:text-white">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Results area -->
+            <!-- area hasil -->
             <div class="max-h-[60vh] overflow-y-auto p-4 space-y-8 custom-scrollbar">
 
-                <!-- Search Results (Events) -->
+                <!-- hasil cari acara -->
                 <div x-show="results.length > 0">
-                    <h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-4 px-2">Acara</h3>
+                    <h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-4 px-2">acara</h3>
                     <div class="space-y-1">
                         <template x-for="event in results" :key="event.id">
                             <a :href="`/events/${event.id}`"
@@ -102,10 +102,10 @@
                     </div>
                 </div>
 
-                <!-- Shortcuts Section -->
+                <!-- bagian pintasan -->
                 <div x-show="filteredShortcuts.length > 0">
                     <h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-4 px-2 opacity-60">
-                        Pintasan</h3>
+                        pintasan</h3>
                     <div class="space-y-1">
                         <template x-for="shortcut in filteredShortcuts" :key="shortcut.title">
                             <a :href="shortcut.url"
@@ -121,10 +121,10 @@
                     </div>
                 </div>
 
-                <!-- Calendars Section -->
+                <!-- bagian kalender -->
                 <div x-show="filteredCalendars.length > 0">
                     <h3 class="text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-4 px-2 opacity-60">
-                        Kalender</h3>
+                        kalender</h3>
                     <div class="space-y-1">
                         <template x-for="calendar in filteredCalendars" :key="calendar.title">
                             <a :href="calendar.url"
@@ -140,7 +140,7 @@
                     </div>
                 </div>
 
-                <!-- Empty State -->
+                <!-- kalo kosong -->
                 <div x-show="query.length >= 2 && results.length === 0 && filteredShortcuts.length === 0 && filteredCalendars.length === 0"
                     class="py-12 text-center">
                     <p class="text-gray-500 text-sm font-medium">Tidak ada hasil ditemukan untuk "<span

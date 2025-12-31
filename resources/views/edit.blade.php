@@ -10,21 +10,20 @@
 @section('content')
     <div class="max-w-6xl mx-auto px-6 py-6" x-data="eventForm()">
 
-        <!-- Konten Utama -->
+        <!-- konten utama -->
         <form action="{{ route('events.update', $event->id) }}" method="POST" enctype="multipart/form-data"
             class="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-12 lg:gap-20">
             @csrf
             @method('PUT')
 
-            <!-- Sisi Kiri: Preview dan Upload Gambar -->
+            <!-- sisi kiri: preview dan upload gambar -->
             <div class="flex flex-col gap-5">
-                <!-- Wrapper Gambar: Menggunakan aspect-square agar tetap kotak -->
                 <div
                     class="relative aspect-square w-full rounded-3xl overflow-hidden border border-[#3a3442] shadow-2xl shadow-black/50">
                     <img :src="imagePreview || '{{ $event->image ? asset('storage/' . $event->image) : asset('images/invite.jpg') }}'"
                         class="w-full h-full object-cover">
 
-                    <!-- Tombol Upload  -->
+                    <!-- tombol upload  -->
                     <label for="imageUpload"
                         class="absolute bottom-4 right-4 cursor-pointer bg-[#26212c]/90 hover:bg-[#2f2936] backdrop-blur-sm border border-[#3a3442] rounded-full p-3 flex items-center justify-center transition-all shadow-lg">
                         <svg class="w-5 h-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -37,12 +36,12 @@
                 </div>
             </div>
 
-            <!-- Sisi Kanan: Form Detail Acara -->
+            <!-- sisi kanan: form detail acara -->
             <div class="flex flex-col gap-6">
 
-                <!-- Pilihan Kategori dan Visibilitas -->
+                <!-- pilihan kategori dan visibilitas -->
                 <div class="flex flex-wrap gap-3 mb-2">
-                    <!-- Dropdown Kategori -->
+                    <!-- dropdown kategori -->
                     <div x-data="{ open: false }" class="relative">
                         <button type="button" @click="open = !open" @click.outside="open = false"
                             class="bg-[#26212c] hover:bg-[#2f2936] text-gray-300 text-xs font-medium px-3 py-1.5 rounded-lg border border-[#3a3442] flex items-center gap-2 transition-colors">
@@ -63,26 +62,24 @@
                         <input type="hidden" name="category_id" :value="categoryId">
                     </div>
 
-                    <!-- Visibility is now hardcoded to 'Private' as per user request -->
                     @if($visibilities->count() > 0)
                         <input type="hidden" name="visibility_id" value="{{ $visibilities->first()->id }}">
                     @endif
                 </div>
 
-                <!-- Input Judul Acara: Menggunakan font besar dan transparan -->
+                <!-- Input judul acara -->
                 <input type="text" name="judul" x-model="eventName" placeholder="Nama Acara"
                     value="{{ old('judul', $event->judul) }}"
                     class="bg-transparent text-5xl font-bold w-full outline-none placeholder-[#545454] focus:placeholder-gray-700 text-white transition-all caret-purple-500">
 
-                <!-- Pemilih Tanggal & Waktu -->
+                <!-- Pilih tanggal & waktu -->
                 <div class="flex flex-col md:flex-row gap-3 mt-2 overflow-visible relative z-10">
 
-                    <!-- Kartu Input Tanggal -->
+                    <!-- Kartu input tanggal -->
                     <div class="flex-1 bg-[#26212c] border border-[#3a3442] rounded-2xl p-2 relative">
 
-                        <!-- Baris Mulai -->
                         <div class="flex items-center gap-4 p-2 relative">
-                            <!-- Label -->
+            
                             <div class="flex items-center gap-3 w-24 pl-2 relative z-10">
                                 <span class="w-2.5 h-2.5 rounded-full border border-gray-500 bg-[#26212c]"></span>
                                 <span class="text-[15px] font-medium text-gray-300">Mulai</span>
@@ -96,7 +93,7 @@
                                         <span x-text="formatDate(startDate)"></span>
                                     </button>
 
-                                    <!-- Kalendar Popup -->
+                                    <!-- Kalendar popup -->
                                     <div x-show="openPicker === 'start'" @click.outside="openPicker = null" x-transition
                                         class="absolute top-full left-0 mt-2 bg-[#1a161f] border border-[#3a3442] rounded-xl shadow-2xl p-4 w-72 z-50">
                                         <div class="flex justify-between items-center mb-4">
@@ -132,7 +129,7 @@
                                         class="w-full h-full bg-[#2f2936] hover:bg-[#383240] rounded-lg px-2 flex items-center justify-center text-[15px] text-gray-200 font-medium transition-colors">
                                         <span x-text="startTime"></span>
                                     </button>
-                                    <!-- Waktu Dropdown -->
+                                    <!-- Waktu dropdown -->
                                     <div x-show="openPicker === 'startTime'" @click.outside="openPicker = null" x-transition
                                         class="absolute top-full left-0 mt-2 w-32 bg-[#2d2833] border border-[#3a3442] rounded-xl shadow-xl max-h-60 overflow-y-auto z-50 py-1 scrollBar-hidden">
                                         <template x-for="time in timeSlots">
@@ -146,15 +143,14 @@
                             </div>
                         </div>
 
-                        <!-- Baris Selesai -->
+                       
                         <div class="flex items-center gap-4 p-2 relative z-10">
-                            <!-- Label -->
                             <div class="flex items-center gap-3 w-24 pl-2">
                                 <span class="w-2.5 h-2.5 rounded-full border border-gray-500 bg-[#26212c]"></span>
                                 <span class="text-[15px] font-medium text-gray-300">Akhir</span>
                             </div>
 
-                            <!-- Inputs -->
+                            <!-- Input -->
                             <div class="flex gap-1 flex-1">
                                 <div class="relative flex-1">
                                     <button type="button" @click="toggleCalendar('end')"
@@ -197,7 +193,7 @@
                                         class="w-full h-full bg-[#2f2936] hover:bg-[#383240] rounded-lg px-2 flex items-center justify-center text-[15px] text-gray-200 font-medium transition-colors">
                                         <span x-text="endTime"></span>
                                     </button>
-                                    <!-- Dropdown Waktu -->
+                                    <!-- Dropdown waktu -->
                                     <div x-show="openPicker === 'endTime'" @click.outside="openPicker = null" x-transition
                                         class="absolute top-full left-0 mt-2 w-32 bg-[#2d2833] border border-[#3a3442] rounded-xl shadow-xl max-h-60 overflow-y-auto z-50 py-1 scrollBar-hidden">
                                         <template x-for="time in timeSlots">
@@ -215,7 +211,7 @@
 
                 </div>
 
-                <!-- Pemilih Lokasi (buka Modal) -->
+                <!-- pilih lokasi (buka modal) -->
                 <div class="w-full bg-[#26212c] hover:bg-[#2f2936] transition-colors border border-[#3a3442] rounded-xl p-3.5 flex items-center gap-3 text-left group cursor-pointer"
                     @click="openLocationModal = true">
                     <div
@@ -234,7 +230,7 @@
                     </div>
                 </div>
 
-                <!-- Pemilih Deskripsi (buka Modal) -->
+                <!-- Pilih deskripsi (buka modal) -->
                 <div class="w-full bg-[#26212c] hover:bg-[#2f2936] transition-colors border border-[#3a3442] rounded-xl p-3.5 flex items-start gap-3 text-left group cursor-pointer"
                     @click="openDescriptionModal = true">
                     <div
@@ -250,12 +246,12 @@
                     </div>
                 </div>
 
-                <!-- Bagian Opsi Tambahan -->
+                <!-- Bagian opsi tambahan -->
                 <div class="mt-4">
                     <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Opsi Acara</h3>
                     <div class="bg-transparent space-y-1">
 
-                        <!-- Pilihan Harga Tiket -->
+                        <!-- Pilihan harga tiket -->
                         <div class="flex justify-between items-center py-2.5 px-2 hover:bg-[#26212c] rounded-lg transition-colors cursor-pointer group"
                             @click="tempTicketPrice = ticketPrice; openTicketModal = true">
                             <div class="flex items-center gap-3">
@@ -279,7 +275,7 @@
                             </div>
                         </div>
 
-                        <!-- Memerlukan Persetujuan -->
+                        <!-- perlu persetujuan -->
                         <div class="flex justify-between items-center py-2.5 px-2 hover:bg-[#26212c] rounded-lg transition-colors cursor-pointer group"
                             @click="requiresApproval = !requiresApproval">
                             <div class="flex items-center gap-3">
@@ -297,7 +293,7 @@
                             </div>
                         </div>
 
-                        <!-- Pilihan Kapasitas -->
+                        <!-- pilihan kapasitas -->
                         <div class="flex justify-between items-center py-2.5 px-2 hover:bg-[#26212c] rounded-lg transition-colors cursor-pointer group"
                             @click="tempCapacityLimit = capacityLimit; openCapacityModal = true">
                             <div class="flex items-center gap-3">
@@ -323,7 +319,7 @@
                     </div>
                 </div>
 
-                <!-- Hidden Inputs for Form Submission -->
+                <!-- Hidden Inputs buat form submission -->
                 <input type="hidden" name="description" :value="description">
                 <input type="hidden" name="lokasi" :value="location">
                 <input type="hidden" name="waktu_mulai" :value="formatISO(startDate, startTime)">
@@ -332,7 +328,7 @@
                 <input type="hidden" name="kapasitas" :value="capacityLimit">
                 <input type="hidden" name="requires_approval" :value="requiresApproval ? 1 : 0">
 
-                <!-- Tombol Submit Akhir -->
+                <!-- tombol submit -->
                 <div class="pt-6">
                     <button type="submit"
                         class="w-full bg-white hover:bg-gray-200 text-black font-bold text-lg py-3.5 rounded-xl transition-all transform active:scale-[0.98] shadow-lg">
@@ -343,13 +339,13 @@
             </div>
         </form>
 
-        <!-- Modal Kapasitas -->
+        <!-- Modal kapasitas -->
         <div x-show="openCapacityModal" style="display: none;"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" x-transition.opacity>
             <div @click.outside="openCapacityModal = false"
                 class="bg-[#1a161f] border border-[#3a3442] w-[400px] rounded-2xl p-6 shadow-2xl transform transition-all"
                 x-transition.scale>
-                <!-- Icon Header -->
+                <!-- Icon header -->
                 <div
                     class="w-12 h-12 rounded-full bg-[#26212c] border border-[#3a3442] flex items-center justify-center mb-4">
                     <svg class="w-6 h-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -362,7 +358,7 @@
                     Tutup pendaftaran saat mencapai kapasitas.<br>
                     Hanya tamu yang disetujui yang dihitung.
                 </p>
-                <!-- Input Angka dengan Validasi Tailwind -->
+                <!-- Input Angka dengan -->
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-[15px] font-medium text-gray-200">Kapasitas Maksimal</span>
@@ -384,7 +380,7 @@
             </div>
         </div>
 
-        <!-- Modal Deskripsi -->
+        <!-- Modal deskripsi -->
         <div x-show="openDescriptionModal" style="display: none;"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" x-transition.opacity>
             <div @click.outside="openDescriptionModal = false"
@@ -414,7 +410,7 @@
             </div>
         </div>
 
-        <!-- Modal Lokasi -->
+        <!-- Modal lokasi -->
         <div x-show="openLocationModal" style="display: none;"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" x-transition.opacity>
             <div @click.outside="openLocationModal = false"
@@ -444,7 +440,7 @@
                         </template>
                     </div>
 
-                    <!-- Map Container -->
+                    <!-- Map kontainer -->
                     <div id="user-map" class="h-64 w-full mt-4 rounded-xl border border-[#3a3442] z-0 relative"></div>
                     <p class="text-xs text-gray-500 mt-2">Klik pada peta untuk memilih lokasi secara otomatis.</p>
                 </div>
@@ -457,7 +453,7 @@
             </div>
         </div>
 
-        <!-- Modal Harga Tiket -->
+        <!-- Modal harga tiket -->
         <div x-show="openTicketModal" style="display: none;"
             class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" x-transition.opacity>
             <div @click.outside="openTicketModal = false"
@@ -473,7 +469,7 @@
                         </svg>
                     </button>
                 </div>
-                <!-- Input Harga dengan Simbol Mata Uang -->
+                <!-- Input harga -->
                 <div class="mb-6">
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
@@ -502,7 +498,6 @@
 
 @push('scripts')
 
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
@@ -513,7 +508,6 @@
             const eventEndDate = new Date('{{ $event->waktu_selesai }}');
 
             return {
-                // Data Form (State Alpine.js) - Pre-filled with existing event data
                 categoryId: '{{ $event->category_id }}',
                 categoryName: '{{ $event->category->nama ?? "" }}',
                 visibilityId: '{{ $event->visibility_id }}',
@@ -544,7 +538,6 @@
                 marker: null,
                 suggestions: [],
 
-                // Date Picker logic merged - Pre-filled with event dates
                 openPicker: null,
                 startDate: eventStartDate,
                 endDate: eventEndDate,
@@ -560,7 +553,6 @@
                     this.calculateDays();
                     this.generateTimeSlots();
 
-                    // Watchers for Map
                     this.$watch('openLocationModal', value => {
                         if (value) {
                             this.$nextTick(() => {
@@ -578,9 +570,6 @@
                 initMap() {
                     if (this.map) return;
 
-                    // Init Map - Default or existing location if possible to parse?
-                    // Since we store location as string, we can't easily parse coords.
-                    // We'll default to Jakarta for now.
                     this.map = L.map('user-map').setView([-6.2088, 106.8456], 13);
                     
                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -588,18 +577,15 @@
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     }).addTo(this.map);
 
-                    // Click Event
                     this.map.on('click', (e) => {
                         const { lat, lng } = e.latlng;
 
-                        // Move/Add Marker
                         if (this.marker) {
                             this.marker.setLatLng([lat, lng]);
                         } else {
                             this.marker = L.marker([lat, lng]).addTo(this.map);
                         }
 
-                        // Reverse Geocode
                         this.location = "Mengambil alamat...";
                         
                         fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)

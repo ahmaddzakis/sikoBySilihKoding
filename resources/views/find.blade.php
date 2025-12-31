@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="max-w-6xl mx-auto px-6 py-12">
-        <!-- Header Section -->
+        <!-- bagian header -->
         <div class="mb-12">
             <h1 class="text-4xl font-extrabold text-white mb-4 tracking-tight">
                 Temukan <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500">Acara
@@ -26,13 +26,13 @@
                 <p class="text-gray-500">Cek kembali nanti untuk pembaruan acara terbaru dari admin.</p>
             </div>
         @else
-            <!-- Events Grid -->
+            <!-- daftar acara -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($events as $event)
                     <a href="{{ route('events.show', $event['id']) }}" class="group block">
                         <div
                             class="bg-surface border border-border rounded-3xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-pink-500/10 hover:border-pink-500/30">
-                            <!-- Image Container -->
+                            <!-- wadah gambarnya -->
                             <div class="relative aspect-[16/10] overflow-hidden">
                                 @if($event['image'])
                                     <img src="{{ $event['image'] }}" alt="{{ $event['title'] }}"
@@ -44,7 +44,7 @@
                                     </div>
                                 @endif
 
-                                <!-- Price Badge -->
+                                <!-- label harga -->
                                 <div class="absolute top-4 left-4">
                                     <span
                                         class="bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full border border-white/10">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
 
-                            <!-- Content -->
+                            <!-- isinya -->
                             <div class="p-6">
                                 <div class="flex items-center gap-2 mb-3">
                                     <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>

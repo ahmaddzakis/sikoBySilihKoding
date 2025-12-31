@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="min-h-screen pb-20">
-        <!-- Hero Section: Background Image with blur -->
+
         <div class="relative h-[400px] w-full overflow-hidden">
             <div class="absolute inset-0 bg-cover bg-center"
                 style="background-image: url('{{ $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=600&fit=crop' }}'); filter: blur(20px); transform: scale(1.1);">
@@ -13,14 +13,14 @@
 
             <div class="relative max-w-6xl mx-auto px-6 h-full flex items-end pb-12">
                 <div class="flex flex-col md:flex-row gap-8 items-end w-full">
-                    <!-- Main Image -->
+                    <!-- gambar utamanya -->
                     <div
                         class="w-full md:w-[400px] aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex-shrink-0">
                         <img src="{{ $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop' }}"
                             alt="{{ $event->judul }}" class="w-full h-full object-cover">
                     </div>
 
-                    <!-- Basic Info -->
+                    <!-- info singkat -->
                     <div class="flex-1 space-y-4">
                         <div class="flex items-center gap-3">
                             <span
@@ -48,13 +48,13 @@
             </div>
         </div>
 
-        <!-- Content Area -->
+        <!-- area konten -->
         <div class="max-w-6xl mx-auto px-6 mt-12">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-                <!-- Sisi Kiri: Deskripsi & Detail -->
+                <!-- sisi kiri: deskripsi & detail -->
                 <div class="lg:col-span-2 space-y-12">
-                    <!-- Deskripsi Section -->
+                    <!-- bagian deskripsi -->
                     <section>
                         <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                             <i class="fa-solid fa-align-left text-pink-500 text-lg"></i>
@@ -65,7 +65,7 @@
                         </div>
                     </section>
 
-                    <!-- Lokasi Section -->
+                    <!-- bagian lokasi -->
                     <section>
                         <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                             <i class="fa-solid fa-location-dot text-pink-500 text-lg"></i>
@@ -90,13 +90,13 @@
                     </section>
                 </div>
 
-                <!-- Sisi Kanan: Tiket & Waktu -->
+                <!-- sisi kanan: tiket & waktu -->
                 <div class="space-y-6">
-                    <!-- Tiket Card -->
+                    <!-- kartu tiket -->
                     <div
                         class="bg-gradient-to-b from-[#26212c] to-[#1a161f] border border-[#3a3442] rounded-3xl p-8 sticky top-24 shadow-2xl">
                         <div class="space-y-6">
-                            <!-- Waktu Info -->
+                            <!-- info waktu -->
                             <div class="space-y-4">
                                 <div class="flex items-start gap-4">
                                     <div
@@ -136,7 +136,7 @@
                                 $isPast = $event->waktu_selesai->isPast();
                             @endphp
 
-                            <!-- Harga & Kapasitas -->
+                            <!-- harga & kapasitas -->
                             <div class="flex justify-between items-end">
                                 <div>
                                     <p class="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Tiket Masuk
@@ -155,9 +155,9 @@
                                 @endif
                             </div>
 
-                            <!-- Action Button -->
+                            <!-- tombol aksi -->
                             @if(auth()->id() === $event->organizer_id && !$isPast)
-                                <!-- Edit and Delete Buttons for Organizer -->
+                                <!-- edit dan delete tombol -->
                                 <div class="space-y-3 mt-4">
                                     <a href="{{ route('dashboard.events.edit', $event->id) }}"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg flex items-center justify-center gap-2">
@@ -217,7 +217,7 @@
                                 </a>
 
                             @else
-                                <!-- Selalu tampilkan form pendaftaran (mengisi ulang) -->
+                                <!-- selalu tampilkan form pendaftaran  -->
                                 <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4" enctype="multipart/form-data">
                                     @csrf
                                     <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/10">
@@ -228,7 +228,7 @@
                                             @endif
                                         </div>
                                         
-                                        <!-- Nama Lengkap -->
+                                        <!-- nama lengkap -->
                                         <div>
                                             <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nama Lengkap</label>
                                             <input type="text" name="name" required placeholder="Contoh: Ahmad Zaki" pattern="[a-zA-Z\s]+" title="Nama hanya boleh berisi huruf dan spasi" value="{{ old('name', auth()->user()->name ?? '') }}"
@@ -238,7 +238,7 @@
                                             @enderror
                                         </div>
 
-                                        <!-- Nomor Telepon -->
+                                        <!-- nomor telepon -->
                                         <div>
                                             <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nomor Telepon (WA)</label>
                                             <input type="tel" name="phone" required placeholder="0812xxxxxxx" pattern="[0-9]+" title="Nomor telepon hanya boleh berisi angka" value="{{ old('phone') }}"
@@ -250,7 +250,7 @@
 
                                         @if($event->harga_tiket > 0)
                                             <div class="pt-2 border-t border-white/10"></div>
-                                            <!-- Info Pembayaran -->
+                                            <!-- info pembayaran -->
                                             <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-3">
                                                 <div class="flex justify-between items-center mb-2">
                                                     <span class="text-xs text-yellow-500 font-bold uppercase">Total Tagihan</span>
@@ -261,7 +261,7 @@
                                                 </p>
                                             </div>
 
-                                            <!-- Upload Bukti -->
+                                            <!-- upload bukti -->
                                             <div>
                                                 <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Bukti Transfer</label>
                                                 <input type="file" name="payment_proof" required accept="image/*"
@@ -289,7 +289,7 @@
                         </div>
                     </div>
 
-                    <!-- Tombol Kembali -->
+                    <!-- tombol kembali -->
                     <a href="javascript:history.back()"
                         class="flex items-center justify-center gap-2 text-gray-500 hover:text-white transition-colors py-4 font-bold text-sm">
                         <i class="fa-solid fa-arrow-left text-xs"></i>

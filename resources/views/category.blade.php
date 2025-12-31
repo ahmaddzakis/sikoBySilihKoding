@@ -5,13 +5,13 @@
 @section('content')
     <div class="max-w-6xl mx-auto px-6 py-8" x-data="{ category: '{{ ucfirst($category ?? 'Teknologi') }}' }">
 
-        <!-- Hero Section -->
+        <!-- bagian hero -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
-            <!-- Left Text -->
+            <!-- teks sebelah kiri -->
             <div class="space-y-6">
-                <!-- Icon & Title -->
+                <!-- icon sama judul -->
                 <div>
-                    <!-- Dynamic Icon based on category (Simple logic for demo) -->
+                    <!-- icon berubah-ubah sesuai kategorinya -->
                     <div class="w-16 h-16 rounded-2xl bg-[#26212c] border border-[#3a3442] flex items-center justify-center text-3xl mb-6 shadow-2xl text-orange-500"
                         x-show="category === 'Teknologi'">
                         <i class="fa-solid fa-microchip"></i>
@@ -41,23 +41,22 @@
 
             </div>
 
-            <!-- Right Card (3D Style) -->
+            <!-- kartu sebelah kanan (style 3D) -->
             <div class="relative group">
-                <!-- Background Blob -->
+                <!-- efek cahaya di belakang -->
                 <div
                     class="absolute -inset-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-1000">
                 </div>
 
-                <!-- Card Container -->
+                <!-- wadah kartunya -->
                 <div
                     class="relative aspect-video bg-[#1e1a24] rounded-[2rem] border border-[#3a3442] overflow-hidden flex items-center justify-center">
 
-                    <!-- Inner Image / 3D Element Placeholder -->
-                    <!-- Using a gradient circle to mimic the 3D element in screenshot -->
+                    <!-- gambar dalem kartu-->
                     <div
                         class="relative w-64 h-64 rounded-full bg-gradient-to-b from-[#706487] to-[#26212c] flex items-center justify-center shadow-2xl">
                         <div class="w-56 h-56 rounded-full bg-[#1e1a24] flex items-center justify-center overflow-hidden">
-                            <!-- Category Images -->
+                            <!-- category images -->
                             @if(strtolower($category ?? '') === 'teknologi')
                                 <img src="{{ asset('images/categories/teknologi.png') }}"
                                     class="w-full h-full object-cover opacity-80 mix-blend-screen" alt="Teknologi" />
@@ -83,7 +82,7 @@
                                 <img src="{{ asset('images/categories/musik.jpg') }}"
                                     class="w-full h-full object-cover opacity-80 mix-blend-screen" alt="musik" />
                             @else
-                                <!-- Placeholder untuk kategori lainnya - tambahkan gambar sesuai nama kategori -->
+                                <!-- placeholder untuk kategori lainnya - tambahkan gambar sesuai nama kategori -->
                                 <div
                                     class="w-full h-full bg-gradient-to-br from-purple-600/30 to-blue-600/30 flex items-center justify-center">
                                     <span class="text-gray-500 text-sm">{{ ucfirst($category ?? 'Kategori') }}</span>
@@ -94,13 +93,13 @@
                         <div class="absolute inset-0 rounded-full border border-purple-500/20"></div>
                     </div>
 
-                    <!-- Decorative Text -->
+                    <!-- Teks hiasan vertikal -->
                     <div class="absolute top-8 right-8 writing-vertical-rl text-[10px] text-gray-600 tracking-widest font-mono uppercase opacity-50 hidden md:block"
                         style="writing-mode: vertical-rl;">
                         Startups<br>Hackathon Bootcamp<br>Desain Produk AR/VR
                     </div>
 
-                    <!-- Bottom Labels -->
+                    <!-- Label bagian bawah -->
                     <div class="absolute bottom-6 left-8 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
                         Jelajahi
                     </div>
@@ -112,24 +111,24 @@
             </div>
         </div>
 
-        <!-- Section: Major Upcoming Events -->
+        <!-- daftar acara mendatang -->
         <div class="mb-16">
             <h2 class="text-xl font-bold text-white mb-6">Acara Mendatang</h2>
 
             <div class="bg-[#26212c] rounded-2xl border border-[#3a3442] overflow-hidden">
                 @if(count($events) > 0)
                     @foreach($events->groupBy('month_name') as $month => $monthEvents)
-                        <!-- Month Label -->
+                        <!-- nama lulannya -->
                         <div class="px-6 py-4 border-b border-[#3a3442] flex items-center gap-2">
                             <div class="w-2 h-2 rounded-full bg-blue-500"></div>
                             <span class="text-sm font-medium text-gray-400">{{ $month }}</span>
                         </div>
 
                         @foreach($monthEvents as $item)
-                            <!-- Event Item -->
+                            <!-- baris acaranya -->
                             <a href="{{ route('events.show', $item['id']) }}"
                                 class="flex flex-col md:flex-row items-center gap-6 px-6 py-5 hover:bg-[#2f2936] transition-colors group">
-                                <!-- Logo/Image -->
+                                <!-- foto acaranya -->
                                 <div
                                     class="w-12 h-12 rounded-lg bg-blue-900 text-blue-200 font-bold flex items-center justify-center shrink-0 overflow-hidden">
                                     @if($item['image'])
@@ -139,18 +138,18 @@
                                     @endif
                                 </div>
 
-                                <!-- Info -->
+                                <!-- detail acaranya -->
                                 <div class="flex-1 min-w-0">
                                     <h3 class="text-white font-bold text-base truncate">{{ $item['title'] }}</h3>
                                     <div class="text-gray-500 text-sm mt-0.5">{{ $item['location'] }}</div>
                                 </div>
 
-                                <!-- Date -->
+                                <!-- tanggal acara -->
                                 <div class="text-right hidden md:block shrink-0 w-24">
                                     <div class="text-gray-400 text-sm font-mono">{{ $item['date'] }}</div>
                                 </div>
 
-                                <!-- Arrow -->
+                                <!-- arrow -->
                                 <div class="text-gray-600 group-hover:text-white transition-colors">
                                     <i class="fa-solid fa-arrow-right"></i>
                                 </div>
@@ -165,10 +164,10 @@
             </div>
         </div>
 
-        <!-- Section: Nearby Events & Sidebar -->
+        <!-- bagian acara terdekat & sidebar -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Left: Nearby Events (Map Placeholder) -->
+            <!-- sebelah kiri: peta acara -->
             <div class="lg:col-span-2 space-y-6">
                 <div class="flex justify-between items-center">
                     <h2 class="text-xl font-bold text-white">Acara Terdekat</h2>
@@ -178,14 +177,14 @@
                     </button>
                 </div>
 
-                <!-- Map Container -->
+                <!-- tempat peta -->
                 <div
                     class="bg-black/40 rounded-3xl border border-[#3a3442] h-80 relative overflow-hidden flex flex-col items-center justify-center text-center p-6">
-                    <!-- Dots Pattern Background -->
+                    <!-- pola titik-titik (hiasan) -->
                     <div class="absolute inset-0 opacity-20"
                         style="background-image: radial-gradient(#4a4452 1px, transparent 1px); background-size: 20px 20px;">
                     </div>
-                    <!-- Map Pins (Decorative) -->
+                    <!-- titik lokasi di peta -->
                     <div class="absolute inset-0">
                         <i
                             class="fa-solid fa-location-dot text-[#3a3442] absolute top-1/4 left-1/4 text-2xl animate-pulse"></i>
@@ -206,9 +205,8 @@
                 </div>
             </div>
 
-            <!-- Right: Category Sidebar (Simplified) -->
+            <!-- sebelah kanan: sidebar kategori -->
             <div class="space-y-6">
-                <!-- Spacing Element to align with header height/margin if needed, or just standard flow -->
                 <div class="h-10 hidden lg:block"></div>
 
                 <div class="bg-transparent p-1">

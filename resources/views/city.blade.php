@@ -2,12 +2,12 @@
 
 @section('title', ucfirst($city ?? 'Kota'))
 
-@section('content')
+<!-- bungkus utama halaman kota, pake state buat tab aktif -->
 <div class="relative min-h-screen bg-[#1a161f]" x-data="{ activeTab: 'events' }">
 
-    <!-- Hero Section with Background Image -->
+    <!-- bagian atas (hero) yang ada foto background kotanya -->
     <div class="relative h-[500px] w-full overflow-hidden">
-        <!-- Background Image (Blurred) -->
+        <!-- foto background dari unsplash -->
         <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1508009603885-50cf7c579365?q=80&w=2548&auto=format&fit=crop');">
             <div class="absolute inset-0 bg-gradient-to-b from-[#1a161f]/30 via-[#1a161f]/60 to-[#1a161f]"></div>
         </div>
@@ -39,13 +39,14 @@
         </div>
     </div>
 
-    <!-- Main Content Area -->
+    <!-- area isi utama -->
     <div class="max-w-6xl mx-auto px-6 py-12">
         
-        <!-- Header Controls -->
+        <!-- header buat daftar acaranya -->
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-3xl font-bold text-white">Acara</h2>
             <div class="flex gap-2">
+                <!-- Tombol buat user kalau mau nambahin acara sendiri -->
                 <button class="bg-[#26212c] hover:bg-[#2f2936] text-white px-4 py-2 rounded-lg border border-[#3a3442] flex items-center gap-2 text-sm font-medium transition-colors">
                     <i class="fa-solid fa-plus"></i> Kirim Acara
                 </button>
@@ -60,11 +61,11 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
             
-            <!-- Events List (Left Column) -->
+            <!-- events list (left column) -->
             <div class="lg:col-span-2 space-y-8">
                 @if(count($events) > 0)
                     @foreach($events as $event)
-                        <!-- Event Card -->
+                        <!-- kartu satuan buat setiap acara -->
                         <a href="{{ route('events.show', $event['id']) }}" class="bg-[#26212c] rounded-2xl border border-[#3a3442] p-5 hover:bg-[#2f2936] transition-all cursor-pointer group flex gap-5">
                             <div class="flex-1">
                                 <div class="text-gray-500 text-xs font-bold mb-1">{{ $event['time'] }}</div>
@@ -84,7 +85,7 @@
                                 </div>
                             </div>
 
-                            <!-- Thumbnail -->
+                            <!-- foto thumbnail acaranya, kalau ngga ada dikasih icon default -->
                             <div class="w-32 h-32 rounded-xl bg-cover bg-center shrink-0 border border-[#3a3442] overflow-hidden">
                                 @if($event['image'])
                                     <img src="{{ $event['image'] }}" class="w-full h-full object-cover">
@@ -105,9 +106,9 @@
                 @endif
             </div>
 
-             <!-- Sidebar (Right Column) -->
+             <!-- sidebar (kolom kanan) -->
             <div class="space-y-6">
-                <!-- Info Card -->
+                <!-- info card -->
                 <div class="bg-transparent">
                     <div class="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -123,24 +124,23 @@
                     </button>
                 </div>
 
-                <!-- Map Widget -->
+                <!-- widget peta (cuma placeholder/gambar aja) -->
                 <div class="w-full aspect-square rounded-2xl bg-[#26212c] border border-[#3a3442] overflow-hidden relative group cursor-pointer">
-                    <!-- Map Image Placeholder -->
+                    <!-- ini pake mapbox static API buat gambarnya -->
                     <div class="absolute inset-0 bg-cover bg-center opacity-50 contrast-125 grayscale-[50%]" style="background-image: url('https://api.mapbox.com/styles/v1/mapbox/dark-v10/static/100.5018,13.7563,12,0/600x600?access_token=Pk.xxx'); background-color: #242424;">
-                        <!-- Using a generic dark map pattern via CSS if image fails -->
                         <div class="w-full h-full opacity-30" style="background-image: radial-gradient(#4a4452 1px, transparent 1px); background-size: 20px 20px;"></div>
                     </div>
                     
-                    <!-- Pins -->
+                    <!-- Titik lokasi (pin) di peta -->
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-orange-500 rounded-full shadow-[0_0_20px_rgba(249,115,22,0.5)]"></div>
                     <div class="absolute top-1/3 left-1/3 w-2 h-2 bg-gray-500 rounded-full"></div>
                     <div class="absolute bottom-1/3 right-1/4 w-2 h-2 bg-gray-500 rounded-full"></div>
 
-                    <!-- Labels based on screenshot -->
+                    <!-- Nama daerahnya -->
                     <div class="absolute top-4 left-4 text-gray-400 text-xs font-medium">Jakarta Pusat</div>
                     <div class="absolute top-1/2 left-1/2 mt-4 -ml-6 text-white text-sm font-bold shadow-black drop-shadow-md">Jakarta</div>
                     
-                    <!-- Overlay on Hover -->
+                    <!-- Overlay buat tombol pas mouse diarahin ke peta -->
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <span class="text-white font-bold text-sm bg-black/50 px-3 py-1 rounded-full backdrop-blur-sm border border-white/20">Buka Peta</span>
                     </div>

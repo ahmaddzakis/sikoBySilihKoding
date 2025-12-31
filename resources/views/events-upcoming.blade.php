@@ -2,9 +2,9 @@
     @foreach($events as $event)
         <div
             class="bg-[#26212c] p-6 rounded-3xl border border-[#3a3442] text-gray-200 shadow-2xl flex flex-col md:flex-row gap-6 max-w-4xl mx-auto group hover:border-[#4d4554] transition-all">
-            <!-- Left Column: Poster & Host -->
+            <!-- kolom kiri: poster & host -->
             <div class="flex flex-col gap-4 w-full md:w-1/3">
-                <!-- Event Poster -->
+                <!-- poster acara -->
                 <div
                     class="aspect-square rounded-2xl flex flex-col justify-center items-center relative overflow-hidden select-none {{ $event['image'] ? 'bg-gray-800' : 'bg-[#F5E625] p-6 text-black' }}">
                     @if($event['image'])
@@ -22,7 +22,7 @@
                     @endif
                 </div>
 
-                <!-- Host Info -->
+                <!-- info host -->
                 <div class="flex flex-col gap-1">
                     <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Diselenggarakan Oleh</span>
                     <div class="flex items-center gap-2">
@@ -34,9 +34,9 @@
                 </div>
             </div>
 
-            <!-- Right Column: Details -->
+            <!-- kolom kanan: detail -->
             <div class="flex-1 flex flex-col gap-4">
-                <!-- Header -->
+                <!-- header -->
                 <div class="flex justify-between items-start">
                     <div class="flex flex-col gap-2">
                         <div class="flex gap-2">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                <!-- Date & Location -->
+                <!-- tanggal & lokasi -->
                 <div class="space-y-3">
                     <div class="flex items-start gap-4">
                         <div
@@ -83,7 +83,7 @@
                 </div>
 
                 @if($event['requires_approval'])
-                    <!-- Registration Status -->
+                    <!-- status pendaftaran -->
                     <div class="bg-[#332d3b] rounded-2xl p-3 border border-[#3f384a]">
                         <div class="flex items-start gap-3">
                             <div
@@ -100,7 +100,7 @@
 
                 <div class="h-px bg-[#3f384a] my-2"></div>
 
-                <!-- Actions -->
+                <!-- tombol-tombol -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Harga:</span>
