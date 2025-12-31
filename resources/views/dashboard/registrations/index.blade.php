@@ -74,6 +74,11 @@
                                             {{ substr($reg->user->name, 0, 1) }}
                                         </div>
                                         <span class="text-white font-bold">{{ $reg->user->name }}</span>
+                                        @if($reg->payment_proof)
+                                            <a href="{{ asset('storage/' . $reg->payment_proof) }}" target="_blank" class="text-[10px] text-pink-500 hover:text-pink-400 block mt-0.5 font-normal underline">
+                                                <i class="fa-solid fa-receipt mr-1"></i>Lihat Bukti
+                                            </a>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-6 py-5 text-gray-400 text-sm">{{ $reg->user->email }}</td>

@@ -122,7 +122,8 @@
                 </a>
 
                 <!-- Dropdown Notifikasi (File Terpisah) -->
-                @include('notification')
+                <!-- Dropdown Notifikasi removed as requested -->
+
 
                 <!-- Dropdown Profil: Logika untuk user yang sudah Login atau Belum -->
                 @auth

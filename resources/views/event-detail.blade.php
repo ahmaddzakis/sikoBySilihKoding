@@ -186,16 +186,54 @@
                                     class="w-full bg-red-500/20 text-red-500 border border-red-500/30 font-black py-4 rounded-2xl cursor-not-allowed shadow-xl text-lg mt-4">
                                     Stok Habis
                                 </button>
+                            @elseif(isset($existingRegistration) && $existingRegistration)
+                                <!-- Jika sudah terdaftar, tampilkan info & tombol tiket -->
+                                <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/10 mt-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">DATA PENDAFTARAN</p>
+                                        <span class="text-[9px] bg-green-500/20 text-green-500 px-2 py-0.5 rounded font-bold uppercase tracking-tighter">SUDAH TERDAFTAR</span>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nama Lengkap</label>
+                                        <input type="text" value="{{ $existingRegistration->name }}" disabled
+                                            class="w-full bg-[#1a161f] border border-[#3a3442] rounded-xl px-4 py-2.5 text-sm text-gray-400 cursor-not-allowed">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Nomor Telepon (WA)</label>
+                                        <input type="text" value="{{ $existingRegistration->phone }}" disabled
+                                            class="w-full bg-[#1a161f] border border-[#3a3442] rounded-xl px-4 py-2.5 text-sm text-gray-400 cursor-not-allowed">
+                                    </div>
+                                    
+                                    @if($event->harga_tiket > 0)
+                                    <div class="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                                        <p class="text-sm text-yellow-500 font-bold mb-2">Informasi Pembayaran</p>
+                                        <p class="text-xs text-gray-400">Total pembayaran: <span class="text-white font-bold">Rp {{ number_format($event->harga_tiket, 0, ',', '.') }}</span></p>
+                                        
+                                        @if($existingRegistration->status == 'pending')
+                                             <div class="mt-2 text-[10px] text-yellow-400 flex items-center gap-2">
+                                                <i class="fa-solid fa-clock"></i>
+                                                <span>Menunggu Konfirmasi Admin</span>
+                                             </div>
+                                        @endif
+                                    </div>
+                                    @endif
+                                </div>
+
+                                <a href="{{ route('tickets.download', $existingRegistration->id) }}" target="_blank"
+                                    class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black py-4 rounded-2xl transition-all transform active:scale-[0.98] shadow-xl text-lg flex items-center justify-center gap-2 mt-4">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    Unduh E-Tiket (PDF)
+                                </a>
+
                             @else
-                                <!-- Selalu tampilkan form pendaftaran (mengisi ulang) -->
-                                <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4">
+                                <!-- Selalu tampilkan form pendaftaran (jika belum daftar) -->
+                                <form action="{{ route('events.register', $event->id) }}" method="POST" class="space-y-4" enctype="multipart/form-data">
                                     @csrf
                                     <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/10">
                                         <div class="flex justify-between items-center mb-2">
                                             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Data Pendaftaran</p>
-                                            @if($isRegistered)
-                                                <span class="text-[9px] bg-green-500/20 text-green-500 px-2 py-0.5 rounded font-bold uppercase tracking-tighter">Sudah Terdaftar</span>
-                                            @endif
                                         </div>
                                         
                                         <!-- Nama Lengkap -->
@@ -216,7 +254,24 @@
                                             @error('phone')
                                                 <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
                                             @enderror
+                                    </div>
+
+                                    @if($event->harga_tiket > 0)
+                                        <div class="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
+                                            <p class="text-sm text-yellow-500 font-bold mb-2">Informasi Pembayaran</p>
+                                            <p class="text-xs text-gray-400 mb-4">Silakan transfer biaya pendaftaran sebesar <span class="text-white font-bold">Rp {{ number_format($event->harga_tiket, 0, ',', '.') }}</span> ke rekening berikut:</p>
+                                            <div class="bg-black/20 p-3 rounded-lg border border-white/5 mb-4">
+                                                <p class="text-sm text-white font-mono">BCA 1234567890</p>
+                                                <p class="text-xs text-gray-500">a.n. Siko By Silih Koding</p>
+                                            </div>
+
+                                            <label class="block text-[10px] uppercase font-bold text-gray-500 mb-1 ml-1">Upload Bukti Transfer</label>
+                                            <input type="file" name="payment_proof" accept="image/*" required class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 cursor-pointer">
+                                            @error('payment_proof')
+                                                <p class="text-red-500 text-xs mt-1 ml-1">{{ $message }}</p>
+                                            @enderror
                                         </div>
+                                    @endif
                                     </div>
 
                                     <button type="submit"

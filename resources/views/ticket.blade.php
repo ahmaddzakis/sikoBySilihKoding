@@ -33,6 +33,17 @@
             color: #ededed;
         }
 
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: #1a161f !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
         .ticket-container {
             background: #26212c;
             border-radius: 1.5rem;
@@ -262,10 +273,10 @@
 
     <!-- Controls -->
     <div class="mt-8 flex gap-4 no-print">
-        <button id="download-btn"
+        <button onclick="window.print()"
             class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-3 transition-all shadow-lg shadow-purple-500/20">
-            <i class="fa-solid fa-download"></i>
-            Unduh Tiket
+            <i class="fa-solid fa-file-pdf"></i>
+            Unduh Tiket (PDF)
         </button>
         <a href="{{ route('events.show', $registration->event_id) }}"
             class="bg-[#26212c] hover:bg-[#3a3442] text-gray-300 px-8 py-3 rounded-xl font-bold transition-all border border-[#3a3442]">
@@ -273,71 +284,9 @@
         </a>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Script untuk auto-print jika diperlukan, atau sekadar helper -->
     <script>
-        const btn = document.getElementById('download-btn');
-        const element = document.getElementById('ticket-capture');
-
-        function downloadPDF() {
-            // Select the original element
-            const element = document.getElementById('ticket-capture');
-            
-            // Create a wrapper to simulate the PDF page context (A4 width)
-            // We append this to the body to ensure it renders, but we can position it absolutely
-            const wrapper = document.createElement('div');
-            wrapper.id = 'pdf-wrapper';
-            wrapper.style.position = 'absolute';
-            wrapper.style.left = '-9999px'; // Position off-screen to avoid flicker
-            wrapper.style.top = '0';
-            wrapper.style.width = '794px'; // A4 width (approx 210mm at 96dpi)
-            // wrapper.style.minHeight = '1123px'; // A4 height (approx 297mm)
-            wrapper.style.padding = '40px';
-            wrapper.style.backgroundColor = '#1a161f'; // Dark background matching theme
-            wrapper.style.color = '#ededed';
-            wrapper.style.fontFamily = "'Outfit', sans-serif";
-            
-            // Clone the ticket
-            const clone = element.cloneNode(true);
-            clone.removeAttribute('id'); // Prevent duplicate IDs
-            
-            // Reset some styles on the clone to make it fit nicely in the PDF wrapper
-            clone.style.margin = '0 auto'; // Center it
-            clone.style.width = '100%';
-            clone.style.maxWidth = '600px'; // Set a reasonable nice width for the ticket
-            clone.style.boxShadow = 'none'; // Remove shadows might help rendering
-            clone.style.border = '1px solid #3a3442';
-            clone.style.borderRadius = '1.5rem';
-            
-            // Ensure background colors are preserved in the clone
-            clone.style.background = '#26212c';
-            
-            wrapper.appendChild(clone);
-            document.body.appendChild(wrapper);
-
-            const opt = {
-                margin: 0,
-                filename: 'Tiket_SIKO_{{ $registration->event_id }}_{{ $registration->id }}.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true, 
-                    backgroundColor: '#1a161f', // Match the wrapper bg
-                    logging: true,
-                    windowWidth: 794
-                },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Generate PDF
-            html2pdf().from(wrapper).set(opt).save().then(function() {
-                // Cleanup
-                document.body.removeChild(wrapper);
-            });
-        }
-
-        btn.addEventListener('click', downloadPDF);
+        // Opsional: Bisa tambahkan logika lain jika perlu
     </script>
 </body>
-
 </html>

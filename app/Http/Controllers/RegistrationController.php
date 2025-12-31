@@ -40,13 +40,33 @@ class RegistrationController extends Controller
         }
 
         // 5. Simpan pendaftaran
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
             'phone' => 'required|numeric|digits_between:10,15',
-        ]);
+        ];
 
-        // Penyelenggara/Admin selalu otomatis disetujui
-        $status = 'approved';
+        // Jika berbayar, wajib upload bukti
+        if ($event->harga_tiket > 0) {
+            $rules['payment_proof'] = 'required|image|mimes:jpeg,png,jpg|max:2048';
+        }
+
+        $request->validate($rules);
+
+        // Upload Bukti Pembayaran
+        $paymentProofPath = null;
+        if ($request->hasFile('payment_proof')) {
+            $paymentProofPath = $request->file('payment_proof')->store('payment_proofs', 'public');
+        }
+
+        // Tentukan status
+        // Jika berbayar dan upload bukti -> pending (menunggu konfirmasi)
+        // Jika gratis -> approved (sesuai logika sebelumnya)
+        $status = ($event->harga_tiket > 0) ? 'pending' : 'approved';
+
+        // Override jika penyelenggara/admin (optional, tapi masuk akal)
+        if ($event->organizer_id == Auth::id() || Auth::user()->role == 'admin') {
+            $status = 'approved';
+        }
 
         $registration = Registration::create([
             'event_id' => $event->id,
@@ -54,7 +74,12 @@ class RegistrationController extends Controller
             'status' => $status,
             'name' => $request->name,
             'phone' => $request->phone,
+            'payment_proof' => $paymentProofPath,
         ]);
+
+        if ($status == 'pending') {
+            return redirect()->route('tickets.download', $registration->id)->with('success', 'Pendaftaran berhasil! Mohon tunggu konfirmasi admin untuk verifikasi pembayaran.');
+        }
 
         return redirect()->route('tickets.download', $registration->id)->with('success', 'Pendaftaran berhasil!');
     }
