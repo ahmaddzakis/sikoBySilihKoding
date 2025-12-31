@@ -42,15 +42,27 @@
 
             <div class="space-y-2">
                 <label for="password" class="text-white text-sm font-medium">Kata Sandi</label>
-                <input type="password" name="password" id="password" placeholder="••••••••" required
-                    class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px]" />
+                <div class="relative">
+                    <input type="password" name="password" id="password" placeholder="••••••••" required
+                        class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px] pr-12" />
+                    <button type="button" onclick="togglePassword('password', this)"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors focus:outline-none">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="space-y-2">
                 <label for="password_confirmation" class="text-white text-sm font-medium">Konfirmasi Kata Sandi</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••"
-                    required
-                    class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px]" />
+                <div class="relative">
+                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••"
+                        required
+                        class="w-full bg-transparent border border-[#3a3442] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 transition-all text-[15px] pr-12" />
+                    <button type="button" onclick="togglePassword('password_confirmation', this)"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors focus:outline-none">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
             </div>
 
             <button type="submit"
@@ -68,4 +80,21 @@
             </p>
         </div>
     </div>
+
+    <script>
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 @endsection
