@@ -35,14 +35,7 @@
                         <h1 class="text-4xl md:text-5xl font-black text-white leading-tight">
                             {{ $event->judul }}
                         </h1>
-                        <div class="flex items-center gap-3 text-gray-300">
-                            <div
-                                class="w-8 h-8 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-                                {{ substr($event->organizer->name ?? 'U', 0, 1) }}
-                            </div>
-                            <span class="font-medium">Oleh <span
-                                    class="text-white">{{ $event->organizer->name ?? 'Penyelenggara' }}</span></span>
-                        </div>
+
                     </div>
                 </div>
             </div>
