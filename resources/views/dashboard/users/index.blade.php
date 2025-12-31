@@ -12,7 +12,7 @@
                         
                         {{-- Role Filter --}}
                         <div class="relative">
-                            <select name="role" onchange="this.form.submit()" class="appearance-none w-full md:w-32 pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-slate-600 bg-white cursor-pointer">
+                            <select name="role" onchange="this.form.submit()" class="appearance-none w-full md:w-32 pl-3 pr-8 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-black bg-white cursor-pointer">
                                 <option value="">Role</option>
                                 <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
@@ -26,7 +26,7 @@
                         <div class="relative w-full md:w-48">
                             <input type="text" name="search" x-model="search"
                                 placeholder="Cari..." 
-                                class="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm">
+                                class="w-full pl-9 pr-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-sky-500 transition-colors text-sm text-black placeholder-slate-500">
                             <div class="absolute left-3 top-2.5 text-slate-400">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
