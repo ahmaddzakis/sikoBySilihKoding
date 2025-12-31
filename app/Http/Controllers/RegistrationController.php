@@ -41,8 +41,8 @@ class RegistrationController extends Controller
 
         // 5. Simpan pendaftaran
         $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
+            'phone' => 'required|numeric|digits_between:10,15',
         ]);
 
         // Penyelenggara/Admin selalu otomatis disetujui
