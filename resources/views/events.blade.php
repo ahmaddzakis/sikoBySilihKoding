@@ -12,11 +12,11 @@
             <div class="bg-[#26212c] p-1 rounded-xl border border-[#3a3442] flex text-sm">
                 <a href="?tab=upcoming"
                     class="px-5 py-2 rounded-lg transition-all font-semibold {{ $activeTab === 'upcoming' ? 'bg-[#3a3442] text-white' : 'text-gray-400 hover:text-gray-200' }}">
-                    MENDATANG
+                    Mendatang
                 </a>
                 <a href="?tab=past"
                     class="px-5 py-2 rounded-lg transition-all font-semibold {{ $activeTab === 'past' ? 'bg-[#3a3442] text-white' : 'text-gray-400 hover:text-gray-200' }}">
-                    LAMPAU
+                    Lampau
                 </a>
             </div>
         </div>
