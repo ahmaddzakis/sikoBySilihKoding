@@ -7,7 +7,7 @@
 
         <div class="relative h-[400px] w-full overflow-hidden">
             <div class="absolute inset-0 bg-cover bg-center"
-                style="background-image: url('{{ $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=600&fit=crop' }}'); filter: blur(20px); transform: scale(1.1);">
+                style="background-image: url('{{ $event->image_url }}'); filter: blur(20px); transform: scale(1.1);">
             </div>
             <div class="absolute inset-0 bg-black/60"></div>
 
@@ -16,7 +16,7 @@
                     <!-- gambar utamanya -->
                     <div
                         class="w-full md:w-[400px] aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 flex-shrink-0">
-                        <img src="{{ $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop' }}"
+                        <img src="{{ $event->image_url }}"
                             alt="{{ $event->judul }}" class="w-full h-full object-cover">
                     </div>
 

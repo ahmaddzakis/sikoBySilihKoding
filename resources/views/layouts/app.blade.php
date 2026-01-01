@@ -189,9 +189,50 @@
                         Masuk
                     </a>
                 @endauth
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-400 hover:text-white transition-colors p-2">
+                    <i class="fa-solid fa-bars text-xl" x-show="!mobileMenuOpen"></i>
+                    <i class="fa-solid fa-xmark text-xl" x-show="mobileMenuOpen" x-cloak></i>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div x-show="mobileMenuOpen" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-2"
+         class="md:hidden fixed inset-0 z-40 bg-[#1a161f] pt-24 px-6 pb-6 overflow-y-auto"
+         x-cloak>
+        
+        <nav class="flex flex-col gap-4">
+            <a href="/events" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 {{ request()->is('events') || request()->is('/') ? 'text-white bg-white/5' : 'text-gray-400' }}">
+                <i class="fa-regular fa-calendar text-lg w-6 text-center"></i>
+                <span class="font-medium">Acara</span>
+            </a>
+
+            <a href="/find" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 {{ request()->is('find') ? 'text-white bg-white/5' : 'text-gray-400' }}">
+                <i class="fa-solid fa-compass text-lg w-6 text-center"></i>
+                <span class="font-medium">Temukan</span>
+            </a>
+
+            <a href="/calendar" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 {{ request()->is('calendar') ? 'text-white bg-white/5' : 'text-gray-400' }}">
+                <i class="fa-regular fa-calendar-days text-lg w-6 text-center"></i>
+                <span class="font-medium">Kalender</span>
+            </a>
+
+            <div class="h-px bg-[#3a3442] my-2"></div>
+
+            <a href="{{ Auth::check() ? '/create' : route('login') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 text-pink-500 font-medium">
+                <i class="fa-solid fa-plus text-lg w-6 text-center"></i>
+                <span>Buat Acara</span>
+            </a>
+        </nav>
+    </div>
 
     <!-- CONTENT -->
     <main class="flex-grow">
@@ -267,6 +308,7 @@
         function layoutData() {
             return {
                 searchOpen: false,
+                mobileMenuOpen: false,
 
                 init() {
                     this.$watch('searchOpen', value => {

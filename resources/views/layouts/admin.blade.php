@@ -37,13 +37,33 @@
     @stack('styles')
 </head>
 
-<body class="bg-[#1a161f] text-gray-200 min-h-screen font-sans selection:bg-pink-500 selection:text-white">
+<body class="bg-[#1a161f] text-gray-200 min-h-screen font-sans selection:bg-pink-500 selection:text-white" x-data="{ sidebarOpen: false }">
     <div class="flex min-h-screen">
+        <!-- Overlay untuk mobile saat sidebar terbuka -->
+        <div x-show="sidebarOpen" 
+             @click="sidebarOpen = false"
+             x-transition:enter="transition-opacity ease-linear duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition-opacity ease-linear duration-300"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-black/50 z-40 md:hidden"
+             x-cloak>
+        </div>
+
         <!-- sidebar kiri buat menu-menu admin -->
-        <aside class="w-64 bg-[#26212c] border-r border-[#3a3442] p-6 flex flex-col gap-8">
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto">
-                <span class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Admin</span>
+        <aside class="fixed inset-y-0 left-0 z-50 w-64 bg-[#26212c] border-r border-[#3a3442] p-6 flex flex-col gap-8 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto"
+               :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto">
+                    <span class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Admin</span>
+                </div>
+                <!-- Tombol close sidebar di mobile -->
+                <button @click="sidebarOpen = false" class="md:hidden text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
             </div>
             
             <nav class="flex flex-col gap-2">
@@ -87,7 +107,13 @@
         <main class="flex-1 overflow-y-auto">
             <!-- header atas admin -->
             <header class="h-20 border-b border-[#3a3442] px-8 flex items-center justify-between bg-[#1a161f]/50 backdrop-blur-md sticky top-0 z-10">
-                <h1 class="text-xl font-bold text-white tracking-tight">@yield('title', 'Dashboard Admin')</h1>
+                <div class="flex items-center gap-4">
+                    <!-- Tombol hamburger untuk mobile -->
+                    <button @click="sidebarOpen = true" class="md:hidden text-gray-400 hover:text-white mr-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-white tracking-tight">@yield('title', 'Dashboard Admin')</h1>
+                </div>
                 
                 <div class="flex items-center gap-4">
                     <!-- info admin yang lagi login -->
