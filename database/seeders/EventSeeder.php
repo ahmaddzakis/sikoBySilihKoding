@@ -16,9 +16,6 @@ class EventSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear existing events to ensure we only have 5
-        Event::query()->delete();
-
         $categories = Category::all();
         $publicVisibility = EventVisibility::where('slug', 'public')->first();
         $user = User::first();
@@ -70,7 +67,13 @@ class EventSeeder extends Seeder
             ]
         ];
 
+        // Create events if they don't exist
         foreach ($eventsData as $data) {
+            // Check if event already exists by title to prevent overwriting edits
+            if (Event::where('judul', $data['judul'])->exists()) {
+                continue;
+            }
+
             $startDate = Carbon::create(2026, rand(1, 12), rand(1, 28))->setHour(rand(8, 20));
             $category = Category::where('nama', $data['category_name'])->first() ?? $categories->first();
             
