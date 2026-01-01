@@ -84,7 +84,7 @@
                 <div class="flex flex-col gap-2 text-textMuted font-medium text-sm">
                     <div class="flex items-center gap-2 justify-center md:justify-start">
                         <i class="fa-regular fa-calendar text-xs opacity-60"></i>
-                        <span>Bergabung {{ $user->created_at->format('F Y') }}</span>
+                        <span>Bergabung {{ $user->created_at->translatedFormat('F Y') }}</span>
                     </div>
                     <div class="flex items-center gap-2 justify-center md:justify-start">
                         <span class="text-white">{{ $createdEventsCount }}</span> Dibuat
