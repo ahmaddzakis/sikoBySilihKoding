@@ -27,6 +27,10 @@ class EventSeeder extends Seeder
             return;
         }
 
+        // Fetch Admin and User
+        $admin = User::where('email', 'admin@gmail.com')->first();
+        $user = User::where('email', 'user@gmail.com')->first() ?? $user; // Fallback to first user if specific user not found
+
         $eventsData = [
             [
                 'judul' => "Sigit's Birthday!",
@@ -35,6 +39,7 @@ class EventSeeder extends Seeder
                 'harga_tiket' => 0,
                 'kapasitas' => 50,
                 'category_name' => 'Lainnya',
+                'organizer_id' => $user->id, // User event
             ],
             [
                 'judul' => 'Cirebon Cullinary Festival',
@@ -43,6 +48,7 @@ class EventSeeder extends Seeder
                 'harga_tiket' => 25000,
                 'kapasitas' => 1000,
                 'category_name' => 'Makanan',
+                'organizer_id' => $admin ? $admin->id : $user->id, // Admin event
             ],
             [
                 'judul' => 'JCE Meet Up - Sleman Yogyakarta',
@@ -51,6 +57,7 @@ class EventSeeder extends Seeder
                 'harga_tiket' => 0,
                 'kapasitas' => 100,
                 'category_name' => 'Teknologi',
+                'organizer_id' => $admin ? $admin->id : $user->id, // Admin event
             ],
             [
                 'judul' => 'Konser Denny Caknan (Bandung 2026)',
@@ -59,6 +66,7 @@ class EventSeeder extends Seeder
                 'harga_tiket' => 150000,
                 'kapasitas' => 5000,
                 'category_name' => 'Musik',
+                'organizer_id' => $admin ? $admin->id : $user->id, // Admin event
             ]
         ];
 
@@ -67,7 +75,7 @@ class EventSeeder extends Seeder
             $category = Category::where('nama', $data['category_name'])->first() ?? $categories->first();
             
             Event::create([
-                'organizer_id' => $user->id,
+                'organizer_id' => $data['organizer_id'],
                 'category_id' => $category->id,
                 'visibility_id' => $publicVisibility->id,
                 'judul' => $data['judul'],
