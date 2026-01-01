@@ -220,7 +220,7 @@ class EventController extends Controller
 
     public function show($id)
     {
-        $event = \App\Models\Event::visible()->with('organizer')->findOrFail($id);
+        $event = \App\Models\Event::with('organizer')->findOrFail($id);
 
         $existingRegistration = null;
         if (\Auth::check()) {

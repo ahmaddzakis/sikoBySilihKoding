@@ -580,8 +580,16 @@
                 openPicker: null,
                 startDate: new Date('{{ old('waktu_mulai') ? \Carbon\Carbon::parse(old('waktu_mulai'))->format('Y-m-d') : now()->format('Y-m-d') }}'),
                 endDate: new Date('{{ old('waktu_selesai') ? \Carbon\Carbon::parse(old('waktu_selesai'))->format('Y-m-d') : now()->format('Y-m-d') }}'),
-                startTime: '{{ old('waktu_mulai') ? \Carbon\Carbon::parse(old('waktu_mulai'))->format('H:i') : "14:00" }}',
-                endTime: '{{ old('waktu_selesai') ? \Carbon\Carbon::parse(old('waktu_selesai'))->format('H:i') : "15:00" }}',
+                startTime: '{{ old('waktu_mulai') ? \Carbon\Carbon::parse(old('waktu_mulai'))->format('H:i') : "" }}' || (() => {
+                    const n = new Date();
+                    n.setHours(n.getHours() + 1, 0, 0, 0);
+                    return n.toTimeString().slice(0, 5);
+                })(),
+                endTime: '{{ old('waktu_selesai') ? \Carbon\Carbon::parse(old('waktu_selesai'))->format('H:i') : "" }}' || (() => {
+                    const n = new Date();
+                    n.setHours(n.getHours() + 2, 0, 0, 0);
+                    return n.toTimeString().slice(0, 5);
+                })(),
                 currentMonth: today.getMonth(),
                 currentYear: today.getFullYear(),
                 monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
