@@ -70,10 +70,6 @@
             };
             const timeString = new Intl.DateTimeFormat('en-US', options).format(now);
             
-            // Format: "9:14 PM GMT+7" style but "WIB"
-            // The screenshot says "9:14 PM GMT+7"
-            // User requested "Explore Events dan jam WIB"
-            
             document.getElementById('clock-wib').textContent = `${timeString} WIB`;
         }
 
