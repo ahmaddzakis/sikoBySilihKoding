@@ -32,7 +32,7 @@ class EventSeeder extends Seeder
             [
                 'judul' => "Sigit's Birthday!",
                 'description' => 'Rayakan momen spesial ulang tahun Sigit! Akan ada makan-makan, games seru, dan doorprize menarik. Jangan lupa datang tepat waktu ya!',
-                'lokasi' => 'Jakarta Selatan',
+                'lokasi' => 'Jl. Kemang Raya No. 12, Pela Mampang, Jakarta Selatan',
                 'harga_tiket' => 0,
                 'kapasitas' => 50,
                 'category_name' => 'Lainnya',
@@ -41,7 +41,7 @@ class EventSeeder extends Seeder
             [
                 'judul' => 'Cirebon Cullinary Festival',
                 'description' => 'Jelajahi kekayaan rasa nusantara di Festival Kuliner Cirebon. Tersedia ratusan tenan makanan tradisional dan modern yang siap memanjakan lidah Anda.',
-                'lokasi' => 'Alun-alun Kejaksan, Cirebon',
+                'lokasi' => 'Alun-alun Kejaksan, Jl. Kartini, Cirebon',
                 'harga_tiket' => 25000,
                 'kapasitas' => 1000,
                 'category_name' => 'Makanan',
@@ -49,8 +49,8 @@ class EventSeeder extends Seeder
             ],
             [
                 'judul' => 'JCE Meet Up - Sleman Yogyakarta',
-                'description' => 'Temu kangen komunitas Java Code Enthusiast chapter Jogja. Diskusi santai seputar teknologi terbaru dan networking dengan sesama developer.',
-                'lokasi' => 'Sleman, Yogyakarta',
+                'description' => "Japanese Culture Enthusiast Meet Up (Sleman) merupakan acara temu komunitas yang ditujukan bagi para pecinta budaya Jepang, mulai dari anime, manga, musik, fashion, hingga tradisi dan kebiasaan Jepang. Kegiatan ini menjadi wadah untuk berbagi minat, pengetahuan, serta mempererat hubungan antar sesama penggemar budaya Jepang di wilayah Sleman dan sekitarnya.\n\nAcara ini akan diisi dengan berbagai kegiatan menarik seperti diskusi budaya Jepang, sharing pengalaman belajar bahasa Jepang, cosplay mini showcase, kuis interaktif, serta sesi networking antar komunitas. Dengan suasana santai dan inklusif, meet up ini terbuka untuk pemula maupun enthusiast yang ingin memperluas wawasan dan relasi.\n\nMelalui Japanese Culture Enthusiast Meet Up, diharapkan tercipta komunitas yang aktif, kreatif, dan saling mendukung dalam mengapresiasi budaya Jepang secara positif.",
+                'lokasi' => 'Sleman City Hall, Jl. Magelang Km 9, Sleman, Yogyakarta',
                 'harga_tiket' => 0,
                 'kapasitas' => 100,
                 'category_name' => 'Teknologi',
@@ -59,7 +59,7 @@ class EventSeeder extends Seeder
             [
                 'judul' => 'Konser Denny Caknan (Bandung 2026)',
                 'description' => 'Ambyar bareng di konser spesial Denny Caknan! Siapkan hatimu untuk bernyanyi bersama lagu-lagu hits seperti Kartonyono Medot Janji dan Los Dol.',
-                'lokasi' => 'Lapangan Gazibu, Bandung',
+                'lokasi' => 'Lapangan Gazibu, Jl. Diponegoro No.22, Bandung',
                 'harga_tiket' => 150000,
                 'kapasitas' => 5000,
                 'category_name' => 'Musik',
@@ -67,30 +67,33 @@ class EventSeeder extends Seeder
             ]
         ];
 
-        // Create events if they don't exist
+        // Create or Update events
         foreach ($eventsData as $data) {
-            // Check if event already exists by title to prevent overwriting edits
-            if (Event::where('judul', $data['judul'])->exists()) {
-                continue;
-            }
-
             $startDate = Carbon::create(2026, rand(1, 12), rand(1, 28))->setHour(rand(8, 20));
             $category = Category::where('nama', $data['category_name'])->first() ?? $categories->first();
             
-            Event::create([
-                'organizer_id' => $data['organizer_id'],
-                'category_id' => $category->id,
-                'visibility_id' => $publicVisibility->id,
-                'judul' => $data['judul'],
-                'description' => $data['description'],
-                'lokasi' => $data['lokasi'],
-                'waktu_mulai' => $startDate,
-                'waktu_selesai' => $startDate->copy()->addHours(rand(2, 5)),
-                'harga_tiket' => $data['harga_tiket'],
-                'requires_approval' => rand(0, 1),
-                'image' => null, // Explicitly null to trigger default image logic
-                'kapasitas' => $data['kapasitas'],
-            ]);
+            // Use updateOrCreate to ensure description and other critical fields are synced
+            // while keeping the event ID stable if it exists.
+            Event::updateOrCreate(
+                ['judul' => $data['judul']], // Search key
+                [
+                    'organizer_id' => $data['organizer_id'],
+                    'category_id' => $category->id,
+                    'visibility_id' => $publicVisibility->id,
+                    'description' => $data['description'], // This ensures description is synced
+                    'lokasi' => $data['lokasi'],
+                    'harga_tiket' => $data['harga_tiket'],
+                    'kapasitas' => $data['kapasitas'],
+                    // Only set dates if creating new, to avoid resetting dates on existing events?
+                    // Actually, updateOrCreate overwrites. To preserve edits but sync description, 
+                    // we ideally want selective update. But for "teammate pull", overwriting 
+                    // to the "correct" seed state is usually desired.
+                    'waktu_mulai' => Event::where('judul', $data['judul'])->value('waktu_mulai') ?? $startDate,
+                    'waktu_selesai' => Event::where('judul', $data['judul'])->value('waktu_selesai') ?? $startDate->copy()->addHours(rand(2, 5)),
+                    'requires_approval' => rand(0, 1),
+                    // 'image' => null // Don't overwrite image if it exists
+                ]
+            );
         }
     }
 }
