@@ -22,7 +22,7 @@ class EventController extends Controller
             // For now, let's keep it to where(id, 0) to return empty if not logged in.
             $query->where('id', 0);
         }
-        
+
         $upcomingEvents = (clone $query)
             ->where('waktu_selesai', '>=', now())
             ->orderBy('waktu_mulai', 'asc')
@@ -221,7 +221,7 @@ class EventController extends Controller
     public function show($id)
     {
         $event = \App\Models\Event::visible()->with('organizer')->findOrFail($id);
-        
+
         $existingRegistration = null;
         if (\Auth::check()) {
             $existingRegistration = $event->registrations()
@@ -314,10 +314,9 @@ class EventController extends Controller
 
     public function discover()
     {
-        // Ambil acara yang dibuat oleh admin (role: admin)
-        $events = \App\Models\Event::whereHas('organizer', function ($query) {
-            $query->where('role', 'admin');
-        })->where('waktu_mulai', '>=', now())
+        // Ambil semua acara public (atau milik user) yang akan datang
+        $events = \App\Models\Event::visible()
+            ->where('waktu_mulai', '>=', now())
             ->orderBy('waktu_mulai')
             ->get()
             ->map(function ($event) {
