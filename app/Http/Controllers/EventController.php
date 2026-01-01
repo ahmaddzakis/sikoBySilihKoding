@@ -34,7 +34,7 @@ class EventController extends Controller
                     'start_month' => $event->waktu_mulai->format('M'),
                     'location' => $event->lokasi,
                     'description' => $event->description,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'organizer' => $event->organizer->name ?? 'Unknown',
                     'price' => $event->harga_tiket,
                     'requires_approval' => $event->requires_approval,
@@ -53,7 +53,7 @@ class EventController extends Controller
                     'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
                     'location' => $event->lokasi,
                     'description' => $event->description,
-                    'image' => $event->image ? asset('storage/' . $event->image) : asset('images/categories/lainnya.jpg'), // Safe fallback
+                    'image' => $event->image_url, // Safe fallback
                     'attendees' => $event->registrations()->count(),
                 ];
             });
@@ -88,22 +88,7 @@ class EventController extends Controller
         }
 
         try {
-            // Default images mapping
-            $defaultImages = [
-                1 => 'teknologi.jpg', // Teknologi
-                2 => 'makanan.jpg',   // Makanan
-                3 => 'musik.jpg',     // Musik
-                4 => 'seni.jpg',      // Seni
-                5 => 'kesehatan.jpg', // Kesehatan
-                6 => 'ai.jpg',        // Ai
-                7 => 'iklim.jpg',     // Iklim
-                8 => 'kebugaran.jpg', // Kebugaran
-                9 => 'lainnya.jpg',   // Lainnya
-            ];
-
-            // Get default image based on category, fallback to 'lainnya.jpg' if not found
-            $defaultImageName = $defaultImages[$request->category_id] ?? 'lainnya.jpg';
-            $imagePath = 'events/defaults/' . $defaultImageName;
+            $imagePath = null;
 
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('events', 'public');
@@ -265,7 +250,7 @@ class EventController extends Controller
                     'title' => $event->judul,
                     'date' => $event->waktu_mulai->translatedFormat('d M Y'),
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                 ];
             });
 
@@ -292,7 +277,7 @@ class EventController extends Controller
                     'title' => $event->judul,
                     'date' => $event->waktu_mulai->format('j/n'),
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'month_name' => $event->waktu_mulai->translatedFormat('F'),
                 ];
             });
@@ -318,7 +303,7 @@ class EventController extends Controller
                     'date' => $event->waktu_mulai->translatedFormat('l, d F'),
                     'time' => $event->waktu_mulai->format('H.i'),
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'organizer' => $event->organizer->name,
                 ];
             });
@@ -339,7 +324,7 @@ class EventController extends Controller
                     'title' => $event->judul,
                     'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'organizer' => $event->organizer->name,
                     'price' => $event->harga_tiket,
                 ];

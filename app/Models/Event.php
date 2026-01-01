@@ -63,4 +63,28 @@ class Event extends Model
             })->orWhere('organizer_id', auth()->id());
         });
     }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image) {
+            return asset('storage/' . $this->image);
+        }
+
+        // Mapping based on category ID
+        $idMap = [
+            1 => 'teknologi.png',
+            2 => 'makanan.png',
+            3 => 'musik.jpg',
+            4 => 'art.jpg',
+            5 => 'kesehatan.jpg',
+            6 => 'ai.jpg',
+            7 => 'iklim.jpg',
+            8 => 'kebugaran.jpg',
+            9 => 'lainnya.jpg'
+        ];
+
+        $filename = $idMap[$this->category_id] ?? 'lainnya.jpg';
+
+        return asset('images/categories/' . $filename);
+    }
 }
