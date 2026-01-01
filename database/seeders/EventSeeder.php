@@ -34,6 +34,7 @@ class EventSeeder extends Seeder
                 'lokasi' => 'Jakarta Selatan',
                 'harga_tiket' => 0,
                 'kapasitas' => 50,
+                'category_name' => 'Lainnya',
             ],
             [
                 'judul' => 'Cirebon Cullinary Festival',
@@ -41,6 +42,7 @@ class EventSeeder extends Seeder
                 'lokasi' => 'Alun-alun Kejaksan, Cirebon',
                 'harga_tiket' => 25000,
                 'kapasitas' => 1000,
+                'category_name' => 'Makanan',
             ],
             [
                 'judul' => 'JCE Meet Up - Sleman Yogyakarta',
@@ -48,6 +50,7 @@ class EventSeeder extends Seeder
                 'lokasi' => 'Sleman, Yogyakarta',
                 'harga_tiket' => 0,
                 'kapasitas' => 100,
+                'category_name' => 'Teknologi',
             ],
             [
                 'judul' => 'Konser Denny Caknan (Bandung 2026)',
@@ -55,15 +58,17 @@ class EventSeeder extends Seeder
                 'lokasi' => 'Lapangan Gazibu, Bandung',
                 'harga_tiket' => 150000,
                 'kapasitas' => 5000,
+                'category_name' => 'Musik',
             ]
         ];
 
         foreach ($eventsData as $data) {
             $startDate = Carbon::create(2026, rand(1, 12), rand(1, 28))->setHour(rand(8, 20));
+            $category = Category::where('nama', $data['category_name'])->first() ?? $categories->first();
             
             Event::create([
                 'organizer_id' => $user->id,
-                'category_id' => $categories->random()->id,
+                'category_id' => $category->id,
                 'visibility_id' => $publicVisibility->id,
                 'judul' => $data['judul'],
                 'description' => $data['description'],
@@ -72,6 +77,7 @@ class EventSeeder extends Seeder
                 'waktu_selesai' => $startDate->copy()->addHours(rand(2, 5)),
                 'harga_tiket' => $data['harga_tiket'],
                 'requires_approval' => rand(0, 1),
+                'image' => null, // Explicitly null to trigger default image logic
                 'kapasitas' => $data['kapasitas'],
             ]);
         }
