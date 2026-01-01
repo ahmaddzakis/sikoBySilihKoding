@@ -565,17 +565,16 @@
                 marker: null,
                 suggestions: [],
 
-                // default images
                 defaultImages: {
-                    'Teknologi': '{{ asset('storage/events/defaults/teknologi.jpg') }}',
-                    'Makanan': '{{ asset('storage/events/defaults/makanan.jpg') }}',
-                    'Musik': '{{ asset('storage/events/defaults/musik.jpg') }}',
-                    'Seni': '{{ asset('storage/events/defaults/seni.jpg') }}',
-                    'Kesehatan': '{{ asset('storage/events/defaults/kesehatan.jpg') }}',
-                    'Ai': '{{ asset('storage/events/defaults/ai.jpg') }}',
-                    'Iklim': '{{ asset('storage/events/defaults/iklim.jpg') }}',
-                    'Kebugaran': '{{ asset('storage/events/defaults/kebugaran.jpg') }}',
-                    'Lainnya': '{{ asset('storage/events/defaults/lainnya.jpg') }}'
+                    'Teknologi': '{{ asset('images/categories/teknologi.jpg') }}',
+                    'Makanan': '{{ asset('images/categories/makanan.jpg') }}',
+                    'Musik': '{{ asset('images/categories/musik.jpg') }}',
+                    'Seni': '{{ asset('images/categories/seni.jpg') }}',
+                    'Kesehatan': '{{ asset('images/categories/kesehatan.png') }}',
+                    'Ai': '{{ asset('images/categories/ai.jpg') }}',
+                    'Iklim': '{{ asset('images/categories/iklim.jpg') }}',
+                    'Kebugaran': '{{ asset('images/categories/kebugaran.png') }}',
+                    'Lainnya': '{{ asset('images/categories/user.jpg') }}'
                 },
 
                 openPicker: null,
@@ -779,7 +778,7 @@
                     if (this.categoryName && this.defaultImages[this.categoryName]) {
                         return this.defaultImages[this.categoryName];
                     }
-                    return this.defaultImages['Lainnya'];
+                    return '{{ asset('images/categories/user.jpg') }}';
                 },
 
                 selectCategory(id, name) {
