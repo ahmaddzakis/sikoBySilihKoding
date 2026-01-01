@@ -124,7 +124,7 @@
                                     </div>
                                 </td>
                                 <td class="p-4 text-sm whitespace-nowrap">
-                                    {{ \Carbon\Carbon::parse($e->waktu_mulai)->format('d M Y H:i') }} <br>
+                                    {{ \Carbon\Carbon::parse($e->waktu_mulai)->translatedFormat('d M Y H:i') }} <br>
                                     <span class="text-xs text-slate-400">s/d</span>
                                     {{ \Carbon\Carbon::parse($e->waktu_selesai)->format('H:i') }}
                                 </td>

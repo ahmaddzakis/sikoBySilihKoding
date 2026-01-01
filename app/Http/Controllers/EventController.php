@@ -33,7 +33,7 @@ class EventController extends Controller
                     'title' => $event->judul,
                     'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
                     'start_day' => $event->waktu_mulai->format('d'),
-                    'start_month' => $event->waktu_mulai->format('M'),
+                    'start_month' => $event->waktu_mulai->translatedFormat('M'),
                     'location' => $event->lokasi,
                     'description' => $event->description,
                     'image' => $event->image_url,
@@ -277,7 +277,7 @@ class EventController extends Controller
                 return [
                     'id' => $event->id,
                     'title' => $event->judul,
-                    'date' => $event->waktu_mulai->format('j/n'),
+                    'date' => $event->waktu_mulai->translatedFormat('j/n'),
                     'location' => $event->lokasi,
                     'image' => $event->image_url,
                     'month_name' => $event->waktu_mulai->translatedFormat('F'),
