@@ -258,15 +258,44 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Date Validation
+            // Date Validation & Defaults
             const now = new Date();
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            const minDateTime = now.toISOString().slice(0, 16);
+            
+            // Helper to format date for datetime-local input (YYYY-MM-DDTHH:mm)
+            const toLocalISOString = (date) => {
+                const pad = (n) => n.toString().padStart(2, '0');
+                const year = date.getFullYear();
+                const month = pad(date.getMonth() + 1);
+                const day = pad(date.getDate());
+                const hours = pad(date.getHours());
+                const minutes = pad(date.getMinutes());
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            };
+
+            const minDateTime = toLocalISOString(now);
             
             const waktuMulai = document.getElementById('waktu_mulai');
             const waktuSelesai = document.getElementById('waktu_selesai');
 
+            // Set restriction to prevent past dates
             waktuMulai.min = minDateTime;
             waktuSelesai.min = minDateTime;
+
+            // Set Default Values if empty (Next Hour)
+            if (!waktuMulai.value) {
+                const startTime = new Date();
+                startTime.setHours(startTime.getHours() + 1);
+                startTime.setMinutes(0, 0, 0); // Start exact at next hour
+                
+                const endTime = new Date(startTime);
+                endTime.setHours(endTime.getHours() + 1);
+
+                waktuMulai.value = toLocalISOString(startTime);
+                waktuSelesai.value = toLocalISOString(endTime);
+                
+                // Ensure end time min is valid
+                waktuSelesai.min = waktuMulai.value;
+            }
 
             waktuMulai.addEventListener('change', function() {
                 waktuSelesai.min = this.value;

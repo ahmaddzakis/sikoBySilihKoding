@@ -12,14 +12,7 @@
             {{-- LEFT : EVENT IMAGE --}}
             <div class="bg-gray-100 p-6 flex flex-col items-center justify-center border-r border-gray-200">
                 <div class="w-full aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden shadow-md mb-4 relative group">
-                    @if($event->image)
-                        <img id="image-preview" src="{{ asset('storage/' . $event->image) }}" alt="Event Cover" class="w-full h-full object-cover">
-                    @else
-                        <img id="image-preview" src="" alt="Event Cover Preview" class="w-full h-full object-cover hidden">
-                        <div id="placeholder-icon" class="w-full h-full flex items-center justify-center text-gray-400">
-                            <i class="fa-solid fa-image text-4xl"></i>
-                        </div>
-                    @endif
+                    <img id="image-preview" src="{{ $event->image_url }}" alt="Event Cover" class="w-full h-full object-cover">
                     
                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <p class="text-white font-bold text-sm">Ganti Gambar</p>

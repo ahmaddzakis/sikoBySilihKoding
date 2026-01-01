@@ -11,16 +11,18 @@ class EventController extends Controller
         $activeTab = $request->query('tab', 'upcoming');
 
         // Logic for "Explore Events": Show all valid upcoming events
-        // If user is logged in, they might want to see their own?
-        // But "Explore" usually means public discovery.
-        // Let's assume Home is the Explore feed.
-        
         $query = \App\Models\Event::with('organizer');
 
-        // If you want to only show "Public" events, ensure filtering is correct.
-        // Assuming 'requires_approval' or 'visibility_id' handles that? 
-        // For now, let's just show all active events for the home feed.
-        
+        // Only show events created by the authenticated user
+        if (auth()->check()) {
+            $query->where('organizer_id', auth()->id());
+        } else {
+            // For guests, maybe show nothing or generic events? 
+            // Based on user request, let's show nothing or redirect if needed.
+            // For now, let's keep it to where(id, 0) to return empty if not logged in.
+            $query->where('id', 0);
+        }
+
         $upcomingEvents = (clone $query)
             ->where('waktu_selesai', '>=', now())
             ->orderBy('waktu_mulai', 'asc')
@@ -31,10 +33,10 @@ class EventController extends Controller
                     'title' => $event->judul,
                     'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
                     'start_day' => $event->waktu_mulai->format('d'),
-                    'start_month' => $event->waktu_mulai->format('M'),
+                    'start_month' => $event->waktu_mulai->translatedFormat('M'),
                     'location' => $event->lokasi,
                     'description' => $event->description,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'organizer' => $event->organizer->name ?? 'Unknown',
                     'price' => $event->harga_tiket,
                     'requires_approval' => $event->requires_approval,
@@ -53,7 +55,7 @@ class EventController extends Controller
                     'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
                     'location' => $event->lokasi,
                     'description' => $event->description,
-                    'image' => $event->image ? asset('storage/' . $event->image) : asset('images/categories/lainnya.jpg'), // Safe fallback
+                    'image' => $event->image_url, // Safe fallback
                     'attendees' => $event->registrations()->count(),
                 ];
             });
@@ -88,22 +90,7 @@ class EventController extends Controller
         }
 
         try {
-            // Default images mapping
-            $defaultImages = [
-                1 => 'teknologi.jpg', // Teknologi
-                2 => 'makanan.jpg',   // Makanan
-                3 => 'musik.jpg',     // Musik
-                4 => 'seni.jpg',      // Seni
-                5 => 'kesehatan.jpg', // Kesehatan
-                6 => 'ai.jpg',        // Ai
-                7 => 'iklim.jpg',     // Iklim
-                8 => 'kebugaran.jpg', // Kebugaran
-                9 => 'lainnya.jpg',   // Lainnya
-            ];
-
-            // Get default image based on category, fallback to 'lainnya.jpg' if not found
-            $defaultImageName = $defaultImages[$request->category_id] ?? 'lainnya.jpg';
-            $imagePath = 'events/defaults/' . $defaultImageName;
+            $imagePath = null;
 
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('events', 'public');
@@ -233,8 +220,8 @@ class EventController extends Controller
 
     public function show($id)
     {
-        $event = \App\Models\Event::visible()->with('organizer')->findOrFail($id);
-        
+        $event = \App\Models\Event::with('organizer')->findOrFail($id);
+
         $existingRegistration = null;
         if (\Auth::check()) {
             $existingRegistration = $event->registrations()
@@ -265,7 +252,7 @@ class EventController extends Controller
                     'title' => $event->judul,
                     'date' => $event->waktu_mulai->translatedFormat('d M Y'),
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                 ];
             });
 
@@ -290,9 +277,9 @@ class EventController extends Controller
                 return [
                     'id' => $event->id,
                     'title' => $event->judul,
-                    'date' => $event->waktu_mulai->format('j/n'),
+                    'date' => $event->waktu_mulai->translatedFormat('j/n'),
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'month_name' => $event->waktu_mulai->translatedFormat('F'),
                 ];
             });
@@ -318,7 +305,7 @@ class EventController extends Controller
                     'date' => $event->waktu_mulai->translatedFormat('l, d F'),
                     'time' => $event->waktu_mulai->format('H.i'),
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'organizer' => $event->organizer->name,
                 ];
             });
@@ -327,10 +314,9 @@ class EventController extends Controller
 
     public function discover()
     {
-        // Ambil acara yang dibuat oleh admin (role: admin)
-        $events = \App\Models\Event::whereHas('organizer', function ($query) {
-            $query->where('role', 'admin');
-        })->where('waktu_mulai', '>=', now())
+        // Ambil semua acara public (atau milik user) yang akan datang
+        $events = \App\Models\Event::visible()
+            ->where('waktu_mulai', '>=', now())
             ->orderBy('waktu_mulai')
             ->get()
             ->map(function ($event) {
@@ -339,7 +325,7 @@ class EventController extends Controller
                     'title' => $event->judul,
                     'date' => $event->waktu_mulai->translatedFormat('D, d M Y • H:i') . ' WIB',
                     'location' => $event->lokasi,
-                    'image' => $event->image ? asset('storage/' . $event->image) : null,
+                    'image' => $event->image_url,
                     'organizer' => $event->organizer->name,
                     'price' => $event->harga_tiket,
                 ];
