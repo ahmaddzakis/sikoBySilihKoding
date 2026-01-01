@@ -11,15 +11,17 @@ class EventController extends Controller
         $activeTab = $request->query('tab', 'upcoming');
 
         // Logic for "Explore Events": Show all valid upcoming events
-        // If user is logged in, they might want to see their own?
-        // But "Explore" usually means public discovery.
-        // Let's assume Home is the Explore feed.
-        
         $query = \App\Models\Event::with('organizer');
 
-        // If you want to only show "Public" events, ensure filtering is correct.
-        // Assuming 'requires_approval' or 'visibility_id' handles that? 
-        // For now, let's just show all active events for the home feed.
+        // Only show events created by the authenticated user
+        if (auth()->check()) {
+            $query->where('organizer_id', auth()->id());
+        } else {
+            // For guests, maybe show nothing or generic events? 
+            // Based on user request, let's show nothing or redirect if needed.
+            // For now, let's keep it to where(id, 0) to return empty if not logged in.
+            $query->where('id', 0);
+        }
         
         $upcomingEvents = (clone $query)
             ->where('waktu_selesai', '>=', now())
