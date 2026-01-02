@@ -23,6 +23,23 @@
                 </div>
 
                 <!-- info host -->
+                <div class="flex items-center gap-3 bg-[#332d3b] p-3 rounded-2xl border border-[#3f384a]">
+                    <div class="w-10 h-10 rounded-full {{ $event['organizer_avatar'] ? 'bg-gray-800' : 'bg-gradient-to-tr from-green-400 to-green-600' }} flex items-center justify-center border border-[#4d3664] overflow-hidden shrink-0">
+                        @if($event['organizer_avatar'])
+                            <img src="{{ Storage::url($event['organizer_avatar']) }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="relative w-6 h-6 flex items-center justify-center">
+                                <div class="absolute top-1.5 left-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                <div class="absolute top-1.5 right-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-2 border-b-2 border-black/80 rounded-full"></div>
+                            </div>
+                        @endif
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest leading-none mb-1">Penyelenggara</p>
+                        <p class="text-sm font-bold text-white leading-none">{{ $event['organizer'] }}</p>
+                    </div>
+                </div>
 
             </div>
 
