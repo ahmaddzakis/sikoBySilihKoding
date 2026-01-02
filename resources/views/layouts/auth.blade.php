@@ -37,16 +37,16 @@
 
 <body class="min-h-screen flex flex-col bg-[#121212] text-white font-sans selection:bg-purple-500/30">
     <!-- Navbar -->
-    <nav class="w-full flex items-center justify-between p-6 absolute top-0 left-0 z-50">
+    <nav class="w-full flex flex-col md:flex-row items-start md:items-center justify-between p-6 relative md:absolute top-0 left-0 z-50 gap-4">
         <!-- Left: Web Icon -->
         <a href="{{ url('/') }}" class="flex-shrink-0">
             <img src="{{ asset('favicon.png') }}" alt="SIKO Icon" class="h-8 w-auto hover:opacity-80 transition-opacity">
         </a>
 
-        <!-- Right: Clock & Explore (Hidden on Mobile) -->
-        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-400">
-            <div id="clock-wib" class="tracking-wide"></div>
-            <a href="{{ url('/events') }}" class="hover:text-white transition-colors flex items-center gap-1 group">
+        <!-- Right: Clock & Explore -->
+        <div class="flex items-center gap-4 md:gap-6 text-sm font-medium text-gray-400">
+            <div id="clock-wib" class="tracking-wide text-xs md:text-sm"></div>
+            <a href="{{ url('/events') }}" class="hover:text-white transition-colors flex items-center gap-1 group text-xs md:text-sm">
                 Explore Events
                 <i class="fa-solid fa-arrow-right -rotate-45 group-hover:rotate-0 transition-transform duration-300 text-xs"></i>
             </a>
