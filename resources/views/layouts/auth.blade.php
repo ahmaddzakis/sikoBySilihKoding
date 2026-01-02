@@ -43,8 +43,8 @@
             <img src="{{ asset('favicon.png') }}" alt="SIKO Icon" class="h-8 w-auto hover:opacity-80 transition-opacity">
         </a>
 
-        <!-- Right: Clock & Explore -->
-        <div class="flex items-center gap-6 text-sm font-medium text-gray-400">
+        <!-- Right: Clock & Explore (Hidden on Mobile) -->
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-400">
             <div id="clock-wib" class="tracking-wide"></div>
             <a href="{{ url('/events') }}" class="hover:text-white transition-colors flex items-center gap-1 group">
                 Explore Events

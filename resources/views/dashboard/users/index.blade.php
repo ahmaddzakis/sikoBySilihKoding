@@ -4,43 +4,42 @@
     <div class="min-h-screen bg-[#1a161f] p-8" x-data="{ search: '{{ request('search') }}' }">
         <div class="max-w-6xl mx-auto bg-[#26212c] rounded-xl shadow-lg overflow-hidden p-8 border border-[#3a3442]">
             
-            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                <h1 class="text-2xl font-bold text-white">Manajemen Pengguna</h1>
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-8 gap-6">
+                <h1 class="text-3xl font-black text-white">Manajemen Pengguna</h1>
                 
-                <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto items-center">
-                    <form action="{{ route('dashboard.users.index') }}" method="GET" class="flex flex-col md:flex-row gap-2 w-full md:w-auto items-center">
-                        
-                        {{-- Role Filter --}}
-                        <div class="relative">
-                            <select name="role" onchange="this.form.submit()" class="appearance-none w-full md:w-32 pl-3 pr-8 py-2 rounded-lg border border-[#3a3442] focus:outline-none focus:border-pink-500 transition-colors text-sm text-gray-300 bg-[#1a161f] cursor-pointer">
-                                <option value="">Role</option>
-                                <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                <div class="flex flex-col gap-4 w-full xl:w-auto">
+                    {{-- Search Form --}}
+                    <form action="{{ route('dashboard.users.index') }}" method="GET" class="contents">
+                        <div class="flex flex-col sm:flex-row gap-3 w-full">
+                            
+                            {{-- Role Filter --}}
+                            <div class="relative w-full sm:w-auto">
+                                <select name="role" onchange="this.form.submit()" class="appearance-none w-full sm:w-32 pl-4 pr-10 py-3 rounded-xl border border-[#3a3442] focus:outline-none focus:border-pink-500 transition-all text-sm font-medium text-gray-300 bg-[#1a161f] cursor-pointer hover:bg-[#2f2936]">
+                                    <option value="">Role</option>
+                                    <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
                             </div>
-                        </div>
 
-                        {{-- SEARCH INPUT --}}
-                        <div class="relative w-full md:w-48">
-                            <input type="text" name="search" x-model="search"
-                                placeholder="Cari..." 
-                                class="w-full pl-9 pr-4 py-2 rounded-lg border border-[#3a3442] focus:outline-none focus:border-pink-500 transition-colors text-sm text-gray-300 bg-[#1a161f] placeholder-gray-600">
-                            <div class="absolute left-3 top-2.5 text-gray-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
+                            {{-- SEARCH INPUT --}}
+                            <div class="relative w-full sm:w-64">
+                                <input type="text" name="search" x-model="search"
+                                    placeholder="Cari pengguna..." 
+                                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-[#3a3442] focus:outline-none focus:border-pink-500 transition-all text-sm font-medium text-gray-300 bg-[#1a161f] placeholder-gray-500 hover:bg-[#2f2936]">
+                                <div class="absolute left-3.5 top-3.5 text-gray-500">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </div>
                             </div>
                         </div>
                     </form>
 
                     {{-- CREATE USER BUTTON --}}
                     <a href="{{ route('dashboard.users.create') }}"
-                        class="flex items-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg transform active:scale-95 whitespace-nowrap text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                        </svg>
+                        class="flex items-center justify-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-pink-500/25 transform active:scale-[0.98] text-sm w-full sm:w-auto">
+                        <i class="fa-solid fa-plus"></i>
                         Buat Pengguna
                     </a>
                 </div>

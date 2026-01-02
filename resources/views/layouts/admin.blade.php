@@ -58,7 +58,7 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-8 w-auto">
-                    <span class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Admin</span>
+                    <span class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">DASHBOARD</span>
                 </div>
                 <!-- Tombol close sidebar di mobile -->
                 <button @click="sidebarOpen = false" class="md:hidden text-gray-400 hover:text-white">
@@ -122,9 +122,15 @@
                         <div class="text-[10px] text-gray-500 uppercase tracking-widest">{{ Auth::user()->role }}</div>
                     </div>
                     <!-- foto profil admin -->
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 border border-[#3a3442] overflow-hidden flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-full {{ Auth::user()->avatar ? 'bg-gray-800' : 'bg-gradient-to-tr from-green-400 to-green-600' }} border border-[#3a3442] overflow-hidden flex items-center justify-center">
                         @if(Auth::user()->avatar)
                             <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="relative w-6 h-6 flex items-center justify-center">
+                                <div class="absolute top-1.5 left-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                <div class="absolute top-1.5 right-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-2 border-b-2 border-black/80 rounded-full"></div>
+                            </div>
                         @endif
                     </div>
                 </div>
