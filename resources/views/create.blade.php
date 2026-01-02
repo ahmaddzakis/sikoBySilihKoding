@@ -718,8 +718,19 @@
                     now.setHours(0,0,0,0);
                     if (selected < now) return;
 
-                    if (type === 'start') this.startDate = selected;
-                    else this.endDate = selected;
+                    if (type === 'start') {
+                        this.startDate = selected;
+                        // Auto-update End Date if Start Date is after End Date
+                        if (this.endDate < selected) {
+                            this.endDate = new Date(selected);
+                        }
+                    } else {
+                        // Prevent selecting End Date before Start Date
+                        if (selected < this.startDate) {
+                           return; 
+                        }
+                        this.endDate = selected;
+                    }
                     this.openPicker = null;
                 },
 
