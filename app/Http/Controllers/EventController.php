@@ -240,7 +240,11 @@ class EventController extends Controller
             return response()->json([]);
         }
 
-        $events = \App\Models\Event::visible()->where(function ($q) use ($query) {
+        $events = \App\Models\Event::visible()
+            ->whereHas('organizer', function ($q) {
+                $q->where('role', 'admin');
+            })
+            ->where(function ($q) use ($query) {
             $q->where('judul', 'like', "%{$query}%")
                 ->orWhere('lokasi', 'like', "%{$query}%");
         })
@@ -270,6 +274,9 @@ class EventController extends Controller
         }
 
         $events = $category->events()->visible()
+            ->whereHas('organizer', function ($q) {
+                $q->where('role', 'admin');
+            })
             ->where('waktu_mulai', '>=', now())
             ->orderBy('waktu_mulai')
             ->get()
@@ -294,7 +301,11 @@ class EventController extends Controller
 
     public function city($city)
     {
-        $events = \App\Models\Event::visible()->where('lokasi', 'like', '%' . $city . '%')
+        $events = \App\Models\Event::visible()
+            ->whereHas('organizer', function ($q) {
+                $q->where('role', 'admin');
+            })
+            ->where('lokasi', 'like', '%' . $city . '%')
             ->where('waktu_mulai', '>=', now())
             ->orderBy('waktu_mulai')
             ->get()
@@ -316,6 +327,9 @@ class EventController extends Controller
     {
         // Ambil semua acara public (atau milik user) yang akan datang
         $events = \App\Models\Event::visible()
+            ->whereHas('organizer', function ($q) {
+                $q->where('role', 'admin');
+            })
             ->where('waktu_mulai', '>=', now())
             ->orderBy('waktu_mulai')
             ->get()

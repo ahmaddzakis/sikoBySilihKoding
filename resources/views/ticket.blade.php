@@ -268,10 +268,7 @@
             
              <div class="mt-8 text-center">
                 <p class="text-[#a1a1aa] text-xs">Simpan bukti ini sebagai tiket masuk acara.</p>
-                <div class="mt-4 opacity-50">
-                    <!-- Barcode bohongan -->
-                    <div class="h-12 bg-white/20 rounded mx-auto w-2/3"></div>
-                </div>
+
             </div>
         </div>
     </div>
