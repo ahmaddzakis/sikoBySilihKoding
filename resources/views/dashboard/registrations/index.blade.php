@@ -70,13 +70,17 @@
                                 <td class="px-6 py-5">
                                     <div class="flex items-center gap-3">
                                         <div
-                                            class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white">
-                                            {{ substr($reg->user->name, 0, 1) }}
+                                            class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white overflow-hidden">
+                                            @if($reg->user->avatar)
+                                                <img src="{{ Storage::url($reg->user->avatar) }}" alt="{{ $reg->user->name }}" class="w-full h-full object-cover">
+                                            @else
+                                                {{ substr($reg->user->name, 0, 1) }}
+                                            @endif
                                         </div>
                                         <span class="text-white font-bold">{{ $reg->user->name }}</span>
                                         @if($reg->payment_proof)
                                             <a href="{{ asset('storage/' . $reg->payment_proof) }}" target="_blank" class="text-[10px] text-pink-500 hover:text-pink-400 block mt-0.5 font-normal underline">
-                                                <i class="fa-solid fa-receipt mr-1"></i>Lihat Bukti
+                                                <i class="fa-solid fa-receipt mr-1"></i>Bukti Pembayaran
                                             </a>
                                         @endif
                                     </div>

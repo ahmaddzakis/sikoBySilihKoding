@@ -13,9 +13,14 @@ class EventController extends Controller
         // Logic for "Explore Events": Show all valid upcoming events
         $query = \App\Models\Event::with('organizer');
 
-        // Only show events created by the authenticated user
+        // Show events created by the authenticated user OR events they are registered for
         if (auth()->check()) {
-            $query->where('organizer_id', auth()->id());
+            $query->where(function($q) {
+                $q->where('organizer_id', auth()->id())
+                  ->orWhereHas('registrations', function($sq) {
+                      $sq->where('user_id', auth()->id());
+                  });
+            });
         } else {
             // For guests, maybe show nothing or generic events? 
             // Based on user request, let's show nothing or redirect if needed.
@@ -38,6 +43,7 @@ class EventController extends Controller
                     'description' => $event->description,
                     'image' => $event->image_url,
                     'organizer' => $event->organizer->name ?? 'Unknown',
+                    'organizer_avatar' => $event->organizer->avatar ?? null,
                     'price' => $event->harga_tiket,
                     'requires_approval' => $event->requires_approval,
                     'attendees' => $event->registrations()->count(),
