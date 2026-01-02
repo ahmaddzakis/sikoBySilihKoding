@@ -84,8 +84,8 @@ class RegistrationController extends Controller
 
     public function index(Event $event)
     {
-        // Hanya organizer yang bisa lihat daftar pendaftar
-        if ($event->organizer_id !== Auth::id()) {
+        // Hanya organizer atau admin yang bisa lihat daftar pendaftar
+        if ($event->organizer_id !== Auth::id() && Auth::user()->role !== 'admin') {
             abort(403);
         }
 
@@ -95,8 +95,8 @@ class RegistrationController extends Controller
 
     public function updateStatus(Request $request, Registration $registration)
     {
-        // Hanya organizer acara yang bisa mengubah status
-        if ($registration->event->organizer_id !== Auth::id()) {
+        // Hanya organizer acara atau admin yang bisa mengubah status
+        if ($registration->event->organizer_id !== Auth::id() && Auth::user()->role !== 'admin') {
             abort(403);
         }
 

@@ -36,6 +36,25 @@
                             {{ $event->judul }}
                         </h1>
 
+                        <!-- Organizer Info -->
+                        <div class="flex items-center gap-3 pt-2">
+                            <div class="w-10 h-10 rounded-full {{ $event->organizer->avatar ? 'bg-gray-800' : 'bg-gradient-to-tr from-green-400 to-green-600' }} flex items-center justify-center border border-white/20 overflow-hidden shrink-0 shadow-lg">
+                                @if($event->organizer->avatar)
+                                    <img src="{{ Storage::url($event->organizer->avatar) }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="relative w-6 h-6 flex items-center justify-center">
+                                        <div class="absolute top-1.5 left-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                        <div class="absolute top-1.5 right-1 w-1.5 h-1.5 bg-black/80 rounded-full"></div>
+                                        <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-2 border-b-2 border-black/80 rounded-full"></div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest leading-none mb-1">Diselenggarakan oleh</p>
+                                <p class="text-white font-bold leading-none">{{ $event->organizer->name }}</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -118,6 +137,20 @@
                                         <p class="text-gray-400 text-sm">{{ $event->waktu_selesai->format('H:i') }} WIB</p>
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <!-- Total Pendaftar -->
+                            <div class="bg-white/5 rounded-xl p-4 border border-white/10 flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                                        <i class="fa-solid fa-users text-green-500 text-sm"></i>
+                                    </div>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Peserta</p>
+                                </div>
+                                <p class="text-white font-black text-lg">
+                                    {{ $event->registrations->count() }}
+                                    <span class="text-xs font-normal text-gray-500">Orang</span>
+                                </p>
                             </div>
 
                             <div class="mt-6 mb-2">
