@@ -3,19 +3,19 @@
 @section('title', 'Buat Acara')
 
 @section('content')
-<div class="min-h-screen bg-slate-100 -m-8 p-8">
-    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-8">
+<div class="min-h-screen bg-[#1a161f] p-8 -m-8">
+    <div class="max-w-4xl mx-auto bg-[#26212c] rounded-xl shadow-lg overflow-hidden p-8 border border-[#3a3442]">
         
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-slate-800">Buat Acara Baru</h1>
-            <a href="{{ route('dashboard.events.index') }}" class="text-sm text-slate-500 hover:text-slate-800">
+            <h1 class="text-2xl font-bold text-white">Buat Acara Baru</h1>
+            <a href="{{ route('dashboard.events.index') }}" class="text-sm text-gray-400 hover:text-white transition-colors">
                 Kembali ke Daftar
             </a>
         </div>
 
         @if ($errors->any())
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
-                <ul class="list-disc list-inside">
+            <div class="bg-red-500/10 border border-red-500/30 text-red-500 px-4 py-3 rounded-lg relative mb-6">
+                <ul class="list-disc list-inside text-sm">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -28,15 +28,15 @@
 
             <!-- Nama Acara -->
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">
-                    Nama Acara <span class="text-red-500">*</span>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    Nama Acara <span class="text-pink-500">*</span>
                 </label>
                 <input 
                     type="text" 
                     name="judul" 
                     value="{{ old('judul') }}"
                     placeholder="Masukkan nama acara"
-                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                    class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 placeholder-gray-600 transition-colors"
                     required
                 >
             </div>
@@ -44,64 +44,74 @@
             <!-- Kategori dan Visibilitas -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        Kategori <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Kategori <span class="text-pink-500">*</span>
                     </label>
-                    <select 
-                        name="category_id" 
-                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
-                        required
-                    >
-                        <option value="">Pilih Kategori</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->nama }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <select 
+                            name="category_id" 
+                            class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 appearance-none cursor-pointer transition-colors"
+                            required
+                        >
+                            <option value="">Pilih Kategori</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->nama }}</option>
+                            @endforeach
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        Visibilitas <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Visibilitas <span class="text-pink-500">*</span>
                     </label>
-                    <select 
-                        name="visibility_id" 
-                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
-                        required
-                    >
-                        <option value="">Pilih Visibilitas</option>
-                        @foreach($visibilities as $visibility)
-                            <option value="{{ $visibility->id }}" {{ old('visibility_id') == $visibility->id ? 'selected' : '' }}>{{ $visibility->nama }}</option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <select 
+                            name="visibility_id" 
+                            class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 appearance-none cursor-pointer transition-colors"
+                            required
+                        >
+                            <option value="">Pilih Visibilitas</option>
+                            @foreach($visibilities as $visibility)
+                                <option value="{{ $visibility->id }}" {{ old('visibility_id') == $visibility->id ? 'selected' : '' }}>{{ $visibility->nama }}</option>
+                            @endforeach
+                        </select>
+                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Waktu Mulai dan Selesai -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        Waktu Mulai <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Waktu Mulai <span class="text-pink-500">*</span>
                     </label>
                     <input 
                         type="datetime-local" 
                         name="waktu_mulai" 
                         id="waktu_mulai"
                         value="{{ old('waktu_mulai') }}"
-                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                        class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 placeholder-gray-600 transition-colors [color-scheme:dark]"
                         required
                     >
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">
-                        Waktu Selesai <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Waktu Selesai <span class="text-pink-500">*</span>
                     </label>
                     <input 
                         type="datetime-local" 
                         name="waktu_selesai" 
                         id="waktu_selesai"
                         value="{{ old('waktu_selesai') }}"
-                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                        class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 placeholder-gray-600 transition-colors [color-scheme:dark]"
                         required
                     >
                 </div>
@@ -109,8 +119,8 @@
 
             <!-- Lokasi -->
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">
-                    Lokasi <span class="text-red-500">*</span>
+                <label class="block text-sm font-medium text-gray-300 mb-2">
+                    Lokasi <span class="text-pink-500">*</span>
                 </label>
                 <div class="relative">
                     <input 
@@ -119,38 +129,38 @@
                         id="lokasi-input"
                         value="{{ old('lokasi') }}"
                         placeholder="Lokasi atau jalan"
-                        class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                        class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 placeholder-gray-600 transition-colors"
                         required
                         autocomplete="off"
                     >
-                    <button type="button" id="toggle-map" class="absolute right-3 top-3 text-slate-400 hover:text-sky-600">
+                    <button type="button" id="toggle-map" class="absolute right-3 top-3 text-gray-500 hover:text-pink-500 transition-colors">
                         <i class="fa-solid fa-map-location-dot"></i>
                     </button>
                     <!-- Suggestions Dropdown -->
-                    <div id="suggestions" class="absolute z-50 w-full bg-white border border-slate-300 rounded-lg shadow-lg mt-1 hidden max-h-60 overflow-y-auto"></div>
+                    <div id="suggestions" class="absolute z-50 w-full bg-[#1a161f] border border-[#3a3442] rounded-lg shadow-xl mt-1 hidden max-h-60 overflow-y-auto custom-scrollbar"></div>
                 </div>
-                <div id="map-container" class="hidden mt-2 border border-slate-300 rounded-lg overflow-hidden">
-                    <div id="map" class="h-64 w-full z-0"></div>
-                    <p class="text-xs text-slate-500 p-2 bg-slate-50">Klik pada peta untuk memilih lokasi</p>
+                <div id="map-container" class="hidden mt-2 border border-[#3a3442] rounded-lg overflow-hidden">
+                    <div id="map" class="h-64 w-full z-0 grayscale invert brightness-75 contrast-125"></div>
+                    <p class="text-xs text-gray-500 p-2 bg-[#1a161f]">Klik pada peta untuk memilih lokasi</p>
                 </div>
             </div>
 
             <!-- Deskripsi -->
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">
+                <label class="block text-sm font-medium text-gray-300 mb-2">
                     Deskripsi
                 </label>
                 <textarea 
                     name="description" 
                     rows="5"
                     placeholder="Masukkan deskripsi acara..."
-                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                    class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 placeholder-gray-600 transition-colors"
                 >{{ old('description') }}</textarea>
             </div>
 
             <!-- Upload Gambar -->
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">
+                <label class="block text-sm font-medium text-gray-300 mb-2">
                     Gambar Acara
                 </label>
                 <input 
@@ -158,25 +168,25 @@
                     name="image" 
                     id="image-input"
                     accept="image/*"
-                    class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100"
+                    class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-pink-500/10 file:text-pink-500 hover:file:bg-pink-500/20 transition-colors"
                 >
-                <div class="mt-4 relative w-full h-64 bg-black rounded-lg overflow-hidden group">
-                    <img id="image-preview" src="{{ asset('storage/events/default.jpg') }}" alt="Event Preview" class="w-full h-full object-cover text-white">
-                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="mt-4 relative w-full h-64 bg-[#1a161f] rounded-lg overflow-hidden group border border-[#3a3442]">
+                    <img id="image-preview" src="{{ asset('storage/events/default.jpg') }}" alt="Event Preview" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <span class="text-white font-medium">Preview Gambar</span>
                     </div>
                 </div>
-                <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG, JPEG (Max: 2MB). Jika dikosongkan akan menggunakan gambar default di atas.</p>
+                <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, JPEG (Max: 2MB). Jika dikosongkan akan menggunakan gambar default.</p>
             </div>
 
             <!-- Opsi Acara -->
-            <div class="border-t border-slate-200 pt-6 mt-6">
-                <h3 class="text-lg font-bold text-slate-800 mb-4">Opsi Acara</h3>
+            <div class="border-t border-[#3a3442] pt-6 mt-6">
+                <h3 class="text-lg font-bold text-white mb-4">Opsi Acara</h3>
                 
                 <div class="space-y-4">
                     <!-- Harga Tiket -->
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">
                             Harga Tiket (Rp)
                         </label>
                         <input 
@@ -185,14 +195,14 @@
                             value="{{ old('harga_tiket', 0) }}"
                             min="0"
                             placeholder="0 untuk gratis"
-                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                            class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 placeholder-gray-600 transition-colors"
                         >
-                        <p class="text-xs text-slate-500 mt-1">Kosongkan atau isi 0 untuk acara gratis</p>
+                        <p class="text-xs text-gray-500 mt-1">Kosongkan atau isi 0 untuk acara gratis</p>
                     </div>
 
                     <!-- Kapasitas -->
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">
                             Kapasitas Maksimal
                         </label>
                         <input 
@@ -202,9 +212,9 @@
                             min="1"
                             max="100000"
                             placeholder="Kosongkan untuk tidak terbatas"
-                            class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:border-sky-500 text-slate-800"
+                            class="w-full px-4 py-3 bg-[#1a161f] border border-[#3a3442] rounded-lg focus:outline-none focus:border-pink-500 text-gray-200 placeholder-gray-600 transition-colors"
                         >
-                        <p class="text-xs text-slate-500 mt-1">Kosongkan untuk kapasitas tidak terbatas</p>
+                        <p class="text-xs text-gray-500 mt-1">Kosongkan untuk kapasitas tidak terbatas</p>
                     </div>
 
                     <!-- Memerlukan Persetujuan -->
@@ -215,9 +225,9 @@
                             id="requires_approval"
                             value="1"
                             {{ old('requires_approval') ? 'checked' : '' }}
-                            class="w-5 h-5 text-sky-600 border-slate-300 rounded focus:ring-sky-500"
+                            class="w-5 h-5 text-pink-600 bg-[#1a161f] border-gray-600 rounded focus:ring-pink-500 focus:ring-offset-[#1a161f]"
                         >
-                        <label for="requires_approval" class="text-sm font-medium text-slate-700">
+                        <label for="requires_approval" class="text-sm font-medium text-gray-300">
                             Memerlukan persetujuan admin untuk pendaftaran
                         </label>
                     </div>
@@ -228,14 +238,14 @@
             <div class="flex gap-3 pt-6">
                 <button 
                     type="submit"
-                    class="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg"
+                    class="flex-1 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg hover:shadow-pink-500/25"
                 >
                     <i class="fa-solid fa-plus mr-2"></i>
                     Buat Acara
                 </button>
                 <a 
                     href="{{ route('dashboard.events.index') }}"
-                    class="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition-all"
+                    class="px-6 py-3 bg-[#3a3442] hover:bg-[#4d4554] text-gray-200 font-medium rounded-lg transition-all"
                 >
                     Batal
                 </a>
